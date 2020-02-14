@@ -2,13 +2,13 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-class Image
-{
+class Image {
 	int _width, _height;
 	HDC _hDC;
 	HBITMAP _hBitmap;
 
-	Image(int width, int height, HDC hDC, HBITMAP hBitmap) : _width{ width }, _height{ height }, _hDC{ hDC }, _hBitmap{ hBitmap } {}
+	Image(int width, int height, HDC hDC, HBITMAP hBitmap)
+		: _width{width}, _height{height}, _hDC{hDC}, _hBitmap{hBitmap} {}
 
 public:
 	virtual ~Image();
@@ -19,5 +19,6 @@ public:
 	inline int GetHeight() const { return _height; }
 
 	static Image* CreateBlank(int width, int height, COLORREF bgColor);
-	static Image* Capture(HWND hWnd, int x, int y, int width, int height);
+	static Image* Capture(HWND hWnd, const RECT* captureRect);
+	static Image* CaptureDesktop();
 };

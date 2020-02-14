@@ -1,20 +1,18 @@
+#include "CaptureWnd.hpp"
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include "WindowGdi.hpp"
 
-int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, INT)
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
 {
-	WindowGdi wnd(TEXT("Eve Valrandir"), 800, 600, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+	Image* image = CaptureWnd::Capture();
+	if(!image)
+		return 0;
 
-	//Image* img = Image::CreateBlank(200, 200, RGB(255, 255, 0));
-	HWND hwnd = FindWindow(nullptr, TEXT("EVE"));
-	ShowWindow(hwnd, SW_NORMAL);
-	Sleep(500);
-	Image* img = Image::Capture(hwnd, 0, 0, 200, 200);
-	wnd.DrawImage(img, 50, 20);
-	delete img;
+	WindowGdi window(TEXT("Overlord"), 800, 600, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+	window.DrawImage(image, 0, 0);
+	delete image;
 
-	while(wnd.Update())
+	while(window.Update())
 		Sleep(1);
 
 	return 0;

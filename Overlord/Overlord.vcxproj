@@ -140,11 +140,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="WindowGdi.hpp" />
   </ItemGroup>

@@ -1,8 +1,23 @@
 #include "Image.hpp"
 
-void Fill(HDC hDC, COLORREF color, int width, int height)
+static void GetCaptureZone(HWND hWnd, const RECT* rect, int& x, int& y, int& width, int& height)
 {
-	RECT rect{ 0, 0, width, height };
+	RECT r;
+
+	if(rect)
+		r = *rect;
+	else
+		GetWindowRect(hWnd, &r);
+
+	x = r.left;
+	y = r.top;
+	width = r.right - x;
+	height = r.bottom - y;
+}
+
+static void Fill(HDC hDC, COLORREF color, int width, int height)
+{
+	RECT rect{0, 0, width, height};
 	HBRUSH hBrush = CreateSolidBrush(color);
 	FillRect(hDC, &rect, hBrush);
 	DeleteObject(hBrush);
@@ -27,8 +42,11 @@ Image* Image::CreateBlank(int width, int height, COLORREF bgColor)
 	return new Image(width, height, hDC, hBitmap);
 }
 
-Image* Image::Capture(HWND hWnd, int x, int y, int width, int height)
+Image* Image::Capture(HWND hWnd, const RECT* captureRect)
 {
+	int x, y, width, height;
+	GetCaptureZone(hWnd, captureRect, x, y, width, height);
+
 	HDC hSourceDC = ::GetDC(hWnd);
 	HDC hDC = CreateCompatibleDC(hSourceDC);
 	HBITMAP hBitmap = CreateCompatibleBitmap(hSourceDC, width, height);
@@ -37,4 +55,10 @@ Image* Image::Capture(HWND hWnd, int x, int y, int width, int height)
 	ReleaseDC(hWnd, hSourceDC);
 
 	return new Image(width, height, hDC, hBitmap);
+}
+
+Image* Image::CaptureDesktop()
+{
+	RECT rect{0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
+	return Capture(HWND_DESKTOP, &rect);
 }

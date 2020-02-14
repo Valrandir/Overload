@@ -4,9 +4,11 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="CaptureWnd.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
     <ClInclude Include="Image.hpp" />
+    <ClInclude Include="CaptureWnd.hpp" />
   </ItemGroup>
 </Project>
