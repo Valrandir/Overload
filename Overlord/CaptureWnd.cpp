@@ -105,10 +105,6 @@ CaptureWnd::CaptureWnd()
 	delete desktopImage;
 	SetCursor(IDC_CROSS);
 	Show();
-
-	RECT rect {100, 100, 300, 300};
-	FillRect(_hDC, &rect, CreateSolidBrush(RGB(128, 0, 0)));
-	InvalidateRect(_hWnd, 0, FALSE);
 }
 
 CaptureWnd::~CaptureWnd() {}

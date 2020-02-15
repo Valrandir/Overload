@@ -142,12 +142,14 @@
   <ItemGroup>
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="lib\lodepng\lodepng.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="Image.hpp" />
+    <ClInclude Include="lib\lodepng\lodepng.h" />
     <ClInclude Include="WindowGdi.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

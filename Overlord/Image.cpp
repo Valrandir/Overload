@@ -62,3 +62,40 @@ Image* Image::CaptureDesktop()
 	RECT rect{0, 0, GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
 	return Capture(HWND_DESKTOP, &rect);
 }
+
+static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap);
+
+void Image::SaveToFile(const char* filename)
+{
+	SaveImageToFile(filename, _hDC, _hBitmap);
+}
+
+#include "lib/lodepng/lodepng.h"
+
+static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap)
+{
+	BITMAPINFO bi{};
+	BITMAPINFOHEADER& bih = bi.bmiHeader;
+	bih.biSize = sizeof(bih);
+
+	//Initialize BITMAPINFO
+	GetDIBits(hDC, hBitmap, 0, 0, nullptr, &bi, DIB_RGB_COLORS);
+	bih.biCompression = BI_RGB;
+	bih.biBitCount = 32;
+	bih.biHeight *= -1;
+
+	//Get bits
+	unsigned char* bits = new unsigned char[bih.biSizeImage];
+	GetDIBits(hDC, hBitmap, 0, bih.biHeight, bits, &bi, DIB_RGB_COLORS);
+
+	//Swap BGRA to RGBA
+	for(auto it = bits, end = it + bih.biSizeImage; it < end; it += 4) {
+		auto s = *it;
+		it[0] = it[2];
+		it[2] = s;
+	}
+
+	lodepng_encode32_file(filename, bits, bih.biWidth, -bih.biHeight);
+
+	delete[] bits;
+}

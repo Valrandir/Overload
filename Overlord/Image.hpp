@@ -21,4 +21,6 @@ public:
 	static Image* CreateBlank(int width, int height, COLORREF bgColor);
 	static Image* Capture(HWND hWnd, const RECT* captureRect);
 	static Image* CaptureDesktop();
+
+	void SaveToFile(const char* filename);
 };

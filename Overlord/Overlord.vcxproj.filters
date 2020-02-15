@@ -5,10 +5,24 @@
     <ClCompile Include="WindowGdi.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
+    <ClCompile Include="lib\lodepng\lodepng.cpp">
+      <Filter>lib\lodepng</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="CaptureWnd.hpp" />
+    <ClInclude Include="lib\lodepng\lodepng.h">
+      <Filter>lib\lodepng</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="lib">
+      <UniqueIdentifier>{4bae19fd-300f-445b-9829-13ce4c96124a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\lodepng">
+      <UniqueIdentifier>{e76dd857-cc1a-4f77-a2e6-12bd44965d9b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>
