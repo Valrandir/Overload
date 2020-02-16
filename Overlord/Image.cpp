@@ -63,7 +63,18 @@ Image* Image::CaptureDesktop()
 	return Capture(HWND_DESKTOP, &rect);
 }
 
+static void LoadImageFromFile(const char* filename, int& width, int& height, HDC& hDC, HBITMAP& hBitmap);
 static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap);
+
+Image* Image::LoadFile(const char* filename)
+{
+	int width, height;
+	HDC hDC;
+	HBITMAP hBitmap;
+
+	LoadImageFromFile(filename, width, height, hDC, hBitmap);
+	return new Image(width, height, hDC, hBitmap);
+}
 
 void Image::SaveToFile(const char* filename)
 {
@@ -71,6 +82,41 @@ void Image::SaveToFile(const char* filename)
 }
 
 #include "lib/lodepng/lodepng.h"
+static void SwapColors(unsigned char* bits, size_t size);
+
+static void LoadImageFromFile(const char* filename, int& width, int& height, HDC& hDC, HBITMAP& hBitmap)
+{
+	unsigned char* image = 0;
+	unsigned w, h;
+
+	//Decode png from file
+	lodepng_decode32_file(&image, &w, &h, filename);
+	width = (int)w;
+	height = (int)h;
+
+	//Swap RGBA to BGRA
+	SwapColors(image, width * height * 4);
+
+	//Create bitmap
+	HDC hDesktopDC = GetDC(HWND_DESKTOP);
+	hDC = CreateCompatibleDC(hDesktopDC);
+	hBitmap = CreateCompatibleBitmap(hDesktopDC, width, height);
+	SelectObject(hDC, hBitmap);
+	ReleaseDC(HWND_DESKTOP, hDesktopDC);
+
+	//Set bits
+	BITMAPINFO bi{};
+	BITMAPINFOHEADER& bih = bi.bmiHeader;
+	bih.biSize = sizeof(bih);
+	bih.biPlanes = 1;
+	bih.biCompression = BI_RGB;
+	bih.biBitCount = 32;
+	bih.biWidth = width;
+	bih.biHeight = -height;
+	SetDIBits(hDC, hBitmap, 0, height, image, &bi, DIB_RGB_COLORS);
+
+	free(image);
+}
 
 static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap)
 {
@@ -89,13 +135,20 @@ static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap)
 	GetDIBits(hDC, hBitmap, 0, bih.biHeight, bits, &bi, DIB_RGB_COLORS);
 
 	//Swap BGRA to RGBA
-	for(auto it = bits, end = it + bih.biSizeImage; it < end; it += 4) {
+	SwapColors(bits, bih.biSizeImage);
+
+	//Encore png to file
+	lodepng_encode32_file(filename, bits, bih.biWidth, -bih.biHeight);
+
+	delete[] bits;
+}
+
+//Swap R and B in RGBA
+static void SwapColors(unsigned char* bits, size_t size)
+{
+	for(auto it = bits, end = it + size; it < end; it += 4) {
 		auto s = *it;
 		it[0] = it[2];
 		it[2] = s;
 	}
-
-	lodepng_encode32_file(filename, bits, bih.biWidth, -bih.biHeight);
-
-	delete[] bits;
 }
