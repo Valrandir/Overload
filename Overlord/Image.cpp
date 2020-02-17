@@ -1,4 +1,8 @@
 #include "Image.hpp"
+#include "lib/lodepng/lodepng.h"
+
+static BYTE* BitsFromBitmap(HDC hDC, HBITMAP hBitmap);
+static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP& hBitmap);
 
 static void GetCaptureZone(HWND hWnd, const RECT* rect, int& x, int& y, int& width, int& height)
 {
@@ -27,6 +31,19 @@ Image::~Image()
 {
 	DeleteDC(_hDC);
 	DeleteObject(_hBitmap);
+	if(_bits)
+		free(_bits);
+}
+
+Image::Pixel* Image::GetPixels(int* pixelCount)
+{
+	if(pixelCount)
+		*pixelCount = _width * _height;
+
+	if(!_bits)
+		_bits = BitsFromBitmap(_hDC, _hBitmap);
+
+	return (Pixel*)_bits;
 }
 
 Image* Image::CreateBlank(int width, int height, COLORREF bgColor)
@@ -63,39 +80,65 @@ Image* Image::CaptureDesktop()
 	return Capture(HWND_DESKTOP, &rect);
 }
 
-static void LoadImageFromFile(const char* filename, int& width, int& height, HDC& hDC, HBITMAP& hBitmap);
-static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap);
-
 Image* Image::LoadFile(const char* filename)
 {
 	int width, height;
 	HDC hDC;
 	HBITMAP hBitmap;
+	BYTE* bits;
 
-	LoadImageFromFile(filename, width, height, hDC, hBitmap);
-	return new Image(width, height, hDC, hBitmap);
+	//Decode png from file
+	unsigned w, h;
+	lodepng_decode32_file(&bits, &w, &h, filename);
+	width = (int)w;
+	height = (int)h;
+
+	BitmapFromBits(bits, width, height, hDC, hBitmap);
+
+	return new Image(width, height, hDC, hBitmap, bits);
 }
 
 void Image::SaveToFile(const char* filename)
 {
-	SaveImageToFile(filename, _hDC, _hBitmap);
+	if(_bits == nullptr)
+		_bits = BitsFromBitmap(_hDC, _hBitmap);
+
+	//Encore png to file
+	lodepng_encode32_file(filename, _bits, _width, _height);
 }
 
-#include "lib/lodepng/lodepng.h"
-static void SwapColors(unsigned char* bits, size_t size);
-
-static void LoadImageFromFile(const char* filename, int& width, int& height, HDC& hDC, HBITMAP& hBitmap)
+//Swap R and B in RGBA
+static void SwapColors(BYTE* bits, size_t size)
 {
-	unsigned char* image = 0;
-	unsigned w, h;
+	for(auto it = bits, end = it + size; it < end; it += 4) {
+		auto s = *it;
+		it[0] = it[2];
+		it[2] = s;
+	}
+}
 
-	//Decode png from file
-	lodepng_decode32_file(&image, &w, &h, filename);
-	width = (int)w;
-	height = (int)h;
+static BYTE* BitsFromBitmap(HDC hDC, HBITMAP hBitmap)
+{
+	BITMAPINFO bi{};
+	BITMAPINFOHEADER& bih = bi.bmiHeader;
+	bih.biSize = sizeof(bih);
+	GetDIBits(hDC, hBitmap, 0, 0, nullptr, &bi, DIB_RGB_COLORS);
 
+	bih.biCompression = BI_RGB;
+	bih.biBitCount = 32;
+	bih.biHeight *= -1;
+	BYTE* bits = (BYTE*)malloc(bih.biSizeImage);
+	GetDIBits(hDC, hBitmap, 0, bih.biHeight, bits, &bi, DIB_RGB_COLORS);
+
+	SwapColors(bits, bih.biSizeImage);
+
+	return bits;
+}
+
+static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP& hBitmap)
+{
 	//Swap RGBA to BGRA
-	SwapColors(image, width * height * 4);
+	SwapColors(bits, width * height * 4);
 
 	//Create bitmap
 	HDC hDesktopDC = GetDC(HWND_DESKTOP);
@@ -113,42 +156,5 @@ static void LoadImageFromFile(const char* filename, int& width, int& height, HDC
 	bih.biBitCount = 32;
 	bih.biWidth = width;
 	bih.biHeight = -height;
-	SetDIBits(hDC, hBitmap, 0, height, image, &bi, DIB_RGB_COLORS);
-
-	free(image);
-}
-
-static void SaveImageToFile(const char* filename, HDC hDC, HBITMAP hBitmap)
-{
-	BITMAPINFO bi{};
-	BITMAPINFOHEADER& bih = bi.bmiHeader;
-	bih.biSize = sizeof(bih);
-
-	//Initialize BITMAPINFO
-	GetDIBits(hDC, hBitmap, 0, 0, nullptr, &bi, DIB_RGB_COLORS);
-	bih.biCompression = BI_RGB;
-	bih.biBitCount = 32;
-	bih.biHeight *= -1;
-
-	//Get bits
-	unsigned char* bits = new unsigned char[bih.biSizeImage];
-	GetDIBits(hDC, hBitmap, 0, bih.biHeight, bits, &bi, DIB_RGB_COLORS);
-
-	//Swap BGRA to RGBA
-	SwapColors(bits, bih.biSizeImage);
-
-	//Encore png to file
-	lodepng_encode32_file(filename, bits, bih.biWidth, -bih.biHeight);
-
-	delete[] bits;
-}
-
-//Swap R and B in RGBA
-static void SwapColors(unsigned char* bits, size_t size)
-{
-	for(auto it = bits, end = it + size; it < end; it += 4) {
-		auto s = *it;
-		it[0] = it[2];
-		it[2] = s;
-	}
+	SetDIBits(hDC, hBitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
 }

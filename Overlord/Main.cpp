@@ -5,7 +5,7 @@
 void LoadImageTest()
 {
 	Image* image = Image::LoadFile("C:\\Users\\Valrandir\\Desktop\\out\\out.png");
-	WindowGdi window(TEXT("Overlord"), image->GetWidth(), image->GetHeight(), WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+	WindowGdi window(TEXT("Loaded image"), image->GetWidth(), image->GetHeight(), WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 	window.DrawImage(image, 0, 0);
 	delete image;
 
@@ -16,10 +16,13 @@ void LoadImageTest()
 void SaveImageTest()
 {
 	Image* image = CaptureWnd::Capture();
+
+	int count;
+	auto pixels = image->GetPixels(&count);
 	if(!image)
 		return;
 
-	WindowGdi window(TEXT("Overlord"), 800, 600, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
+	WindowGdi window(TEXT("Captured image"), 800, 600, WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 	window.DrawImage(image, 0, 0);
 	image->SaveToFile("C:\\Users\\Valrandir\\Desktop\\out\\out.png");
 	delete image;
