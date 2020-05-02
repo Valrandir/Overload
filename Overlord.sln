@@ -7,6 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Overlord", "Overlord\Overlo
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OverlordTests", "OverlordTests\OverlordTests.vcxproj", "{62BA1DFE-BFF4-44B5-9D90-1A06C8E47E95}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF56FC10-429A-4D63-956D-7FEA300C1ACB}"
+	ProjectSection(SolutionItems) = preProject
+		.clang-format = .clang-format
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug - Tests|x64 = Debug - Tests|x64
