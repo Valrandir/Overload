@@ -8,6 +8,7 @@
     <ClCompile Include="lib\lodepng\lodepng.cpp">
       <Filter>lib\lodepng</Filter>
     </ClCompile>
+    <ClCompile Include="HotKeyMonitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
@@ -16,6 +17,7 @@
     <ClInclude Include="lib\lodepng\lodepng.h">
       <Filter>lib\lodepng</Filter>
     </ClInclude>
+    <ClInclude Include="HotKeyMonitor.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lib">

@@ -1,3 +1,5 @@
+#pragma warning(disable : 4267 4334 4551 6011 6297 26451 26812) //Altered source - Remove warnings
+
 /*
 LodePNG version 20200211
 
