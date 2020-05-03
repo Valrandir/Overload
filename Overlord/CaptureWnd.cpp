@@ -118,3 +118,32 @@ Image* CaptureWnd::Capture()
 
 	return captureWnd._capturedImage;
 }
+
+static decltype(CaptureSource::window_title) GetWindowText(RECT rect)
+{
+	POINT point{rect.left, rect.top};
+	HWND hWnd = WindowFromPoint(point);
+
+	if(!hWnd)
+		return nullptr;
+
+	TCHAR text[0xff];
+	GetWindowText(hWnd, text, 0xff);
+	return text;
+}
+
+CaptureSample CaptureWnd::Sample()
+{
+	CaptureWnd captureWnd;
+
+	while(captureWnd.Update())
+		Sleep(1);
+
+	CaptureSample capture_sample;
+	capture_sample.capture_source.source_rect = captureWnd._selRect;
+	capture_sample.capture_source.window_title = L"hello";
+	capture_sample.image = captureWnd._capturedImage;
+	capture_sample.capture_source.window_title = GetWindowText(captureWnd._selRect);
+
+	return capture_sample;
+}

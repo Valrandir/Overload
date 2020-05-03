@@ -9,6 +9,7 @@
       <Filter>lib\lodepng</Filter>
     </ClCompile>
     <ClCompile Include="HotKeyMonitor.cpp" />
+    <ClCompile Include="CaptureDialog.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
@@ -18,6 +19,16 @@
       <Filter>lib\lodepng</Filter>
     </ClInclude>
     <ClInclude Include="HotKeyMonitor.hpp" />
+    <ClInclude Include="resource.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureDialog.hpp" />
+    <ClInclude Include="CaptureSample.hpp">
+      <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureSource.hpp">
+      <Filter>Entities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lib">
@@ -26,5 +37,24 @@
     <Filter Include="lib\lodepng">
       <UniqueIdentifier>{e76dd857-cc1a-4f77-a2e6-12bd44965d9b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{1a7136c7-3a2f-495f-8751-e493b21ae716}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Entities">
+      <UniqueIdentifier>{55a96db0-d244-4084-a69c-0bfa2dce578c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Overlord.ico">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Overlord.rc">
+      <Filter>Resources</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.clang-format" />
   </ItemGroup>
 </Project>

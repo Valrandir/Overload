@@ -31,9 +31,17 @@ void SaveImageTest()
 		Sleep(1);
 }
 
-int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
+void ImageTest()
 {
 	SaveImageTest();
 	LoadImageTest();
+}
+
+#include "CaptureDialog.hpp"
+
+int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
+{
+	auto capture_sample = CaptureWnd::Sample();
+	CaptureDialog::ShowDialog(capture_sample);
 	return 0;
 }

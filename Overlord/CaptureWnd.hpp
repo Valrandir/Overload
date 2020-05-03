@@ -1,5 +1,6 @@
 #pragma once
 #include "WindowGdi.hpp"
+#include "CaptureSample.hpp"
 
 class CaptureWnd : public WindowGdi {
 	LRESULT WndProc(UINT msg, WPARAM wParam, LPARAM lParam) override;
@@ -17,4 +18,5 @@ public:
 	CaptureWnd(const CaptureWnd&) = delete;
 	CaptureWnd& operator=(const CaptureWnd&) = delete;
 	static Image* Capture();
+	static CaptureSample Sample();
 };

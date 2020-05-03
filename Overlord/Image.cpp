@@ -138,7 +138,7 @@ static BYTE* BitsFromBitmap(HDC hDC, HBITMAP hBitmap)
 static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP& hBitmap)
 {
 	//Swap RGBA to BGRA
-	SwapColors(bits, width * height * 4);
+	SwapColors(bits, (size_t)width * height * 4);
 
 	//Create bitmap
 	HDC hDesktopDC = GetDC(HWND_DESKTOP);
