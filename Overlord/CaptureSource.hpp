@@ -5,5 +5,5 @@
 
 struct CaptureSource {
 	std::wstring window_title;
-	RECT source_rect;
+	RECT source_rect{};
 };

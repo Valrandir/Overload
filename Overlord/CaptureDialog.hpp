@@ -3,5 +3,6 @@
 
 class CaptureDialog {
 public:
-	static void ShowDialog(const CaptureSample& capture_sample);
+	CaptureDialog() = delete;
+	static bool ShowDialog(const CaptureSample& capture_sample);
 };

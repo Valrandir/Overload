@@ -4,5 +4,5 @@
 
 struct CaptureSample {
 	CaptureSource capture_source;
-	Image* image;
+	Image* image{};
 };

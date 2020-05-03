@@ -9,7 +9,9 @@
       <Filter>lib\lodepng</Filter>
     </ClCompile>
     <ClCompile Include="HotKeyMonitor.cpp" />
-    <ClCompile Include="CaptureDialog.cpp" />
+    <ClCompile Include="CaptureDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
@@ -22,12 +24,14 @@
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
     </ClInclude>
-    <ClInclude Include="CaptureDialog.hpp" />
     <ClInclude Include="CaptureSample.hpp">
       <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="CaptureSource.hpp">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureDialog.hpp">
+      <Filter>Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +46,9 @@
     </Filter>
     <Filter Include="Entities">
       <UniqueIdentifier>{55a96db0-d244-4084-a69c-0bfa2dce578c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs">
+      <UniqueIdentifier>{6a96ef68-7838-4da5-a494-0c43b185fbac}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
