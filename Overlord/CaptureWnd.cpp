@@ -44,6 +44,25 @@ static bool RectSizeIsNotZero(const RECT& rect)
 	return rect.left < rect.right && rect.top < rect.bottom;
 }
 
+HWND GetWindowFromRect(const RECT& rect)
+{
+	POINT{rect.left, rect.top};
+	HWND hWnd = WindowFromPoint(POINT{rect.left, rect.top});
+
+	if(!hWnd)
+		throw new std::exception("WindowFromPoint failed");
+
+	return hWnd;
+}
+
+std::wstring GetWindowText(HWND hWnd)
+{
+	int cb_size = GetWindowTextLength(hWnd) * sizeof(wchar_t);
+	wchar_t* buffer = new wchar_t[cb_size];
+	GetWindowText(hWnd, buffer, cb_size);
+	return std::wstring(buffer);
+}
+
 LRESULT CaptureWnd::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch(msg) {
@@ -60,12 +79,12 @@ void CaptureWnd::OnMouseMove(int x, int y)
 	if(!_selecting)
 		return;
 
-	RECT rect = _selRect;
+	RECT rect = _sel_rect;
 
-	DrawFocusRect(_hDC, &_selRect);
-	DragRect(_selRect, _origin, x, y);
-	DrawFocusRect(_hDC, &_selRect);
-	MergeRect(rect, _selRect);
+	DrawFocusRect(_hDC, &_sel_rect);
+	DragRect(_sel_rect, _origin, x, y);
+	DrawFocusRect(_hDC, &_sel_rect);
+	MergeRect(rect, _sel_rect);
 	InvalidateRect(_hWnd, &rect, FALSE);
 }
 
@@ -75,20 +94,20 @@ void CaptureWnd::OnMouseDown(int x, int y)
 	_origin.x = x;
 	_origin.y = y;
 
-	_selRect.left = x;
-	_selRect.top = y;
-	_selRect.right = x;
-	_selRect.bottom = y;
+	_sel_rect.left = x;
+	_sel_rect.top = y;
+	_sel_rect.right = x;
+	_sel_rect.bottom = y;
 
-	DrawFocusRect(_hDC, &_selRect);
-	InvalidateRect(_hWnd, &_selRect, FALSE);
+	DrawFocusRect(_hDC, &_sel_rect);
+	InvalidateRect(_hWnd, &_sel_rect, FALSE);
 }
 
 void CaptureWnd::OnMouseUp(int x, int y)
 {
 	_selecting = false;
 
-	RECT shrinkRect = _selRect;
+	RECT shrinkRect = _sel_rect;
 	ShrinkRect(shrinkRect);
 
 	if(RectSizeIsNotZero(shrinkRect)) {
@@ -100,40 +119,39 @@ void CaptureWnd::OnMouseUp(int x, int y)
 CaptureWnd::CaptureWnd() :
 	WindowGdi(TEXT(""), 0, 0, WS_POPUP)
 {
-	Image* desktopImage = Image::CaptureDesktop();
-	DrawImage(desktopImage, 0, 0);
-	delete desktopImage;
+	Image* desktop_image = Image::CaptureDesktop();
+	DrawImage(desktop_image, 0, 0);
+	delete desktop_image;
 	SetCursor(IDC_CROSS);
 	Show();
 }
 
 CaptureWnd::~CaptureWnd() {}
 
-static decltype(CaptureSource::window_title) GetWindowText(RECT rect)
-{
-	POINT point{rect.left, rect.top};
-	HWND hWnd = WindowFromPoint(point);
-
-	if(!hWnd)
-		return nullptr;
-
-	TCHAR text[0xff];
-	GetWindowText(hWnd, text, 0xff);
-	return text;
-}
-
 CaptureSample CaptureWnd::Capture()
 {
-	CaptureWnd captureWnd;
+	CaptureWnd capture_wnd;
 
-	while(captureWnd.Update())
+	while(capture_wnd.Update())
 		Sleep(1);
 
 	CaptureSample capture_sample;
-	capture_sample.source_rect = captureWnd._selRect;
-	capture_sample.window_title = L"hello";
-	capture_sample.image = captureWnd._capturedImage;
-	capture_sample.window_title = GetWindowText(captureWnd._selRect);
+	capture_sample.source_rect = capture_wnd._sel_rect;
+	capture_sample.window_handle = GetWindowFromRect(capture_wnd._sel_rect);
+	capture_sample.window_title = GetWindowText(capture_sample.window_handle);
+	capture_sample.image = capture_wnd._capturedImage;
+
+	return capture_sample;
+}
+
+CaptureSample CaptureWnd::Recapture(const CaptureSource& capture_source)
+{
+	//SetActiveWindow(capture_source.window_handle);
+	SetForegroundWindow(capture_source.window_handle);
+	Image* image = Image::Capture(HWND_DESKTOP, &capture_source.source_rect);
+
+	CaptureSample capture_sample(capture_source);
+	capture_sample.image = image;
 
 	return capture_sample;
 }
