@@ -2,7 +2,6 @@
 #include "CaptureSource.hpp"
 #include "Image.hpp"
 
-struct CaptureSample {
-	CaptureSource capture_source;
+struct CaptureSample : public CaptureSource {
 	Image* image{};
 };

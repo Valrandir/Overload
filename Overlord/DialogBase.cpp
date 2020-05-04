@@ -9,6 +9,9 @@ INT_PTR CALLBACK DialogBase::DlgProcStatic(HWND hDialogWnd, UINT msg, WPARAM wPa
 {
 	if(msg == WM_INITDIALOG) {
 		SetWindowLongPtr(hDialogWnd, GWLP_USERDATA, (LONG_PTR)lParam);
+		DialogBase* db = (DialogBase*)lParam;
+		db->_hDialogWnd = hDialogWnd;
+		db->Initialize();
 		return true;
 	}
 

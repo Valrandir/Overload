@@ -2,32 +2,23 @@
 #include "resource.h"
 #include <sstream>
 
-void CaptureDialog::InitDialog(HWND hDialogWnd)
+bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
 {
-	auto title = _capture_sample->capture_source.window_title.c_str();
+	CaptureDialog capture_dialog(capture_sample);
+	return capture_dialog.ShowModal(IDD_CAPTURE_SAMPLE);
+}
+
+void CaptureDialog::Initialize()
+{
+	auto title = _capture_sample->window_title.c_str();
 
 	std::wostringstream woss;
-	auto r = _capture_sample->capture_source.source_rect;
+	auto r = _capture_sample->source_rect;
 	woss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
 	auto position = woss.str();
 
-	SetDlgItemText(hDialogWnd, IDC_EDIT_TITLE, title);
-	SetDlgItemText(hDialogWnd, IDC_EDIT_POSITION, position.c_str());
-}
-
-void CaptureDialog::DrawSampleImage(const DRAWITEMSTRUCT* dis)
-{
-	if(dis->itemAction != ODA_DRAWENTIRE)
-		return;
-
-	auto image = _capture_sample->image;
-	if(image) {
-		auto hdcSrc = image->GetDC();
-		auto w = image->GetWidth();
-		auto h = image->GetHeight();
-
-		BitBlt(dis->hDC, 0, 0, w, h, hdcSrc, 0, 0, SRCCOPY);
-	}
+	SetDlgItemText(_hDialogWnd, IDC_EDIT_TITLE, title);
+	SetDlgItemText(_hDialogWnd, IDC_EDIT_POSITION, position.c_str());
 }
 
 INT_PTR CaptureDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -53,8 +44,17 @@ INT_PTR CaptureDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
 }
 
-bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
+void CaptureDialog::DrawSampleImage(const DRAWITEMSTRUCT* dis)
 {
-	CaptureDialog capture_dialog(capture_sample);
-	return capture_dialog.ShowModal(IDD_CAPTURE_SAMPLE);
+	if(dis->itemAction != ODA_DRAWENTIRE)
+		return;
+
+	auto image = _capture_sample->image;
+	if(image) {
+		auto hdcSrc = image->GetDC();
+		auto w = image->GetWidth();
+		auto h = image->GetHeight();
+
+		BitBlt(dis->hDC, 0, 0, w, h, hdcSrc, 0, 0, SRCCOPY);
+	}
 }

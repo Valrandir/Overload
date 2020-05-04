@@ -15,7 +15,7 @@ void LoadImageTest()
 
 void SaveImageTest()
 {
-	Image* image = CaptureWnd::Capture();
+	Image* image = CaptureWnd::Capture().image;
 
 	int count;
 	auto pixels = image->GetPixels(&count);
@@ -41,7 +41,8 @@ void ImageTest()
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
 {
-	auto capture_sample = CaptureWnd::Sample();
+	auto capture_sample = CaptureWnd::Capture();
+
 	CaptureDialog::ShowDialog(&capture_sample);
 	return 0;
 }

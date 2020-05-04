@@ -109,16 +109,6 @@ CaptureWnd::CaptureWnd() :
 
 CaptureWnd::~CaptureWnd() {}
 
-Image* CaptureWnd::Capture()
-{
-	CaptureWnd captureWnd;
-
-	while(captureWnd.Update())
-		Sleep(1);
-
-	return captureWnd._capturedImage;
-}
-
 static decltype(CaptureSource::window_title) GetWindowText(RECT rect)
 {
 	POINT point{rect.left, rect.top};
@@ -132,7 +122,7 @@ static decltype(CaptureSource::window_title) GetWindowText(RECT rect)
 	return text;
 }
 
-CaptureSample CaptureWnd::Sample()
+CaptureSample CaptureWnd::Capture()
 {
 	CaptureWnd captureWnd;
 
@@ -140,10 +130,10 @@ CaptureSample CaptureWnd::Sample()
 		Sleep(1);
 
 	CaptureSample capture_sample;
-	capture_sample.capture_source.source_rect = captureWnd._selRect;
-	capture_sample.capture_source.window_title = L"hello";
+	capture_sample.source_rect = captureWnd._selRect;
+	capture_sample.window_title = L"hello";
 	capture_sample.image = captureWnd._capturedImage;
-	capture_sample.capture_source.window_title = GetWindowText(captureWnd._selRect);
+	capture_sample.window_title = GetWindowText(captureWnd._selRect);
 
 	return capture_sample;
 }

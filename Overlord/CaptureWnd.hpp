@@ -17,6 +17,5 @@ public:
 	virtual ~CaptureWnd();
 	CaptureWnd(const CaptureWnd&) = delete;
 	CaptureWnd& operator=(const CaptureWnd&) = delete;
-	static Image* Capture();
-	static CaptureSample Sample();
+	static CaptureSample Capture();
 };

@@ -8,9 +8,12 @@ public:
 	static INT_PTR CALLBACK DlgProcStatic(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 protected:
+	HWND _hDialogWnd{};
+
 	static const int DIALOG_SUCCESS = 1;
 	static const int DIALOG_CANCEL = 2;
 	DialogBase() {}
+	virtual void Initialize(){};
 	virtual INT_PTR DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 private:
