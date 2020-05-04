@@ -12,6 +12,9 @@
     <ClCompile Include="CaptureDialog.cpp">
       <Filter>Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="DialogBase.cpp">
+      <Filter>Dialogs\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
@@ -33,6 +36,9 @@
     <ClInclude Include="CaptureDialog.hpp">
       <Filter>Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="DialogBase.hpp">
+      <Filter>Dialogs\Base</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lib">
@@ -50,6 +56,9 @@
     <Filter Include="Dialogs">
       <UniqueIdentifier>{6a96ef68-7838-4da5-a494-0c43b185fbac}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dialogs\Base">
+      <UniqueIdentifier>{a8c44e32-7aab-4af7-9489-ffbca6bf5109}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Overlord.ico">
@@ -60,8 +69,5 @@
     <ResourceCompile Include="Overlord.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\.clang-format" />
   </ItemGroup>
 </Project>

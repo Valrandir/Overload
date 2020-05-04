@@ -204,6 +204,7 @@
   <ItemGroup>
     <ClCompile Include="CaptureDialog.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
+    <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="lib\lodepng\lodepng.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="CaptureSource.hpp" />
     <ClInclude Include="CaptureSample.hpp" />
     <ClInclude Include="CaptureWnd.hpp" />
+    <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="lib\lodepng\lodepng.h" />
@@ -226,9 +228,6 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="Overlord.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\.clang-format" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

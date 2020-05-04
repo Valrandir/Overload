@@ -42,6 +42,6 @@ void ImageTest()
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
 {
 	auto capture_sample = CaptureWnd::Sample();
-	CaptureDialog::ShowDialog(capture_sample);
+	CaptureDialog::ShowDialog(&capture_sample);
 	return 0;
 }

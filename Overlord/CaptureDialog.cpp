@@ -2,12 +2,12 @@
 #include "resource.h"
 #include <sstream>
 
-static void InitDialog(HWND hDialogWnd, const CaptureSample* capture_sample)
+void CaptureDialog::InitDialog(HWND hDialogWnd)
 {
-	auto title = capture_sample->capture_source.window_title.c_str();
+	auto title = _capture_sample->capture_source.window_title.c_str();
 
 	std::wostringstream woss;
-	auto r = capture_sample->capture_source.source_rect;
+	auto r = _capture_sample->capture_source.source_rect;
 	woss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
 	auto position = woss.str();
 
@@ -15,61 +15,46 @@ static void InitDialog(HWND hDialogWnd, const CaptureSample* capture_sample)
 	SetDlgItemText(hDialogWnd, IDC_EDIT_POSITION, position.c_str());
 }
 
-static void DrawSampleImage(const CaptureSample* capture_sample, const DRAWITEMSTRUCT* dis)
+void CaptureDialog::DrawSampleImage(const DRAWITEMSTRUCT* dis)
 {
 	if(dis->itemAction != ODA_DRAWENTIRE)
 		return;
 
-	auto image = capture_sample->image;
-	auto hdcSrc = image->GetDC();
-	auto w = image->GetWidth();
-	auto h = image->GetHeight();
+	auto image = _capture_sample->image;
+	if(image) {
+		auto hdcSrc = image->GetDC();
+		auto w = image->GetWidth();
+		auto h = image->GetHeight();
 
-	BitBlt(dis->hDC, 0, 0, w, h, hdcSrc, 0, 0, SRCCOPY);
+		BitBlt(dis->hDC, 0, 0, w, h, hdcSrc, 0, 0, SRCCOPY);
+	}
 }
 
-static void SetDialogData(HWND hDialogWnd, LPARAM lParam)
-{
-	SetWindowLongPtr(hDialogWnd, GWLP_USERDATA, (LONG_PTR)lParam);
-}
-
-static const CaptureSample* GetDialogData(HWND hDialogWnd)
-{
-	return (const CaptureSample*)GetWindowLongPtr(hDialogWnd, GWLP_USERDATA);
-}
-
-static INT_PTR DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CaptureDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch(msg) {
-		case WM_INITDIALOG:
-			SetDialogData(hDialogWnd, lParam);
-			InitDialog(hDialogWnd, (const CaptureSample*)lParam);
-			return true;
-
 		case WM_DRAWITEM:
 			if(wParam == IDC_STATIC_SAMPLE) {
-				DrawSampleImage(GetDialogData(hDialogWnd), (const DRAWITEMSTRUCT*)lParam);
+				DrawSampleImage((const DRAWITEMSTRUCT*)lParam);
 				return true;
 			}
 			break;
-
-		case WM_CLOSE:
-			EndDialog(hDialogWnd, IDCANCEL);
-			return true;
-
 		case WM_COMMAND:
 			switch(LOWORD(wParam)) {
 				case IDOK:
+					EndDialog(hDialogWnd, DIALOG_SUCCESS);
+					return true;
 				case IDCANCEL:
-					EndDialog(hDialogWnd, LOWORD(wParam));
+					EndDialog(hDialogWnd, DIALOG_CANCEL);
 					return true;
 			}
 	}
 
-	return false;
+	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
 }
 
-bool CaptureDialog::ShowDialog(const CaptureSample& capture_sample)
+bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
 {
-	return IDOK == DialogBoxParam(GetModuleHandle(0), MAKEINTRESOURCE(IDD_CAPTURE_SAMPLE), HWND_DESKTOP, DlgProc, reinterpret_cast<LPARAM>(&capture_sample));
+	CaptureDialog capture_dialog(capture_sample);
+	return capture_dialog.ShowModal(IDD_CAPTURE_SAMPLE);
 }
