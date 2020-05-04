@@ -65,8 +65,8 @@ LRESULT WindowGdi::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
 	return DefWindowProc(_hWnd, msg, wParam, lParam);
 }
 
-WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style)
-	: _width{width}, _height{height}, _destroyed{}
+WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style) :
+	_width{width}, _height{height}, _destroyed{}
 {
 	const LPCTSTR CLASS_NAME = TEXT("WindowGdi");
 	HINSTANCE hInstance = GetModuleHandle(NULL);

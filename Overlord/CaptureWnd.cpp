@@ -97,8 +97,8 @@ void CaptureWnd::OnMouseUp(int x, int y)
 	}
 }
 
-CaptureWnd::CaptureWnd()
-	: WindowGdi(TEXT(""), 0, 0, WS_POPUP)
+CaptureWnd::CaptureWnd() :
+	WindowGdi(TEXT(""), 0, 0, WS_POPUP)
 {
 	Image* desktopImage = Image::CaptureDesktop();
 	DrawImage(desktopImage, 0, 0);

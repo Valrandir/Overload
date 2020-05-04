@@ -20,8 +20,8 @@ private:
 		HotKeyFunc callback;
 		void* userdata;
 
-		HotKey(int id, HotKeyFunc callback, void* userdata)
-			: id{id}, callback{callback}, userdata{userdata} {}
+		HotKey(int id, HotKeyFunc callback, void* userdata) :
+			id{id}, callback{callback}, userdata{userdata} {}
 	};
 
 	std::vector<HotKey> _registeredHotKeys;

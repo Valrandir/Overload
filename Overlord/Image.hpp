@@ -8,8 +8,8 @@ class Image {
 	HBITMAP _hBitmap;
 	BYTE* _bits;
 
-	Image(int width, int height, HDC hDC, HBITMAP hBitmap, BYTE* bits = nullptr)
-		: _width{width}, _height{height}, _hDC{hDC}, _hBitmap{hBitmap}, _bits{bits} {}
+	Image(int width, int height, HDC hDC, HBITMAP hBitmap, BYTE* bits = nullptr) :
+		_width{width}, _height{height}, _hDC{hDC}, _hBitmap{hBitmap}, _bits{bits} {}
 
 public:
 	struct Pixel {
