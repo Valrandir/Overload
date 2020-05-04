@@ -38,13 +38,21 @@ void ImageTest()
 }
 
 #include "CaptureDialog.hpp"
+#include "CompareDialog.hpp"
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
 {
-	auto capture_sample = CaptureWnd::Capture();
-	if(CaptureDialog::ShowDialog(&capture_sample)) {
-		auto cs2 = CaptureWnd::Recapture(capture_sample);
-		CaptureDialog::ShowDialog(&cs2);
+	CaptureSample cs1, cs2;
+	cs1 = CaptureWnd::Capture();
+	bool result = CaptureDialog::ShowDialog(&cs1);
+
+	if(result) {
+		cs2 = CaptureWnd::Recapture(cs1);
+		result = CaptureDialog::ShowDialog(&cs2);
+	}
+
+	if(result) {
+		CompareDialog::ShowDialog(cs1.image, cs2.image);
 	}
 
 	return 0;

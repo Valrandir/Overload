@@ -204,6 +204,7 @@
   <ItemGroup>
     <ClCompile Include="CaptureDialog.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
+    <ClCompile Include="CompareDialog.cpp" />
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="Image.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="CaptureSource.hpp" />
     <ClInclude Include="CaptureSample.hpp" />
     <ClInclude Include="CaptureWnd.hpp" />
+    <ClInclude Include="CompareDialog.hpp" />
     <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="Image.hpp" />

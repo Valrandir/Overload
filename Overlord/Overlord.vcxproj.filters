@@ -15,6 +15,9 @@
     <ClCompile Include="DialogBase.cpp">
       <Filter>Dialogs\Base</Filter>
     </ClCompile>
+    <ClCompile Include="CompareDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WindowGdi.hpp" />
@@ -38,6 +41,9 @@
     </ClInclude>
     <ClInclude Include="DialogBase.hpp">
       <Filter>Dialogs\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CompareDialog.hpp">
+      <Filter>Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
