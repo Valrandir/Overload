@@ -34,9 +34,9 @@ static void ShrinkRect(RECT& rect)
 	SystemParametersInfo(SPI_GETFOCUSBORDERWIDTH, 0, &focusBorder.cx, 0);
 	SystemParametersInfo(SPI_GETFOCUSBORDERHEIGHT, 0, &focusBorder.cy, 0);
 	rect.left += focusBorder.cx;
-	rect.right -= focusBorder.cx;
+	rect.right -= (focusBorder.cx + focusBorder.cx);
 	rect.top += focusBorder.cy;
-	rect.bottom -= focusBorder.cy;
+	rect.bottom -= (focusBorder.cy + focusBorder.cy);
 }
 
 static bool RectSizeIsNotZero(const RECT& rect)
@@ -107,11 +107,10 @@ void CaptureWnd::OnMouseUp(int x, int y)
 {
 	_selecting = false;
 
-	RECT shrinkRect = _sel_rect;
-	ShrinkRect(shrinkRect);
+	ShrinkRect(_sel_rect);
 
-	if(RectSizeIsNotZero(shrinkRect)) {
-		_capturedImage = Image::Capture(_hWnd, &shrinkRect);
+	if(RectSizeIsNotZero(_sel_rect)) {
+		_capturedImage = Image::Capture(_hWnd, &_sel_rect);
 		Close();
 	}
 }
