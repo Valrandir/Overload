@@ -2,9 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="WindowGdi.cpp" />
     <ClCompile Include="Image.cpp" />
-    <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="lib\lodepng\lodepng.cpp">
       <Filter>lib\lodepng</Filter>
     </ClCompile>
@@ -18,11 +16,19 @@
     <ClCompile Include="CompareDialog.cpp">
       <Filter>Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="ScrollHandler.cpp" />
+    <ClCompile Include="CaptureWnd.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowGdi.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WindowGdi.hpp" />
     <ClInclude Include="Image.hpp" />
-    <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="lib\lodepng\lodepng.h">
       <Filter>lib\lodepng</Filter>
     </ClInclude>
@@ -45,6 +51,16 @@
     <ClInclude Include="CompareDialog.hpp">
       <Filter>Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="ScrollHandler.hpp" />
+    <ClInclude Include="CaptureWnd.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageView.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowGdi.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="lib">
@@ -64,6 +80,9 @@
     </Filter>
     <Filter Include="Dialogs\Base">
       <UniqueIdentifier>{a8c44e32-7aab-4af7-9489-ffbca6bf5109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{d625cd4d-d328-40fc-9c28-dc358370b21f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

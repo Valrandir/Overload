@@ -1,18 +1,17 @@
 #pragma once
 #include "DialogBase.hpp"
-#include "Image.hpp"
+#include "ImageView.hpp"
 
 class CompareDialog : public DialogBase {
 public:
-	static bool ShowDialog(const Image* img1, const Image* img2);
+	static bool ShowDialog(const Image* imgA, const Image* imgB);
 	void Initialize() override;
 	INT_PTR DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
 
 private:
-	const Image *_img1, *_img2;
+	const Image *_imgA, *_imgB;
+	ImageView _imageViewA, _imageViewB;
 
-	CompareDialog(const Image* img1, const Image* img2) :
-		_img1{img1}, _img2{img2} {}
-
-	void DrawSampleImage(const Image* image, const DRAWITEMSTRUCT* dis);
+	CompareDialog(const Image* imgA, const Image* imgB) :
+		_imgA{imgA}, _imgB{imgB} {}
 };

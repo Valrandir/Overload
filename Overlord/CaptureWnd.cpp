@@ -44,7 +44,7 @@ static bool RectSizeIsNotZero(const RECT& rect)
 	return rect.left < rect.right && rect.top < rect.bottom;
 }
 
-HWND GetWindowFromRect(const RECT& rect)
+static HWND GetWindowFromRect(const RECT& rect)
 {
 	POINT{rect.left, rect.top};
 	HWND hWnd = WindowFromPoint(POINT{rect.left, rect.top});
@@ -55,7 +55,7 @@ HWND GetWindowFromRect(const RECT& rect)
 	return hWnd;
 }
 
-std::wstring GetWindowText(HWND hWnd)
+static std::wstring GetWindowText(HWND hWnd)
 {
 	int cb_size = GetWindowTextLength(hWnd) * sizeof(wchar_t);
 	wchar_t* buffer = new wchar_t[cb_size];

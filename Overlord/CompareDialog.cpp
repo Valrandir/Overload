@@ -2,32 +2,46 @@
 #include "resource.h"
 #include <cassert>
 
-bool CompareDialog::ShowDialog(const Image* img1, const Image* img2)
+static void RectToPoint(const RECT& rect, int& x, int& y, int& w, int& h)
 {
-	assert(img1);
-	assert(img2);
+	x = rect.left;
+	y = rect.top;
+	w = rect.right - x;
+	h = rect.bottom - y;
+}
 
-	CompareDialog compare_dialog(img1, img2);
+static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h)
+{
+	WINDOWPLACEMENT wp;
+	GetWindowPlacement(GetDlgItem(parent_window, dlg_item), &wp);
+	RectToPoint(wp.rcNormalPosition, x, y, w, h);
+}
+
+bool CompareDialog::ShowDialog(const Image* imgA, const Image* imgB)
+{
+	assert(imgA);
+	assert(imgB);
+
+	CompareDialog compare_dialog(imgA, imgB);
 	return compare_dialog.ShowModal(IDD_DIALOG_COMPARE);
 }
 
 void CompareDialog::Initialize()
 {
+	int x, y, w, h;
+
+	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_1, x, y, w, h);
+	_imageViewA.Initialize(_hDialogWnd, x, y, w, h);
+	_imageViewA.SetImage(this->_imgA);
+
+	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_2, x, y, w, h);
+	_imageViewB.Initialize(_hDialogWnd, x, y, w, h);
+	_imageViewB.SetImage(this->_imgB);
 }
 
 INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch(msg) {
-		case WM_DRAWITEM:
-			if(wParam == IDC_STATIC_IMG_1) {
-				DrawSampleImage(_img1, (const DRAWITEMSTRUCT*)lParam);
-				return true;
-			}
-			if(wParam == IDC_STATIC_IMG_2) {
-				DrawSampleImage(_img2, (const DRAWITEMSTRUCT*)lParam);
-				return true;
-			}
-			break;
 		case WM_COMMAND:
 			switch(LOWORD(wParam)) {
 				case IDOK:
@@ -40,16 +54,4 @@ INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	}
 
 	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
-}
-
-void CompareDialog::DrawSampleImage(const Image* image, const DRAWITEMSTRUCT* dis)
-{
-	if(dis->itemAction != ODA_DRAWENTIRE)
-		return;
-
-	auto hdcSrc = image->GetDC();
-	auto w = image->GetWidth();
-	auto h = image->GetHeight();
-
-	BitBlt(dis->hDC, 0, 0, w, h, hdcSrc, 0, 0, SRCCOPY);
 }

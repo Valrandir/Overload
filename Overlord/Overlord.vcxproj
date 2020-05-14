@@ -208,8 +208,10 @@
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageView.cpp" />
     <ClCompile Include="lib\lodepng\lodepng.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -221,8 +223,10 @@
     <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="Image.hpp" />
+    <ClInclude Include="ImageView.hpp" />
     <ClInclude Include="lib\lodepng\lodepng.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="ScrollHandler.hpp" />
     <ClInclude Include="WindowGdi.hpp" />
   </ItemGroup>
   <ItemGroup>
