@@ -29,9 +29,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height)
 	}
 
 	DWORD style = WS_CHILDWINDOW | WS_HSCROLL | WS_VSCROLL | WS_VISIBLE;
-	width += GetSystemMetrics(SM_CYHSCROLL);
-	height += GetSystemMetrics(SM_CYVSCROLL);
-	_hWnd = CreateWindowEx(0, CLASS_NAME, TEXT(""), style, x, y, width, height, hWndParent, NULL, hInstance, NULL);
+	_hWnd = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, x, y, width, height, hWndParent, NULL, hInstance, NULL);
 	SetWindowLongPtr(_hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 	HDC hDC = ::GetDC(_hWnd);
