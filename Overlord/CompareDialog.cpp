@@ -23,6 +23,16 @@ static void ScrollCallback(int offset_x, int offset_y, void* userdata)
 	linked_image_view->ScrollImage(offset_x, offset_y);
 }
 
+static void ZoomCallback(bool is_zoom_out, void* userdata)
+{
+	auto linked_image_view = (ImageView*)userdata;
+
+	if(is_zoom_out)
+		linked_image_view->ZoomOut();
+	else
+		linked_image_view->ZoomIn();
+}
+
 bool CompareDialog::ShowDialog(const Image* img_l, const Image* img_r)
 {
 	assert(img_l);
@@ -40,11 +50,13 @@ void CompareDialog::Initialize()
 	_image_view_l.Initialize(_hDialogWnd, x, y, w, h);
 	_image_view_l.SetImage(this->_img_l);
 	_image_view_l.SetScrollCallback(ScrollCallback, &_image_view_r);
+	_image_view_l.SetZoomCallback(ZoomCallback, &_image_view_r);
 
 	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_2, x, y, w, h);
 	_image_view_r.Initialize(_hDialogWnd, x, y, w, h);
 	_image_view_r.SetImage(this->_img_r);
 	_image_view_r.SetScrollCallback(ScrollCallback, &_image_view_l);
+	_image_view_r.SetZoomCallback(ZoomCallback, &_image_view_l);
 }
 
 INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)

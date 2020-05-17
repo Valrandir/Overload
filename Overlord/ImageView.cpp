@@ -37,8 +37,8 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height)
 	_hBitmap = CreateCompatibleBitmap(hDC, _width, _height);
 	ReleaseDC(_hWnd, hDC);
 	SelectObject(_hDC, _hBitmap);
-	RECT rect{0, 0, _width, _height};
-	FillRect(_hDC, &rect, (HBRUSH)LTGRAY_BRUSH);
+
+	ClearBackground();
 }
 
 ImageView::~ImageView()
@@ -94,6 +94,22 @@ void ImageView::SetScrollCallback(ScrollCallbackFunc callback, void* userdata)
 	_scroll_cb_userdata = userdata;
 }
 
+void ImageView::SetZoomCallback(ZoomCallbackFunc callback, void* userdata)
+{
+	_zoom_cb_func = callback;
+	_zoom_cb_userdata = userdata;
+}
+
+void ImageView::ZoomIn()
+{
+	UpdateZoom(1);
+}
+
+void ImageView::ZoomOut()
+{
+	UpdateZoom(-1);
+}
+
 void ImageView::SetupScrollInfo(const Image* image)
 {
 	assert(image);
@@ -111,7 +127,14 @@ void ImageView::DrawImage(const Image* image, int x, int y)
 	int w = image->GetWidth();
 	int h = image->GetHeight();
 	RECT rect{x, y, x + w, y + h};
-	BitBlt(_hDC, x, y, w, h, image->GetDC(), 0, 0, SRCCOPY);
+
+	if(_zoom_level > 1) {
+		auto zx = _zoom_factor * image->GetWidth();
+		auto zy = _zoom_factor * image->GetHeight();
+		StretchBlt(_hDC, x, y, zx, zy, image->GetDC(), 0, 0, image->GetWidth(), image->GetHeight(), SRCCOPY);
+	} else
+		BitBlt(_hDC, x, y, w, h, image->GetDC(), 0, 0, SRCCOPY);
+
 	InvalidateRect(_hWnd, NULL, FALSE);
 }
 
@@ -166,6 +189,7 @@ void ImageView::OnLMouseMove()
 	_mouse_origin.y = screen_pos.y;
 
 	ScrollImage(offset_x, offset_y);
+
 	if(_scroll_cb_func)
 		_scroll_cb_func(offset_x, offset_y, _scroll_cb_userdata);
 }
@@ -186,6 +210,47 @@ void ImageView::OnLMouseDown()
 void ImageView::OnLMouseUp()
 {
 	ReleaseCapture();
+}
+
+void ImageView::OnZoom(int direction)
+{
+	UpdateZoom(direction);
+
+	if(_zoom_cb_func)
+		_zoom_cb_func(direction == -1, _zoom_cb_userdata);
+}
+
+static int GetZoomFactor(int zoom_level)
+{
+	int zoom_factor = 1;
+
+	for(int i = 0; i < zoom_level - 1; ++i)
+		zoom_factor *= 2;
+
+	return zoom_factor;
+}
+
+void ImageView::UpdateZoom(int direction)
+{
+	_zoom_level += direction;
+
+	if(_zoom_level < 0)
+		_zoom_level = 0;
+
+	if(_zoom_level > ZOOM_LEVEL_MAX)
+		_zoom_level = ZOOM_LEVEL_MAX;
+
+	_zoom_factor = GetZoomFactor(_zoom_level);
+	_sbh.Setup(_hWnd, _width, _height, _image->GetWidth() * _zoom_factor, _image->GetHeight() * _zoom_factor);
+	auto sp = _sbh.GetPosition();
+	ClearBackground();
+	DrawImage(_image, -sp.x, -sp.y);
+}
+
+void ImageView::ClearBackground()
+{
+	RECT rect{0, 0, _width, _height};
+	FillRect(_hDC, &rect, (HBRUSH)LTGRAY_BRUSH);
 }
 
 LRESULT CALLBACK ImageView::WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -215,6 +280,12 @@ LRESULT ImageView::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
 			return 0;
 		case WM_LBUTTONUP:
 			OnLMouseUp();
+			return 0;
+		case WM_MOUSEWHEEL:
+			if((short)HIWORD(wParam) > 0)
+				OnZoom(-1);
+			else
+				OnZoom(1);
 			return 0;
 		case WM_HSCROLL:
 		case WM_VSCROLL:

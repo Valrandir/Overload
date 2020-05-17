@@ -1,15 +1,31 @@
 #include "ScrollHandler.hpp"
 #include <exception>
 
+static void AdjustForNewSize(int view_size, int old_size, int new_size, int& scroll_pos)
+{
+	if(old_size == 0)
+		return;
+
+	auto ratio = (double)new_size / old_size;
+	scroll_pos *= ratio;
+
+	auto diff = new_size - view_size;
+	if(scroll_pos > diff)
+		scroll_pos = diff;
+}
+
 void ScrollBarHandler::Setup(HWND parent_window, int view_width, int view_height, int content_width, int content_height)
 {
+	AdjustForNewSize(view_width, _content_width, content_width, _scroll_pos_x);
+	AdjustForNewSize(view_height, _content_height, content_height, _scroll_pos_y);
+
 	_parent_window = parent_window;
 	_view_width = view_width;
 	_view_height = view_height;
 	_content_width = content_width;
 	_content_height = content_height;
-	_h_scroll_enabled = SetupSingle(view_width, content_width, SB_HORZ);
-	_v_scroll_enabled = SetupSingle(view_height, content_height, SB_VERT);
+	_h_scroll_enabled = SetupSingle(_scroll_pos_x, view_width, content_width, SB_HORZ);
+	_v_scroll_enabled = SetupSingle(_scroll_pos_y, view_height, content_height, SB_VERT);
 }
 
 void ScrollBarHandler::HandleScroll(UINT msg, WPARAM wParam, LPARAM lParam)
@@ -37,7 +53,7 @@ bool ScrollBarHandler::OffsetScroll(int sox, int soy)
 	return scrolled;
 }
 
-bool ScrollBarHandler::SetupSingle(int view_size, int content_size, int sb_hv)
+bool ScrollBarHandler::SetupSingle(int scroll_pos, int view_size, int content_size, int sb_hv)
 {
 	auto diff = content_size - view_size;
 	if(diff >= 0) {
@@ -47,8 +63,9 @@ bool ScrollBarHandler::SetupSingle(int view_size, int content_size, int sb_hv)
 		si.nMin = 0;
 		si.nMax = diff;
 		si.nPage = 1;
-		si.nPos = 0;
+		si.nPos = scroll_pos;
 		SetScrollInfo(_parent_window, sb_hv, &si, TRUE);
+		EnableScrollBar(_parent_window, sb_hv, ESB_ENABLE_BOTH);
 		return true;
 	}
 
