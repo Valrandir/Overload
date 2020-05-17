@@ -6,6 +6,8 @@
 
 class ImageView {
 public:
+	using ScrollCallbackFunc = void (*)(int offset_x, int offset_y, void* userdata);
+
 	ImageView(){};
 	void Initialize(HWND hWndParent, int x, int y, int width, int height);
 	~ImageView();
@@ -17,6 +19,8 @@ public:
 	void Close();
 
 	void SetImage(const Image* image);
+	void ScrollImage(int offset_x, int offset_y);
+	void SetScrollCallback(ScrollCallbackFunc callback, void* userdata);
 
 	inline HWND GetHandle() const { return _hWnd; }
 	inline int GetWidth() const { return _width; }
@@ -33,14 +37,16 @@ private:
 	ScrollBarHandler _sbh;
 	bool _mouse_dragging{};
 	POINT _mouse_origin{};
+	ScrollCallbackFunc _scroll_cb_func{};
+	void* _scroll_cb_userdata;
 
 	void SetupScrollInfo(const Image* image);
 	void DrawImage(const Image* image, int x, int y);
 	void OnPaint();
 	void OnScroll(UINT msg, WPARAM wParam, LPARAM lParam);
-	void OnMouseMove(int x, int y);
-	void OnMouseDown(int x, int y);
-	void OnMouseUp(int x, int y);
+	void OnLMouseMove();
+	void OnLMouseDown();
+	void OnLMouseUp();
 	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT WndProc(UINT msg, WPARAM wParam, LPARAM lParam);
 };

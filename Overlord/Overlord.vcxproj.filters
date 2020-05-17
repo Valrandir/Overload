@@ -4,7 +4,7 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="lib\lodepng\lodepng.cpp">
-      <Filter>lib\lodepng</Filter>
+      <Filter>ExternalLibraries\lodepng</Filter>
     </ClCompile>
     <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="CaptureDialog.cpp">
@@ -20,17 +20,17 @@
     <ClCompile Include="CaptureWnd.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
-    <ClCompile Include="ImageView.cpp">
-      <Filter>Windows</Filter>
-    </ClCompile>
     <ClCompile Include="WindowGdi.cpp">
       <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>UserControls</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="lib\lodepng\lodepng.h">
-      <Filter>lib\lodepng</Filter>
+      <Filter>ExternalLibraries\lodepng</Filter>
     </ClInclude>
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="resource.h">
@@ -55,20 +55,14 @@
     <ClInclude Include="CaptureWnd.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="ImageView.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
     <ClInclude Include="WindowGdi.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
+    <ClInclude Include="ImageView.hpp">
+      <Filter>UserControls</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="lib">
-      <UniqueIdentifier>{4bae19fd-300f-445b-9829-13ce4c96124a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="lib\lodepng">
-      <UniqueIdentifier>{e76dd857-cc1a-4f77-a2e6-12bd44965d9b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{1a7136c7-3a2f-495f-8751-e493b21ae716}</UniqueIdentifier>
     </Filter>
@@ -83,6 +77,15 @@
     </Filter>
     <Filter Include="Windows">
       <UniqueIdentifier>{d625cd4d-d328-40fc-9c28-dc358370b21f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UserControls">
+      <UniqueIdentifier>{53793d9a-2f43-450e-a71d-a01a3b14dbd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLibraries">
+      <UniqueIdentifier>{4bae19fd-300f-445b-9829-13ce4c96124a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLibraries\lodepng">
+      <UniqueIdentifier>{e76dd857-cc1a-4f77-a2e6-12bd44965d9b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

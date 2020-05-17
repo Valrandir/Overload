@@ -80,6 +80,20 @@ void ImageView::SetImage(const Image* image)
 	SetupScrollInfo(image);
 }
 
+void ImageView::ScrollImage(int offset_x, int offset_y)
+{
+	if(_sbh.OffsetScroll(offset_x, offset_y)) {
+		auto sp = _sbh.GetPosition();
+		DrawImage(_image, -sp.x, -sp.y);
+	}
+}
+
+void ImageView::SetScrollCallback(ScrollCallbackFunc callback, void* userdata)
+{
+	_scroll_cb_func = callback;
+	_scroll_cb_userdata = userdata;
+}
+
 void ImageView::SetupScrollInfo(const Image* image)
 {
 	assert(image);
@@ -138,33 +152,40 @@ void ImageView::OnScroll(UINT msg, WPARAM wParam, LPARAM lParam)
 	DrawImage(_image, -sp.x, -sp.y);
 }
 
-void ImageView::OnMouseMove(int x, int y)
+void ImageView::OnLMouseMove()
 {
 	if(!_mouse_dragging)
 		return;
 
-	auto sx = _mouse_origin.x - x;
-	auto sy = _mouse_origin.y - y;
+	POINT screen_pos;
+	GetCursorPos(&screen_pos);
 
-	if(_sbh.OffsetScroll(sx, sy)) {
-		auto sp = _sbh.GetPosition();
-		DrawImage(_image, -sp.x, -sp.y);
-	}
+	auto offset_x = _mouse_origin.x - screen_pos.x;
+	auto offset_y = _mouse_origin.y - screen_pos.y;
+	_mouse_origin.x = screen_pos.x;
+	_mouse_origin.y = screen_pos.y;
 
-	_mouse_origin.x = x;
-	_mouse_origin.y = y;
+	ScrollImage(offset_x, offset_y);
+	if(_scroll_cb_func)
+		_scroll_cb_func(offset_x, offset_y, _scroll_cb_userdata);
 }
 
-void ImageView::OnMouseDown(int x, int y)
+void ImageView::OnLMouseDown()
 {
 	_mouse_dragging = true;
-	_mouse_origin.x = x;
-	_mouse_origin.y = y;
+
+	POINT screen_pos;
+	GetCursorPos(&screen_pos);
+
+	_mouse_origin.x = screen_pos.x;
+	_mouse_origin.y = screen_pos.y;
+
+	SetCapture(_hWnd);
 }
 
-void ImageView::OnMouseUp(int x, int y)
+void ImageView::OnLMouseUp()
 {
-	_mouse_dragging = false;
+	ReleaseCapture();
 }
 
 LRESULT CALLBACK ImageView::WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -183,12 +204,24 @@ LRESULT ImageView::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
 		case WM_PAINT:
 			OnPaint();
 			return 0;
-		case WM_MOUSEMOVE: OnMouseMove(LOWORD(lParam), HIWORD(lParam)); break;
-		case WM_LBUTTONDOWN: OnMouseDown(LOWORD(lParam), HIWORD(lParam)); break;
-		case WM_LBUTTONUP: OnMouseUp(LOWORD(lParam), HIWORD(lParam)); break;
+		case WM_MOUSEMOVE:
+			if(wParam & MK_LBUTTON) {
+				OnLMouseMove();
+				return 0;
+			}
+			break;
+		case WM_LBUTTONDOWN:
+			OnLMouseDown();
+			return 0;
+		case WM_LBUTTONUP:
+			OnLMouseUp();
+			return 0;
 		case WM_HSCROLL:
 		case WM_VSCROLL:
 			OnScroll(msg, wParam, lParam);
+			return 0;
+		case WM_CAPTURECHANGED:
+			_mouse_dragging = false;
 			return 0;
 		case WM_DESTROY:
 			Close();

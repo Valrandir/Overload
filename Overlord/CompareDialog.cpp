@@ -17,12 +17,18 @@ static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, in
 	RectToPoint(wp.rcNormalPosition, x, y, w, h);
 }
 
-bool CompareDialog::ShowDialog(const Image* imgA, const Image* imgB)
+static void ScrollCallback(int offset_x, int offset_y, void* userdata)
 {
-	assert(imgA);
-	assert(imgB);
+	auto linked_image_view = (ImageView*)userdata;
+	linked_image_view->ScrollImage(offset_x, offset_y);
+}
 
-	CompareDialog compare_dialog(imgA, imgB);
+bool CompareDialog::ShowDialog(const Image* img_l, const Image* img_r)
+{
+	assert(img_l);
+	assert(img_r);
+
+	CompareDialog compare_dialog(img_l, img_r);
 	return compare_dialog.ShowModal(IDD_DIALOG_COMPARE);
 }
 
@@ -31,12 +37,14 @@ void CompareDialog::Initialize()
 	int x, y, w, h;
 
 	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_1, x, y, w, h);
-	_imageViewA.Initialize(_hDialogWnd, x, y, w, h);
-	_imageViewA.SetImage(this->_imgA);
+	_image_view_l.Initialize(_hDialogWnd, x, y, w, h);
+	_image_view_l.SetImage(this->_img_l);
+	_image_view_l.SetScrollCallback(ScrollCallback, &_image_view_r);
 
 	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_2, x, y, w, h);
-	_imageViewB.Initialize(_hDialogWnd, x, y, w, h);
-	_imageViewB.SetImage(this->_imgB);
+	_image_view_r.Initialize(_hDialogWnd, x, y, w, h);
+	_image_view_r.SetImage(this->_img_r);
+	_image_view_r.SetScrollCallback(ScrollCallback, &_image_view_l);
 }
 
 INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
