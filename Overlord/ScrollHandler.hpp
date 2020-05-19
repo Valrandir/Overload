@@ -14,7 +14,7 @@ private:
 	void HandleScroll(WPARAM wParam, LPARAM lParam, int sb_hv, int& sref, int view_size, int content_size);
 	void OffsetScroll(int sb_hv, int offset, int& sref, int max);
 	HWND _parent_window{};
-	int _view_width, _view_height, _content_width{}, _content_height{};
+	int _view_width{}, _view_height{}, _content_width{}, _content_height{};
 	int _scroll_pos_x{}, _scroll_pos_y{};
 	bool _h_scroll_enabled{}, _v_scroll_enabled{};
 };

@@ -88,18 +88,6 @@ void ImageView::ScrollImage(int offset_x, int offset_y)
 	}
 }
 
-void ImageView::SetScrollCallback(ScrollCallbackFunc callback, void* userdata)
-{
-	_scroll_cb_func = callback;
-	_scroll_cb_userdata = userdata;
-}
-
-void ImageView::SetZoomCallback(ZoomCallbackFunc callback, void* userdata)
-{
-	_zoom_cb_func = callback;
-	_zoom_cb_userdata = userdata;
-}
-
 void ImageView::ZoomIn()
 {
 	UpdateZoom(1);
@@ -189,9 +177,7 @@ void ImageView::OnLMouseMove()
 	_mouse_origin.y = screen_pos.y;
 
 	ScrollImage(offset_x, offset_y);
-
-	if(_scroll_cb_func)
-		_scroll_cb_func(offset_x, offset_y, _scroll_cb_userdata);
+	ScrollEvent(offset_x, offset_y);
 }
 
 void ImageView::OnLMouseDown()
@@ -215,9 +201,7 @@ void ImageView::OnLMouseUp()
 void ImageView::OnZoom(int direction)
 {
 	UpdateZoom(direction);
-
-	if(_zoom_cb_func)
-		_zoom_cb_func(direction == -1, _zoom_cb_userdata);
+	ZoomEvent(direction == -1);
 }
 
 static int GetZoomFactor(int zoom_level)

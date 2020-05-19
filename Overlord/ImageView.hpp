@@ -3,11 +3,12 @@
 #include <Windows.h>
 #include "Image.hpp"
 #include "ScrollHandler.hpp"
+#include "Event.hpp"
 
 class ImageView {
 public:
-	using ScrollCallbackFunc = void (*)(int offset_x, int offset_y, void* userdata);
-	using ZoomCallbackFunc = void (*)(bool is_zoom_out, void* userdata);
+	Event<int, int> ScrollEvent;
+	Event<bool> ZoomEvent;
 
 	ImageView(){};
 	void Initialize(HWND hWndParent, int x, int y, int width, int height);
@@ -21,8 +22,6 @@ public:
 
 	void SetImage(const Image* image);
 	void ScrollImage(int offset_x, int offset_y);
-	void SetScrollCallback(ScrollCallbackFunc callback, void* userdata);
-	void SetZoomCallback(ZoomCallbackFunc callback, void* userdata);
 	void ZoomIn();
 	void ZoomOut();
 
@@ -44,14 +43,10 @@ private:
 
 	bool _mouse_dragging{};
 	POINT _mouse_origin{};
-	ScrollCallbackFunc _scroll_cb_func{};
-	void* _scroll_cb_userdata;
 
 	const int ZOOM_LEVEL_MAX = 4;
 	int _zoom_level{1};
 	int _zoom_factor;
-	ZoomCallbackFunc _zoom_cb_func{};
-	void* _zoom_cb_userdata;
 
 	void SetupScrollInfo(const Image* image);
 	void DrawImage(const Image* image, int x, int y);

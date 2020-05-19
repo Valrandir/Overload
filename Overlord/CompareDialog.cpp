@@ -49,14 +49,14 @@ void CompareDialog::Initialize()
 	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_1, x, y, w, h);
 	_image_view_l.Initialize(_hDialogWnd, x, y, w, h);
 	_image_view_l.SetImage(this->_img_l);
-	_image_view_l.SetScrollCallback(ScrollCallback, &_image_view_r);
-	_image_view_l.SetZoomCallback(ZoomCallback, &_image_view_r);
+	_image_view_l.ScrollEvent.SetHandler(ScrollCallback, &_image_view_r);
+	_image_view_l.ZoomEvent.SetHandler(ZoomCallback, &_image_view_r);
 
 	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_2, x, y, w, h);
 	_image_view_r.Initialize(_hDialogWnd, x, y, w, h);
 	_image_view_r.SetImage(this->_img_r);
-	_image_view_r.SetScrollCallback(ScrollCallback, &_image_view_l);
-	_image_view_r.SetZoomCallback(ZoomCallback, &_image_view_l);
+	_image_view_r.ScrollEvent.SetHandler(ScrollCallback, &_image_view_l);
+	_image_view_r.ZoomEvent.SetHandler(ZoomCallback, &_image_view_l);
 }
 
 INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)

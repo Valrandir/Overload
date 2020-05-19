@@ -61,6 +61,7 @@
     <ClInclude Include="ImageView.hpp">
       <Filter>UserControls</Filter>
     </ClInclude>
+    <ClInclude Include="Event.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

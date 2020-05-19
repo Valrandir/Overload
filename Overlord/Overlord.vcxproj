@@ -221,6 +221,7 @@
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="CompareDialog.hpp" />
     <ClInclude Include="DialogBase.hpp" />
+    <ClInclude Include="Event.hpp" />
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="Image.hpp" />
     <ClInclude Include="ImageView.hpp" />

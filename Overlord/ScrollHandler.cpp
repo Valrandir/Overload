@@ -7,7 +7,7 @@ static void AdjustForNewSize(int view_size, int old_size, int new_size, int& scr
 		return;
 
 	auto ratio = (double)new_size / old_size;
-	scroll_pos *= ratio;
+	scroll_pos = int(scroll_pos * ratio);
 
 	auto diff = new_size - view_size;
 	if(scroll_pos > diff)
