@@ -104,7 +104,7 @@ void ImageView::SetupScrollInfo(const Image* image)
 	if(!image)
 		throw new std::exception("image is null");
 
-	_sbh.Setup(_hWnd, _width, _height, image->GetWidth(), image->GetHeight());
+	_sbh.Initialize(_hWnd, _width, _height, image->GetWidth(), image->GetHeight());
 }
 
 void ImageView::DrawImage(const Image* image, int x, int y)
@@ -225,7 +225,7 @@ void ImageView::UpdateZoom(int direction)
 		_zoom_level = ZOOM_LEVEL_MAX;
 
 	_zoom_factor = GetZoomFactor(_zoom_level);
-	_sbh.Setup(_hWnd, _width, _height, _image->GetWidth() * _zoom_factor, _image->GetHeight() * _zoom_factor);
+	_sbh.Initialize(_hWnd, _width, _height, _image->GetWidth() * _zoom_factor, _image->GetHeight() * _zoom_factor);
 	auto sp = _sbh.GetPosition();
 	ClearBackground();
 	DrawImage(_image, -sp.x, -sp.y);
