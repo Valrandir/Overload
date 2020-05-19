@@ -10,8 +10,8 @@ public:
 	Event<int, int> ScrollEvent;
 	Event<bool> ZoomEvent;
 
-	ImageView(){};
-	void Initialize(HWND hWndParent, int x, int y, int width, int height);
+	ImageView() = default;
+	void Initialize(HWND hWndParent, int x, int y, int width, int height, const Image* image);
 	~ImageView();
 	ImageView(const ImageView&) = delete;
 	ImageView& operator=(const ImageView&) = delete;
@@ -20,8 +20,7 @@ public:
 	bool Update();
 	void Close();
 
-	void SetImage(const Image* image);
-	void ScrollImage(int offset_x, int offset_y);
+	void Scroll(int offset_x, int offset_y);
 	void ZoomIn();
 	void ZoomOut();
 
@@ -40,7 +39,6 @@ private:
 	const Image* _image{};
 
 	ScrollBarHandler _sbh;
-
 	bool _mouse_dragging{};
 	POINT _mouse_origin{};
 
@@ -49,7 +47,9 @@ private:
 	int _zoom_factor;
 
 	void SetupScrollInfo(const Image* image);
+	void ClearBackground();
 	void DrawImage(const Image* image, int x, int y);
+
 	void OnPaint();
 	void OnScroll(UINT msg, WPARAM wParam, LPARAM lParam);
 	void OnLMouseMove();
@@ -57,7 +57,7 @@ private:
 	void OnLMouseUp();
 	void OnZoom(int direction);
 	void UpdateZoom(int direction);
-	void ClearBackground();
+
 	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	LRESULT WndProc(UINT msg, WPARAM wParam, LPARAM lParam);
 };

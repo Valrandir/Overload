@@ -2,7 +2,7 @@
 #include <cassert>
 #include <exception>
 
-void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height)
+void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height, const Image* image)
 {
 	const LPCTSTR CLASS_NAME = TEXT("ImageView");
 	HINSTANCE hInstance = GetModuleHandle(NULL);
@@ -38,7 +38,10 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height)
 	ReleaseDC(_hWnd, hDC);
 	SelectObject(_hDC, _hBitmap);
 
+	_image = image;
 	ClearBackground();
+	DrawImage(image, 0, 0);
+	SetupScrollInfo(image);
 }
 
 ImageView::~ImageView()
@@ -73,14 +76,7 @@ void ImageView::Close()
 	DestroyWindow(_hWnd);
 }
 
-void ImageView::SetImage(const Image* image)
-{
-	DrawImage(image, 0, 0);
-	_image = image;
-	SetupScrollInfo(image);
-}
-
-void ImageView::ScrollImage(int offset_x, int offset_y)
+void ImageView::Scroll(int offset_x, int offset_y)
 {
 	if(_sbh.OffsetScroll(offset_x, offset_y)) {
 		auto sp = _sbh.GetPosition();
@@ -105,6 +101,12 @@ void ImageView::SetupScrollInfo(const Image* image)
 		throw new std::exception("image is null");
 
 	_sbh.Initialize(_hWnd, _width, _height, image->GetWidth(), image->GetHeight());
+}
+
+void ImageView::ClearBackground()
+{
+	RECT rect{0, 0, _width, _height};
+	FillRect(_hDC, &rect, (HBRUSH)LTGRAY_BRUSH);
 }
 
 void ImageView::DrawImage(const Image* image, int x, int y)
@@ -176,7 +178,7 @@ void ImageView::OnLMouseMove()
 	_mouse_origin.x = screen_pos.x;
 	_mouse_origin.y = screen_pos.y;
 
-	ScrollImage(offset_x, offset_y);
+	Scroll(offset_x, offset_y);
 	ScrollEvent(offset_x, offset_y);
 }
 
@@ -229,12 +231,6 @@ void ImageView::UpdateZoom(int direction)
 	auto sp = _sbh.GetPosition();
 	ClearBackground();
 	DrawImage(_image, -sp.x, -sp.y);
-}
-
-void ImageView::ClearBackground()
-{
-	RECT rect{0, 0, _width, _height};
-	FillRect(_hDC, &rect, (HBRUSH)LTGRAY_BRUSH);
 }
 
 LRESULT CALLBACK ImageView::WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
