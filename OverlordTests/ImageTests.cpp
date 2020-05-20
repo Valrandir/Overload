@@ -3,7 +3,6 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 #include "../Overlord/Image.hpp"
 #include "../Overlord/CaptureWnd.hpp"
-#include "../Overlord/CaptureDialog.hpp"
 #include <shellapi.h>
 
 #define IMAGE_TESTS_IGNORE
@@ -55,14 +54,14 @@ public:
 	}
 
 #ifdef IMAGE_TESTS_IGNORE
-	BEGIN_TEST_METHOD_ATTRIBUTE(Image_LoadImage_Test)
+	BEGIN_TEST_METHOD_ATTRIBUTE(Image_LoadImage_ShowImage)
 	TEST_IGNORE()
 	END_TEST_METHOD_ATTRIBUTE()
 #endif
-	TEST_METHOD(Image_LoadImage_Test) {
+	TEST_METHOD(Image_LoadImage_ShowImage) {
 		auto img = Image::LoadFile("france.png");
 
-		WindowGdi w(0, 1000, 800);
+		WindowGdi w(0, img->GetWidth(), img->GetHeight());
 		w.Show();
 		w.DrawImage(img, 0, 0);
 		while(w.Update()) {
