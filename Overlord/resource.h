@@ -2,6 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by Overlord.rc
 //
+#define IDCOMPARE                       3
 #define IDI_ICON1                       103
 #define IDD_CAPTURE_SAMPLE              105
 #define IDD_DIALOG_COMPARE              106

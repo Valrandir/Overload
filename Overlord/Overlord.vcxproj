@@ -208,9 +208,11 @@
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageComparer.cpp" />
+    <ClCompile Include="ImageIO.cpp" />
     <ClCompile Include="ImageView.cpp" />
-    <ClCompile Include="lib\lodepng\lodepng.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MainTests.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
   </ItemGroup>
@@ -224,8 +226,12 @@
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="Image.hpp" />
+    <ClInclude Include="ImageComparer.hpp" />
+    <ClInclude Include="ImageIO.hpp" />
     <ClInclude Include="ImageView.hpp" />
-    <ClInclude Include="lib\lodepng\lodepng.h" />
+    <ClInclude Include="lib\stb\stb_custom.h" />
+    <ClInclude Include="lib\stb\stb_image.h" />
+    <ClInclude Include="lib\stb\stb_image_write.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ScrollHandler.hpp" />
     <ClInclude Include="WindowGdi.hpp" />

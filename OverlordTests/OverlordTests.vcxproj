@@ -215,6 +215,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="HotKeyMonitorTests.cpp" />
+    <ClCompile Include="ImageTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Overlord\Overlord.vcxproj">

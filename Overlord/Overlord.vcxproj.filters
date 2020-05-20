@@ -2,10 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="Image.cpp" />
-    <ClCompile Include="lib\lodepng\lodepng.cpp">
-      <Filter>ExternalLibraries\lodepng</Filter>
-    </ClCompile>
     <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="CaptureDialog.cpp">
       <Filter>Dialogs</Filter>
@@ -26,12 +22,18 @@
     <ClCompile Include="ImageView.cpp">
       <Filter>UserControls</Filter>
     </ClCompile>
+    <ClCompile Include="MainTests.cpp" />
+    <ClCompile Include="Image.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageComparer.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageIO.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Image.hpp" />
-    <ClInclude Include="lib\lodepng\lodepng.h">
-      <Filter>ExternalLibraries\lodepng</Filter>
-    </ClInclude>
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
@@ -62,6 +64,24 @@
       <Filter>UserControls</Filter>
     </ClInclude>
     <ClInclude Include="Event.hpp" />
+    <ClInclude Include="Image.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageComparer.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\stb\stb_image.h">
+      <Filter>ExternalLibraries\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\stb\stb_image_write.h">
+      <Filter>ExternalLibraries\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageIO.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\stb\stb_custom.h">
+      <Filter>ExternalLibraries\stb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -85,8 +105,11 @@
     <Filter Include="ExternalLibraries">
       <UniqueIdentifier>{4bae19fd-300f-445b-9829-13ce4c96124a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExternalLibraries\lodepng">
-      <UniqueIdentifier>{e76dd857-cc1a-4f77-a2e6-12bd44965d9b}</UniqueIdentifier>
+    <Filter Include="Image">
+      <UniqueIdentifier>{5ee52e98-970a-4e5f-91ce-f81f26ba3e3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ExternalLibraries\stb">
+      <UniqueIdentifier>{17b8f43d-f66d-4cc4-bd7e-975dddeb52a9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

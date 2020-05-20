@@ -18,11 +18,17 @@ public:
 
 	virtual ~Image();
 	Image(const Image&) = delete;
+	Image(const Image&&) = delete;
 	Image& operator=(const Image&) = delete;
+	Image& operator=(const Image&&) = delete;
 	inline HDC GetDC() const { return _hDC; }
 	inline int GetWidth() const { return _width; }
 	inline int GetHeight() const { return _height; }
-	Pixel* GetPixels(int* pixelCount = nullptr);
+	size_t GetPixels(Pixel* first, Pixel* last);
+	void ClearCachedBits();
+
+	void FillRect(const RECT& rect, COLORREF color);
+	void FillRect(int x, int y, int w, int h, COLORREF color);
 
 	static Image* CreateBlank(int width, int height, COLORREF bgColor);
 	static Image* Capture(HWND hWnd, const RECT* captureRect);

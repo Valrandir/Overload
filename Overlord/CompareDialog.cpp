@@ -12,7 +12,8 @@ static void RectToPoint(const RECT& rect, int& x, int& y, int& w, int& h)
 
 static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h)
 {
-	WINDOWPLACEMENT wp;
+	WINDOWPLACEMENT wp{};
+	wp.length = sizeof(wp);
 	GetWindowPlacement(GetDlgItem(parent_window, dlg_item), &wp);
 	RectToPoint(wp.rcNormalPosition, x, y, w, h);
 }
@@ -62,6 +63,9 @@ INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	switch(msg) {
 		case WM_COMMAND:
 			switch(LOWORD(wParam)) {
+				case IDCOMPARE:
+					MessageBox(hDialogWnd, L"COMPARE", 0, MB_OK);
+					return true;
 				case IDOK:
 					EndDialog(hDialogWnd, DIALOG_SUCCESS);
 					return true;
