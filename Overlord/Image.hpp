@@ -6,14 +6,13 @@ class Image {
 	int _width, _height;
 	HDC _hDC;
 	HBITMAP _hBitmap;
-	BYTE* _bits;
 
-	Image(int width, int height, HDC hDC, HBITMAP hBitmap, BYTE* bits = nullptr) :
-		_width{width}, _height{height}, _hDC{hDC}, _hBitmap{hBitmap}, _bits{bits} {}
+	Image(int width, int height, HDC hDC, HBITMAP hBitmap) :
+		_width{width}, _height{height}, _hDC{hDC}, _hBitmap{hBitmap} {}
 
 public:
 	struct Pixel {
-		BYTE r, g, b, a;
+		BYTE b, g, r, a;
 	};
 
 	virtual ~Image();
@@ -24,8 +23,9 @@ public:
 	inline HDC GetDC() const { return _hDC; }
 	inline int GetWidth() const { return _width; }
 	inline int GetHeight() const { return _height; }
-	size_t GetPixels(Pixel* first, Pixel* last);
-	void ClearCachedBits();
+	size_t GetPixels(Pixel*& bits);
+	size_t GetPixels(Pixel*& begin, Pixel*& end);
+	void FreePixels(void* pixels_data);
 
 	void FillRect(const RECT& rect, COLORREF color);
 	void FillRect(int x, int y, int w, int h, COLORREF color);
@@ -33,7 +33,8 @@ public:
 	static Image* CreateBlank(int width, int height, COLORREF bgColor);
 	static Image* Capture(HWND hWnd, const RECT* captureRect);
 	static Image* CaptureDesktop();
+	static Image* CreateFromPixels(Pixel* bits, int width, int height);
 	static Image* LoadFile(const char* filename);
 
-	void SaveToFile(const char* filename);
+	void SaveFile(const char* filename);
 };

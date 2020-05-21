@@ -5,7 +5,26 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #include "../Overlord/CaptureWnd.hpp"
 #include <shellapi.h>
 
-#define IMAGE_TESTS_IGNORE
+//#define IMAGE_TESTS_IGNORE
+
+static Image* CreateFranceFlag()
+{
+	int width = 240 * 4;
+	int height = 120 * 4;
+	auto img = Image::CreateBlank(width, height, RGB(255, 255, 255));
+	img->FillRect(0, 0, width / 3, height, RGB(0, 0, 255));
+	img->FillRect(width / 3 * 2, 0, width, height, RGB(255, 0, 0));
+	return img;
+}
+
+static void ShowImage(const Image* img)
+{
+	WindowGdi w(0, img->GetWidth(), img->GetHeight());
+	w.Show();
+	w.DrawImage(img, 0, 0);
+	while(w.Update())
+		Sleep(1);
+}
 
 TEST_CLASS(ImageTests) {
 public:
@@ -16,16 +35,16 @@ public:
 #endif
 	TEST_METHOD(Image_Capture_SaveToFile_OpenFolder) {
 		//Arrange
-		Image* image = CaptureWnd::Capture().image;
+		Image* img = CaptureWnd::Capture().image;
 
-		if(!image) {
+		if(!img) {
 			Assert::Fail();
 			return;
 		}
 
 		//Act
-		image->SaveToFile("captured.png");
-		delete image;
+		img->SaveFile("captured.png");
+		delete img;
 
 		//Assert
 		ShellExecute(0, TEXT("explore"), TEXT("."), 0, 0, SW_SHOW);
@@ -38,15 +57,10 @@ public:
 #endif
 	TEST_METHOD(Image_CreateFranceFlag_ShellStart) {
 		//Arrange
-		int width = 240 * 4;
-		int height = 120 * 4;
+		auto img = CreateFranceFlag();
 
 		//Act
-		auto img = Image::CreateBlank(width, height, RGB(255, 255, 255));
-		img->FillRect(0, 0, width / 3, height, RGB(0, 0, 255));
-		img->FillRect(width / 3 * 2, 0, width, height, RGB(255, 0, 0));
-		img->ClearCachedBits();
-		img->SaveToFile("france.png");
+		img->SaveFile("france.png");
 		delete img;
 
 		//Assert
@@ -59,13 +73,42 @@ public:
 	END_TEST_METHOD_ATTRIBUTE()
 #endif
 	TEST_METHOD(Image_LoadImage_ShowImage) {
+		//Arrange
+
+		//Act
 		auto img = Image::LoadFile("france.png");
 
-		WindowGdi w(0, img->GetWidth(), img->GetHeight());
-		w.Show();
-		w.DrawImage(img, 0, 0);
-		while(w.Update()) {
-			Sleep(1);
+		//Assert
+		ShowImage(img);
+		delete img;
+	}
+
+	TEST_METHOD(Image_GetPixels_GreenTint) {
+		//Arrange
+		auto img = CreateFranceFlag();
+		auto w = img->GetWidth();
+		auto h = img->GetHeight();
+		Image::Pixel *begin{}, *end{};
+		img->GetPixels(begin, end);
+		delete img;
+
+		//Act
+		for(auto p = begin; p < end; ++p) {
+			if(p->r > 127)
+				p->r = 127;
+			p->g = 127;
+			if(p->b > 127)
+				p->b = 127;
 		}
+
+		img = Image::CreateFromPixels(begin, w, h);
+		delete begin;
+		img->SaveFile("green.png");
+		delete img;
+
+		//Assert
+		img = Image::LoadFile("green.png");
+		ShellExecute(0, TEXT("open"), TEXT("green.png"), 0, 0, SW_SHOW);
+		delete img;
 	}
 };

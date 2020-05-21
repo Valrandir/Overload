@@ -13,4 +13,9 @@ namespace ImageIO
 	{
 		return 1 == stbi_write_png(filename, width, height, 4, bits, width * 4);
 	}
+
+	void FreeBits(void* bits)
+	{
+		stbi_image_free(bits);
+	}
 }
