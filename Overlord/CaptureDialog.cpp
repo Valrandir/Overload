@@ -2,18 +2,32 @@
 #include "resource.h"
 #include <sstream>
 
+static void DrawSampleImage(const Image* image, const DRAWITEMSTRUCT* dis);
+
+bool CaptureDialog::ShowDialog(const Image* image, const CaptureSource* capture_source)
+{
+	CaptureDialog capture_dialog(image, capture_source);
+	return capture_dialog.ShowModal(IDD_CAPTURE_SAMPLE);
+}
+
 bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
 {
-	CaptureDialog capture_dialog(capture_sample);
-	return capture_dialog.ShowModal(IDD_CAPTURE_SAMPLE);
+	return ShowDialog(capture_sample->image, capture_sample);
 }
 
 void CaptureDialog::Initialize()
 {
-	auto title = _capture_sample->window_title.c_str();
+	int x, y, w, h;
+	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_SAMPLE, x, y, w, h);
+	_image_view.Initialize(_hDialogWnd, x, y, w, h, _image);
+
+	if(!_capture_source)
+		return;
+
+	auto title = _capture_source->window_title.c_str();
 
 	std::wostringstream woss;
-	auto r = _capture_sample->source_rect;
+	auto r = _capture_source->source_rect;
 	woss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
 	auto position = woss.str();
 
@@ -26,7 +40,7 @@ INT_PTR CaptureDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	switch(msg) {
 		case WM_DRAWITEM:
 			if(wParam == IDC_STATIC_SAMPLE) {
-				DrawSampleImage((const DRAWITEMSTRUCT*)lParam);
+				DrawSampleImage(_image, (const DRAWITEMSTRUCT*)lParam);
 				return true;
 			}
 			break;
@@ -44,17 +58,16 @@ INT_PTR CaptureDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
 }
 
-void CaptureDialog::DrawSampleImage(const DRAWITEMSTRUCT* dis)
+static void DrawSampleImage(const Image* image, const DRAWITEMSTRUCT* dis)
 {
 	if(dis->itemAction != ODA_DRAWENTIRE)
 		return;
 
-	auto image = _capture_sample->image;
 	if(image) {
-		auto hdcSrc = image->GetDC();
+		auto hdcapture_sourcerc = image->GetDC();
 		auto w = image->GetWidth();
 		auto h = image->GetHeight();
 
-		BitBlt(dis->hDC, 0, 0, w, h, hdcSrc, 0, 0, SRCCOPY);
+		BitBlt(dis->hDC, 0, 0, w, h, hdcapture_sourcerc, 0, 0, SRCCOPY);
 	}
 }

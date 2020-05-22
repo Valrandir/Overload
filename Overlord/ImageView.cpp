@@ -46,13 +46,18 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 
 ImageView::~ImageView()
 {
-	DeleteDC(_hDC);
-	DeleteObject(_hBitmap);
-
-	if(_image) {
-		delete _image;
-		_image = nullptr;
+	if(_hDC){
+		DeleteDC(_hDC);
+		_hDC = 0;
 	}
+
+	if(_hBitmap)
+	{
+		DeleteObject(_hBitmap);
+		_hBitmap = 0;
+	}
+
+	_image = nullptr;
 }
 
 void ImageView::Show()

@@ -22,7 +22,6 @@
     <ClCompile Include="ImageView.cpp">
       <Filter>UserControls</Filter>
     </ClCompile>
-    <ClCompile Include="MainTests.cpp" />
     <ClCompile Include="Image.cpp">
       <Filter>Image</Filter>
     </ClCompile>
@@ -37,9 +36,6 @@
     <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="resource.h">
       <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="CaptureSample.hpp">
-      <Filter>Entities</Filter>
     </ClInclude>
     <ClInclude Include="CaptureSource.hpp">
       <Filter>Entities</Filter>
@@ -81,6 +77,9 @@
     </ClInclude>
     <ClInclude Include="lib\stb\stb_custom.h">
       <Filter>ExternalLibraries\stb</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureSample.hpp">
+      <Filter>Entities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

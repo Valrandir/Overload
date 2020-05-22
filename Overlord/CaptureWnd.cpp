@@ -127,30 +127,25 @@ CaptureWnd::CaptureWnd() :
 
 CaptureWnd::~CaptureWnd() {}
 
-CaptureSample CaptureWnd::Capture()
+Image* CaptureWnd::Capture(CaptureSource* out_capture_source)
 {
 	CaptureWnd capture_wnd;
 
 	while(capture_wnd.Update())
 		Sleep(1);
 
-	CaptureSample capture_sample;
-	capture_sample.source_rect = capture_wnd._sel_rect;
-	capture_sample.window_handle = GetWindowFromRect(capture_wnd._sel_rect);
-	capture_sample.window_title = GetWindowText(capture_sample.window_handle);
-	capture_sample.image = capture_wnd._capturedImage;
+	if(out_capture_source) {
+		out_capture_source->source_rect = capture_wnd._sel_rect;
+		out_capture_source->window_handle = GetWindowFromRect(capture_wnd._sel_rect);
+		out_capture_source->window_title = GetWindowText(out_capture_source->window_handle);
+	}
 
-	return capture_sample;
+	return capture_wnd._capturedImage;
 }
 
-CaptureSample CaptureWnd::Recapture(const CaptureSource& capture_source)
+Image* CaptureWnd::Recapture(const CaptureSource& capture_source)
 {
 	//SetActiveWindow(capture_source.window_handle);
 	SetForegroundWindow(capture_source.window_handle);
-	Image* image = Image::Capture(HWND_DESKTOP, &capture_source.source_rect);
-
-	CaptureSample capture_sample(capture_source);
-	capture_sample.image = image;
-
-	return capture_sample;
+	return Image::Capture(HWND_DESKTOP, &capture_source.source_rect);
 }

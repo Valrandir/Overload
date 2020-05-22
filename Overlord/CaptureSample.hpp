@@ -3,7 +3,8 @@
 #include "Image.hpp"
 
 struct CaptureSample : public CaptureSource {
-	CaptureSample() {}
+	CaptureSample() :
+		CaptureSource{} {}
 
 	CaptureSample(const CaptureSource& cs) :
 		CaptureSource{cs} {}

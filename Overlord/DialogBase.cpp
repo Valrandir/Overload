@@ -32,3 +32,19 @@ INT_PTR DialogBase::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lPa
 
 	return false;
 }
+
+void DialogBase::RectToPoint(const RECT& rect, int& x, int& y, int& w, int& h)
+{
+	x = rect.left;
+	y = rect.top;
+	w = rect.right - x;
+	h = rect.bottom - y;
+}
+
+void DialogBase::GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h)
+{
+	WINDOWPLACEMENT wp{};
+	wp.length = sizeof(wp);
+	GetWindowPlacement(GetDlgItem(parent_window, dlg_item), &wp);
+	RectToPoint(wp.rcNormalPosition, x, y, w, h);
+}

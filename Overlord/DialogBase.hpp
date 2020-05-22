@@ -16,6 +16,9 @@ protected:
 	virtual void Initialize(){};
 	virtual INT_PTR DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
+	static void RectToPoint(const RECT& rect, int& x, int& y, int& w, int& h);
+	static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h);
+
 private:
 	DialogBase(const DialogBase&) = delete;
 	DialogBase& operator=(const DialogBase&) = delete;

@@ -2,22 +2,6 @@
 #include "resource.h"
 #include <cassert>
 
-static void RectToPoint(const RECT& rect, int& x, int& y, int& w, int& h)
-{
-	x = rect.left;
-	y = rect.top;
-	w = rect.right - x;
-	h = rect.bottom - y;
-}
-
-static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h)
-{
-	WINDOWPLACEMENT wp{};
-	wp.length = sizeof(wp);
-	GetWindowPlacement(GetDlgItem(parent_window, dlg_item), &wp);
-	RectToPoint(wp.rcNormalPosition, x, y, w, h);
-}
-
 static void ScrollCallback(int offset_x, int offset_y, void* userdata)
 {
 	auto linked_image_view = (ImageView*)userdata;
@@ -64,7 +48,7 @@ INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 		case WM_COMMAND:
 			switch(LOWORD(wParam)) {
 				case IDCOMPARE:
-					MessageBox(hDialogWnd, L"COMPARE", 0, MB_OK);
+					OnCompare();
 					return true;
 				case IDOK:
 					EndDialog(hDialogWnd, DIALOG_SUCCESS);
@@ -76,4 +60,9 @@ INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	}
 
 	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
+}
+
+void CompareDialog::OnCompare()
+{
+	MessageBox(_hDialogWnd, L"COMPARE", 0, MB_OK);
 }

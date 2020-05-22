@@ -7,6 +7,7 @@ public:
 	static bool ShowDialog(const Image* img_l, const Image* img_r);
 	void Initialize() override;
 	INT_PTR DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam) override;
+	void OnCompare();
 
 private:
 	const Image *_img_l, *_img_r;

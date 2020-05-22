@@ -1,4 +1,5 @@
 #include "CaptureDialog.hpp"
+#include "CaptureSample.hpp"
 #include "CaptureWnd.hpp"
 #include "CompareDialog.hpp"
 #include "HotKeyMonitor.hpp"
@@ -9,29 +10,35 @@
 
 void OnHotKeyCapture(int, void* userdata)
 {
-	CaptureSample* cs = (CaptureSample*)userdata;
+	auto cs = (CaptureSample*)userdata;
 
-	*cs = CaptureWnd::Capture();
-	//if(!CaptureDialog::ShowDialog(cs))
-	//	cs->image = nullptr;
+	if(cs->image)
+		delete cs->image;
+
+	cs->image = CaptureWnd::Capture(cs);
+	if(!CaptureDialog::ShowDialog(cs))
+		cs->image = nullptr;
 }
 
 void OnHotKeyCompare(int, void* userdata)
 {
-	CaptureSample* cs = (CaptureSample*)userdata;
+	auto cs = (CaptureSample*)userdata;
 
 	if(!cs->image)
 		return;
 
 	auto image_l = cs->image;
 
-	*cs = CaptureWnd::Recapture(*cs);
-	//if(!CaptureDialog::ShowDialog(cs))
-	//	return;
+	cs->image = CaptureWnd::Recapture(*cs);
+	if(!CaptureDialog::ShowDialog(cs))
+		return;
 
 	auto image_r = cs->image;
 
 	CompareDialog::ShowDialog(image_l, image_r);
+
+	delete image_l;
+	delete image_r;
 }
 #include <shellapi.h>
 

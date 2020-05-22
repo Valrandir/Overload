@@ -35,7 +35,7 @@ public:
 #endif
 	TEST_METHOD(Image_Capture_SaveToFile_OpenFolder) {
 		//Arrange
-		Image* img = CaptureWnd::Capture().image;
+		Image* img = CaptureWnd::Capture();
 
 		if(!img) {
 			Assert::Fail();

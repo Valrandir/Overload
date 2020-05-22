@@ -120,14 +120,13 @@
     <ClCompile Include="ImageIO.cpp" />
     <ClCompile Include="ImageView.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MainTests.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureDialog.hpp" />
-    <ClInclude Include="CaptureSource.hpp" />
     <ClInclude Include="CaptureSample.hpp" />
+    <ClInclude Include="CaptureSource.hpp" />
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="CompareDialog.hpp" />
     <ClInclude Include="DialogBase.hpp" />
