@@ -164,11 +164,12 @@ static BYTE* BitsFromBitmap(HDC hDC, HBITMAP hBitmap)
 	bih.biSize = sizeof(bih);
 	GetDIBits(hDC, hBitmap, 0, 0, nullptr, &bi, 0);
 
-	bih.biHeight *= -1;
+	auto height = bih.biHeight;
+	bih.biHeight = -height;
 	bih.biBitCount = 32;
 	bih.biCompression = BI_RGB;
 	BYTE* bits = (BYTE*)malloc(bih.biSizeImage);
-	GetDIBits(hDC, hBitmap, 0, bih.biHeight, bits, &bi, 0);
+	GetDIBits(hDC, hBitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
 
 	return bits;
 }
@@ -190,7 +191,7 @@ static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP&
 	bih.biPlanes = 1;
 	bih.biBitCount = 32;
 	bih.biCompression = BI_RGB;
-	SetDIBits(hDC, hBitmap, 0, height, bits, &bi, 0);
+	SetDIBits(hDC, hBitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
 
 	SelectObject(hDC, hBitmap);
 }
