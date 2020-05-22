@@ -120,7 +120,7 @@ CaptureWnd::CaptureWnd() :
 {
 	Image* desktop_image = Image::CaptureDesktop();
 	DrawImage(desktop_image, 0, 0);
-	delete desktop_image;
+	Image::FreeImage(desktop_image);
 	SetCursor(IDC_CROSS);
 	Show();
 }

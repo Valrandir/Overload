@@ -44,7 +44,7 @@ public:
 
 		//Act
 		img->SaveFile("captured.png");
-		delete img;
+		Image::FreeImage(img);
 
 		//Assert
 		ShellExecute(0, TEXT("explore"), TEXT("."), 0, 0, SW_SHOW);
@@ -61,7 +61,7 @@ public:
 
 		//Act
 		img->SaveFile("france.png");
-		delete img;
+		Image::FreeImage(img);
 
 		//Assert
 		ShellExecute(0, TEXT("open"), TEXT("france.png"), 0, 0, SW_SHOW);
@@ -80,7 +80,7 @@ public:
 
 		//Assert
 		ShowImage(img);
-		delete img;
+		Image::FreeImage(img);
 	}
 
 	TEST_METHOD(Image_GetPixels_GreenTint) {
@@ -90,7 +90,7 @@ public:
 		auto h = img->GetHeight();
 		Image::Pixel *begin{}, *end{};
 		img->GetPixels(begin, end);
-		delete img;
+		Image::FreeImage(img);
 
 		//Act
 		for(auto p = begin; p < end; ++p) {
@@ -102,13 +102,13 @@ public:
 		}
 
 		img = Image::CreateFromPixels(begin, w, h);
-		delete begin;
+		Image::FreePixels(begin);
 		img->SaveFile("green.png");
-		delete img;
+		Image::FreeImage(img);
 
 		//Assert
 		img = Image::LoadFile("green.png");
 		ShellExecute(0, TEXT("open"), TEXT("green.png"), 0, 0, SW_SHOW);
-		delete img;
+		Image::FreeImage(img);
 	}
 };

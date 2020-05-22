@@ -62,7 +62,53 @@ INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
 }
 
+#include "CaptureDialog.hpp"
+#include <cstdlib>
+#include <exception>
+#include <sstream>
+
 void CompareDialog::OnCompare()
 {
-	MessageBox(_hDialogWnd, L"COMPARE", 0, MB_OK);
+	Image::Pixel *img_l_begin, *img_r_begin;
+	auto img_l_pixel_count = _img_l->GetPixels(img_l_begin);
+	auto img_r_pixel_count = _img_r->GetPixels(img_r_begin);
+	auto img_l_it = img_l_begin;
+	auto img_r_it = img_r_begin;
+
+	if(img_l_pixel_count != img_r_pixel_count)
+		throw new std::exception("pixel_count differ between both images");
+
+	auto comp_result_pixels = new Image::Pixel[img_l_pixel_count];
+	auto comp_it = comp_result_pixels;
+
+	int max_diff = 0;
+	int avg_diff = 0;
+	auto comp = [&](BYTE& c, BYTE& l, BYTE& r) -> void {
+		c = abs(l - r);
+		if(max_diff < c)
+			max_diff = c;
+		avg_diff += c;
+	};
+
+	for(size_t i = 0; i < img_l_pixel_count; ++i, ++img_l_it, ++img_r_it, ++comp_it) {
+		comp(comp_it->r, img_l_it->r, img_r_it->r);
+		comp(comp_it->g, img_l_it->g, img_r_it->g);
+		comp(comp_it->b, img_l_it->b, img_r_it->b);
+		comp_it->a = 0xff;
+	}
+
+	avg_diff /= img_l_pixel_count;
+
+	Image::FreePixels(img_l_begin);
+	Image::FreePixels(img_r_begin);
+
+	auto comp_img = Image::CreateFromPixels(comp_result_pixels, _img_l->GetWidth(), _img_l->GetHeight());
+
+	CaptureDialog::ShowDialog(comp_img);
+
+	delete[] comp_result_pixels;
+
+	std::wstringstream wss;
+	wss << L"max_diff = " << max_diff << std::endl << L"avg_diff = " << avg_diff;
+	MessageBox(_hDialogWnd, wss.str().c_str(), TEXT("Compare"), MB_OK | MB_ICONINFORMATION);
 }

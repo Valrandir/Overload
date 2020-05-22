@@ -21,14 +21,14 @@ Image::~Image()
 	}
 }
 
-size_t Image::GetPixels(Pixel*& bits)
+size_t Image::GetPixels(Pixel*& bits) const
 {
 	auto pixel_count = (size_t)_width * _height;
 	bits = (Pixel*)BitsFromBitmap(_hDC, _hBitmap);
 	return pixel_count;
 }
 
-size_t Image::GetPixels(Pixel*& begin, Pixel*& end)
+size_t Image::GetPixels(Pixel*& begin, Pixel*& end) const
 {
 	auto pixel_count = GetPixels(begin);
 	end = begin + pixel_count;
@@ -110,6 +110,11 @@ Image* Image::LoadFile(const char* filename)
 	ImageIO::FreeBits(bits);
 
 	return image;
+}
+
+void Image::FreeImage(Image* image)
+{
+	delete image;
 }
 
 void Image::SaveFile(const char* filename)

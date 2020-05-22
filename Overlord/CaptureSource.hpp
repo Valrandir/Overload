@@ -4,7 +4,7 @@
 #include <string>
 
 struct CaptureSource {
-	HWND window_handle;
-	std::wstring window_title;
+	HWND window_handle{};
+	std::wstring window_title{};
 	RECT source_rect{};
 };

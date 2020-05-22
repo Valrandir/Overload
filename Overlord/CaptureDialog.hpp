@@ -4,7 +4,7 @@
 #include "Image.hpp"
 #include "ImageView.hpp"
 
-class CaptureDialog : public DialogBase {
+class CaptureDialog : private DialogBase {
 public:
 	static bool ShowDialog(const Image* image, const CaptureSource* capture_source = nullptr);
 	static bool ShowDialog(const CaptureSample* capture_sample);

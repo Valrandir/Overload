@@ -26,10 +26,10 @@ void CaptureDialog::Initialize()
 
 	auto title = _capture_source->window_title.c_str();
 
-	std::wostringstream woss;
+	std::wstringstream wss;
 	auto r = _capture_source->source_rect;
-	woss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
-	auto position = woss.str();
+	wss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
+	auto position = wss.str();
 
 	SetDlgItemText(_hDialogWnd, IDC_EDIT_TITLE, title);
 	SetDlgItemText(_hDialogWnd, IDC_EDIT_POSITION, position.c_str());

@@ -2,7 +2,7 @@
 #include "DialogBase.hpp"
 #include "ImageView.hpp"
 
-class CompareDialog : public DialogBase {
+class CompareDialog : private DialogBase {
 public:
 	static bool ShowDialog(const Image* img_l, const Image* img_r);
 	void Initialize() override;

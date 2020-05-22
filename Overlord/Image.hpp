@@ -23,9 +23,9 @@ public:
 	inline HDC GetDC() const { return _hDC; }
 	inline int GetWidth() const { return _width; }
 	inline int GetHeight() const { return _height; }
-	size_t GetPixels(Pixel*& bits);
-	size_t GetPixels(Pixel*& begin, Pixel*& end);
-	void FreePixels(void* pixels_data);
+	size_t GetPixels(Pixel*& bits) const;
+	size_t GetPixels(Pixel*& begin, Pixel*& end) const;
+	static void FreePixels(void* pixels_data);
 
 	void FillRect(const RECT& rect, COLORREF color);
 	void FillRect(int x, int y, int w, int h, COLORREF color);
@@ -35,6 +35,7 @@ public:
 	static Image* CaptureDesktop();
 	static Image* CreateFromPixels(Pixel* bits, int width, int height);
 	static Image* LoadFile(const char* filename);
+	static void FreeImage(Image* image);
 
 	void SaveFile(const char* filename);
 };

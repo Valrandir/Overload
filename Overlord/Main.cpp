@@ -12,12 +12,17 @@ void OnHotKeyCapture(int, void* userdata)
 {
 	auto cs = (CaptureSample*)userdata;
 
-	if(cs->image)
-		delete cs->image;
+	if(cs->image) {
+		Image::FreeImage(cs->image);
+		cs->image = nullptr;
+	}
 
 	cs->image = CaptureWnd::Capture(cs);
-	if(!CaptureDialog::ShowDialog(cs))
+
+	if(!CaptureDialog::ShowDialog(cs)) {
+		Image::FreeImage(cs->image);
 		cs->image = nullptr;
+	}
 }
 
 void OnHotKeyCompare(int, void* userdata)
@@ -30,17 +35,18 @@ void OnHotKeyCompare(int, void* userdata)
 	auto image_l = cs->image;
 
 	cs->image = CaptureWnd::Recapture(*cs);
-	if(!CaptureDialog::ShowDialog(cs))
+	if(!CaptureDialog::ShowDialog(cs)) {
+		Image::FreeImage(image_l);
 		return;
+	}
 
 	auto image_r = cs->image;
 
 	CompareDialog::ShowDialog(image_l, image_r);
 
-	delete image_l;
-	delete image_r;
+	Image::FreeImage(image_l);
+	Image::FreeImage(image_r);
 }
-#include <shellapi.h>
 
 int main()
 {
