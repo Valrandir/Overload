@@ -98,6 +98,7 @@ void CompareDialog::OnCompare()
 	}
 
 	avg_diff /= (int)image_a_pixel_count;
+	avg_diff /= 3;
 
 	Image::FreePixels(image_a_begin);
 	Image::FreePixels(image_b_begin);
