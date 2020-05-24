@@ -3,12 +3,12 @@
 #include <Windows.h>
 
 class Image {
-	int _width, _height;
-	HDC _hDC;
-	HBITMAP _hBitmap;
+	int width, height;
+	HDC dc;
+	HBITMAP bitmap;
 
 	Image(int width, int height, HDC hDC, HBITMAP hBitmap) :
-		_width{width}, _height{height}, _hDC{hDC}, _hBitmap{hBitmap} {}
+		width{width}, height{height}, dc{hDC}, bitmap{hBitmap} {}
 
 public:
 	struct Pixel {
@@ -20,9 +20,9 @@ public:
 	Image(const Image&&) = delete;
 	Image& operator=(const Image&) = delete;
 	Image& operator=(const Image&&) = delete;
-	inline HDC GetDC() const { return _hDC; }
-	inline int GetWidth() const { return _width; }
-	inline int GetHeight() const { return _height; }
+	inline HDC GetDC() const { return dc; }
+	inline int GetWidth() const { return width; }
+	inline int GetHeight() const { return height; }
 	size_t GetPixels(Pixel*& bits) const;
 	size_t GetPixels(Pixel*& begin, Pixel*& end) const;
 	static void FreePixels(void* pixels_data);

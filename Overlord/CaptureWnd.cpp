@@ -63,54 +63,54 @@ static std::wstring GetWindowText(HWND hWnd)
 	return std::wstring(buffer);
 }
 
-LRESULT CaptureWnd::WndProc(UINT msg, WPARAM wParam, LPARAM lParam)
+LRESULT CaptureWnd::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch(msg) {
-		case WM_MOUSEMOVE: OnMouseMove(LOWORD(lParam), HIWORD(lParam)); break;
-		case WM_LBUTTONDOWN: OnMouseDown(LOWORD(lParam), HIWORD(lParam)); break;
-		case WM_LBUTTONUP: OnMouseUp(LOWORD(lParam), HIWORD(lParam)); break;
+		case WM_MOUSEMOVE: OnMouseMove(LOWORD(lparam), HIWORD(lparam)); break;
+		case WM_LBUTTONDOWN: OnMouseDown(LOWORD(lparam), HIWORD(lparam)); break;
+		case WM_LBUTTONUP: OnMouseUp(LOWORD(lparam), HIWORD(lparam)); break;
 	}
 
-	return WindowGdi::WndProc(msg, wParam, lParam);
+	return WindowGdi::WndProc(msg, wparam, lparam);
 }
 
 void CaptureWnd::OnMouseMove(int x, int y)
 {
-	if(!_selecting)
+	if(!selecting)
 		return;
 
-	RECT rect = _sel_rect;
+	RECT rect = sel_rect;
 
-	DrawFocusRect(_hDC, &_sel_rect);
-	DragRect(_sel_rect, _origin, x, y);
-	DrawFocusRect(_hDC, &_sel_rect);
-	MergeRect(rect, _sel_rect);
-	InvalidateRect(_hWnd, &rect, FALSE);
+	DrawFocusRect(dc, &sel_rect);
+	DragRect(sel_rect, origin, x, y);
+	DrawFocusRect(dc, &sel_rect);
+	MergeRect(rect, sel_rect);
+	InvalidateRect(window, &rect, FALSE);
 }
 
 void CaptureWnd::OnMouseDown(int x, int y)
 {
-	_selecting = true;
-	_origin.x = x;
-	_origin.y = y;
+	selecting = true;
+	origin.x = x;
+	origin.y = y;
 
-	_sel_rect.left = x;
-	_sel_rect.top = y;
-	_sel_rect.right = x;
-	_sel_rect.bottom = y;
+	sel_rect.left = x;
+	sel_rect.top = y;
+	sel_rect.right = x;
+	sel_rect.bottom = y;
 
-	DrawFocusRect(_hDC, &_sel_rect);
-	InvalidateRect(_hWnd, &_sel_rect, FALSE);
+	DrawFocusRect(dc, &sel_rect);
+	InvalidateRect(window, &sel_rect, FALSE);
 }
 
 void CaptureWnd::OnMouseUp(int x, int y)
 {
-	_selecting = false;
+	selecting = false;
 
-	ShrinkRect(_sel_rect);
+	ShrinkRect(sel_rect);
 
-	if(RectSizeIsNotZero(_sel_rect)) {
-		_capturedImage = Image::Capture(_hWnd, &_sel_rect);
+	if(RectSizeIsNotZero(sel_rect)) {
+		captured_image = Image::Capture(window, &sel_rect);
 		Close();
 	}
 }
@@ -118,29 +118,29 @@ void CaptureWnd::OnMouseUp(int x, int y)
 CaptureWnd::CaptureWnd() :
 	WindowGdi(TEXT(""), 0, 0, WS_POPUP)
 {
-	Image* desktop_image = Image::CaptureDesktop();
-	DrawImage(desktop_image, 0, 0);
-	Image::FreeImage(desktop_image);
+	Image* desktopimage = Image::CaptureDesktop();
+	DrawImage(desktopimage, 0, 0);
+	Image::FreeImage(desktopimage);
 	SetCursor(IDC_CROSS);
 	Show();
 }
 
 CaptureWnd::~CaptureWnd() {}
 
-Image* CaptureWnd::Capture(CaptureSource* out_capture_source)
+Image* CaptureWnd::Capture(CaptureSource* outcapture_source)
 {
 	CaptureWnd capture_wnd;
 
 	while(capture_wnd.Update())
 		Sleep(1);
 
-	if(out_capture_source) {
-		out_capture_source->source_rect = capture_wnd._sel_rect;
-		out_capture_source->window_handle = GetWindowFromRect(capture_wnd._sel_rect);
-		out_capture_source->window_title = GetWindowText(out_capture_source->window_handle);
+	if(outcapture_source) {
+		outcapture_source->source_rect = capture_wnd.sel_rect;
+		outcapture_source->window_handle = GetWindowFromRect(capture_wnd.sel_rect);
+		outcapture_source->window_title = GetWindowText(outcapture_source->window_handle);
 	}
 
-	return capture_wnd._capturedImage;
+	return capture_wnd.captured_image;
 }
 
 Image* CaptureWnd::Recapture(const CaptureSource& capture_source)

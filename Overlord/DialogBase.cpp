@@ -5,28 +5,28 @@ bool DialogBase::ShowModal(UINT dialog_template)
 	return DIALOG_SUCCESS == DialogBoxParam(GetModuleHandle(0), MAKEINTRESOURCE(dialog_template), HWND_DESKTOP, DialogBase::DlgProcStatic, (LPARAM)this);
 }
 
-INT_PTR CALLBACK DialogBase::DlgProcStatic(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CALLBACK DialogBase::DlgProcStatic(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	if(msg == WM_INITDIALOG) {
-		SetWindowLongPtr(hDialogWnd, GWLP_USERDATA, (LONG_PTR)lParam);
-		DialogBase* db = (DialogBase*)lParam;
-		db->_hDialogWnd = hDialogWnd;
+		SetWindowLongPtr(dialog_wnd, GWLP_USERDATA, (LONG_PTR)lparam);
+		DialogBase* db = (DialogBase*)lparam;
+		db->dialog_wnd = dialog_wnd;
 		db->Initialize();
 		return true;
 	}
 
 	DialogBase* db;
-	if(db = (DialogBase*)GetWindowLongPtr(hDialogWnd, GWLP_USERDATA))
-		return db->DlgProc(hDialogWnd, msg, wParam, lParam);
+	if(db = (DialogBase*)GetWindowLongPtr(dialog_wnd, GWLP_USERDATA))
+		return db->DlgProc(dialog_wnd, msg, wparam, lparam);
 
 	return false;
 }
 
-INT_PTR DialogBase::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR DialogBase::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch(msg) {
 		case WM_CLOSE:
-			EndDialog(hDialogWnd, DIALOG_CANCEL);
+			EndDialog(dialog_wnd, DIALOG_CANCEL);
 			return true;
 	}
 

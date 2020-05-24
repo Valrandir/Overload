@@ -24,8 +24,8 @@ private:
 			id{id}, callback{callback}, userdata{userdata} {}
 	};
 
-	std::vector<HotKey> _registeredHotKeys;
-	int _last_id{};
+	std::vector<HotKey> registered_hotkeys;
+	int last_id{};
 
 	void OnHotKey(int id);
 };

@@ -4,26 +4,26 @@
 
 static void ScrollCallback(int offset_x, int offset_y, void* userdata)
 {
-	auto linked_image_view = (ImageView*)userdata;
-	linked_image_view->Scroll(offset_x, offset_y);
+	auto linkedimageview = (ImageView*)userdata;
+	linkedimageview->Scroll(offset_x, offset_y);
 }
 
 static void ZoomCallback(bool is_zoom_out, void* userdata)
 {
-	auto linked_image_view = (ImageView*)userdata;
+	auto linkedimageview = (ImageView*)userdata;
 
 	if(is_zoom_out)
-		linked_image_view->ZoomOut();
+		linkedimageview->ZoomOut();
 	else
-		linked_image_view->ZoomIn();
+		linkedimageview->ZoomIn();
 }
 
-bool CompareDialog::ShowDialog(const Image* img_l, const Image* img_r)
+bool CompareDialog::ShowDialog(const Image* image_a, const Image* image_b)
 {
-	assert(img_l);
-	assert(img_r);
+	assert(image_a);
+	assert(image_b);
 
-	CompareDialog compare_dialog(img_l, img_r);
+	CompareDialog compare_dialog(image_a, image_b);
 	return compare_dialog.ShowModal(IDD_DIALOG_COMPARE);
 }
 
@@ -31,35 +31,35 @@ void CompareDialog::Initialize()
 {
 	int x, y, w, h;
 
-	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_1, x, y, w, h);
-	_image_view_l.Initialize(_hDialogWnd, x, y, w, h, _img_l);
-	_image_view_l.ScrollEvent.SetHandler(ScrollCallback, &_image_view_r);
-	_image_view_l.ZoomEvent.SetHandler(ZoomCallback, &_image_view_r);
+	GetDlgItemPoint(dialog_wnd, IDC_STATIC_IMG_1, x, y, w, h);
+	imageview_a.Initialize(dialog_wnd, x, y, w, h, image_a);
+	imageview_a.ScrollEvent.SetHandler(ScrollCallback, &imageview_b);
+	imageview_a.ZoomEvent.SetHandler(ZoomCallback, &imageview_b);
 
-	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_IMG_2, x, y, w, h);
-	_image_view_r.Initialize(_hDialogWnd, x, y, w, h, _img_r);
-	_image_view_r.ScrollEvent.SetHandler(ScrollCallback, &_image_view_l);
-	_image_view_r.ZoomEvent.SetHandler(ZoomCallback, &_image_view_l);
+	GetDlgItemPoint(dialog_wnd, IDC_STATIC_IMG_2, x, y, w, h);
+	imageview_b.Initialize(dialog_wnd, x, y, w, h, image_b);
+	imageview_b.ScrollEvent.SetHandler(ScrollCallback, &imageview_a);
+	imageview_b.ZoomEvent.SetHandler(ZoomCallback, &imageview_a);
 }
 
-INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CompareDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch(msg) {
 		case WM_COMMAND:
-			switch(LOWORD(wParam)) {
+			switch(LOWORD(wparam)) {
 				case IDCOMPARE:
 					OnCompare();
 					return true;
 				case IDOK:
-					EndDialog(hDialogWnd, DIALOG_SUCCESS);
+					EndDialog(dialog_wnd, DIALOG_SUCCESS);
 					return true;
 				case IDCANCEL:
-					EndDialog(hDialogWnd, DIALOG_CANCEL);
+					EndDialog(dialog_wnd, DIALOG_CANCEL);
 					return true;
 			}
 	}
 
-	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
+	return DialogBase::DlgProc(dialog_wnd, msg, wparam, lparam);
 }
 
 #include "CaptureDialog.hpp"
@@ -69,16 +69,16 @@ INT_PTR CompareDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM 
 
 void CompareDialog::OnCompare()
 {
-	Image::Pixel *img_l_begin, *img_r_begin;
-	auto img_l_pixel_count = _img_l->GetPixels(img_l_begin);
-	auto img_r_pixel_count = _img_r->GetPixels(img_r_begin);
-	auto img_l_it = img_l_begin;
-	auto img_r_it = img_r_begin;
+	Image::Pixel *image_a_begin, *image_b_begin;
+	auto image_a_pixel_count = image_a->GetPixels(image_a_begin);
+	auto image_b_pixel_count = image_b->GetPixels(image_b_begin);
+	auto image_a_it = image_a_begin;
+	auto image_b_it = image_b_begin;
 
-	if(img_l_pixel_count != img_r_pixel_count)
+	if(image_a_pixel_count != image_b_pixel_count)
 		throw new std::exception("pixel_count differ between both images");
 
-	auto comp_result_pixels = new Image::Pixel[img_l_pixel_count];
+	auto comp_result_pixels = new Image::Pixel[image_a_pixel_count];
 	auto comp_it = comp_result_pixels;
 
 	int max_diff = 0;
@@ -90,25 +90,26 @@ void CompareDialog::OnCompare()
 		avg_diff += c;
 	};
 
-	for(size_t i = 0; i < img_l_pixel_count; ++i, ++img_l_it, ++img_r_it, ++comp_it) {
-		comp(comp_it->r, img_l_it->r, img_r_it->r);
-		comp(comp_it->g, img_l_it->g, img_r_it->g);
-		comp(comp_it->b, img_l_it->b, img_r_it->b);
+	for(size_t i = 0; i < image_a_pixel_count; ++i, ++image_a_it, ++image_b_it, ++comp_it) {
+		comp(comp_it->r, image_a_it->r, image_b_it->r);
+		comp(comp_it->g, image_a_it->g, image_b_it->g);
+		comp(comp_it->b, image_a_it->b, image_b_it->b);
 		comp_it->a = 0xff;
 	}
 
-	avg_diff /= (int)img_l_pixel_count;
+	avg_diff /= (int)image_a_pixel_count;
 
-	Image::FreePixels(img_l_begin);
-	Image::FreePixels(img_r_begin);
+	Image::FreePixels(image_a_begin);
+	Image::FreePixels(image_b_begin);
 
-	auto comp_img = Image::CreateFromPixels(comp_result_pixels, _img_l->GetWidth(), _img_l->GetHeight());
+	auto comp_img = Image::CreateFromPixels(comp_result_pixels, image_a->GetWidth(), image_a->GetHeight());
 
 	CaptureDialog::ShowDialog(comp_img);
 
 	delete[] comp_result_pixels;
 
 	std::wstringstream wss;
-	wss << L"max_diff = " << max_diff << std::endl << L"avg_diff = " << avg_diff;
-	MessageBox(_hDialogWnd, wss.str().c_str(), TEXT("Compare"), MB_OK | MB_ICONINFORMATION);
+	wss << L"max_diff = " << max_diff << std::endl
+		<< L"avg_diff = " << avg_diff;
+	MessageBox(dialog_wnd, wss.str().c_str(), TEXT("Compare"), MB_OK | MB_ICONINFORMATION);
 }

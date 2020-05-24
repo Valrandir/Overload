@@ -18,44 +18,44 @@ bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
 void CaptureDialog::Initialize()
 {
 	int x, y, w, h;
-	GetDlgItemPoint(_hDialogWnd, IDC_STATIC_SAMPLE, x, y, w, h);
-	_image_view.Initialize(_hDialogWnd, x, y, w, h, _image);
+	GetDlgItemPoint(dialog_wnd, IDC_STATIC_SAMPLE, x, y, w, h);
+	imageview.Initialize(dialog_wnd, x, y, w, h, image);
 
-	if(!_capture_source)
+	if(!capture_source)
 		return;
 
-	auto title = _capture_source->window_title.c_str();
+	auto title = capture_source->window_title.c_str();
 
 	std::wstringstream wss;
-	auto r = _capture_source->source_rect;
+	auto r = capture_source->source_rect;
 	wss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
 	auto position = wss.str();
 
-	SetDlgItemText(_hDialogWnd, IDC_EDIT_TITLE, title);
-	SetDlgItemText(_hDialogWnd, IDC_EDIT_POSITION, position.c_str());
+	SetDlgItemText(dialog_wnd, IDC_EDIT_TITLE, title);
+	SetDlgItemText(dialog_wnd, IDC_EDIT_POSITION, position.c_str());
 }
 
-INT_PTR CaptureDialog::DlgProc(HWND hDialogWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+INT_PTR CaptureDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch(msg) {
 		case WM_DRAWITEM:
-			if(wParam == IDC_STATIC_SAMPLE) {
-				DrawSampleImage(_image, (const DRAWITEMSTRUCT*)lParam);
+			if(wparam == IDC_STATIC_SAMPLE) {
+				DrawSampleImage(image, (const DRAWITEMSTRUCT*)lparam);
 				return true;
 			}
 			break;
 		case WM_COMMAND:
-			switch(LOWORD(wParam)) {
+			switch(LOWORD(wparam)) {
 				case IDOK:
-					EndDialog(hDialogWnd, DIALOG_SUCCESS);
+					EndDialog(dialog_wnd, DIALOG_SUCCESS);
 					return true;
 				case IDCANCEL:
-					EndDialog(hDialogWnd, DIALOG_CANCEL);
+					EndDialog(dialog_wnd, DIALOG_CANCEL);
 					return true;
 			}
 	}
 
-	return DialogBase::DlgProc(hDialogWnd, msg, wParam, lParam);
+	return DialogBase::DlgProc(dialog_wnd, msg, wparam, lparam);
 }
 
 static void DrawSampleImage(const Image* image, const DRAWITEMSTRUCT* dis)

@@ -9,18 +9,18 @@ public:
 	BitmapGdi& operator=(BitmapGdi&&) noexcept;
 	virtual ~BitmapGdi();
 
-	inline int GetWidth() const { return _width; }
-	inline int GetHeight() const { return _height; }
-	inline HDC GetDC() const { return _hDC; }
-	inline HBITMAP GetBitmap() const { return _hBitmap; }
+	inline int GetWidth() const { return width; }
+	inline int GetHeight() const { return height; }
+	inline HDC GetDC() const { return dc; }
+	inline HBITMAP GetBitmap() const { return bitmap; }
 
 	void Fill(const RECT& rect, COLORREF color);
 	void Fill(int x, int y, int w, int h, COLORREF color);
 
 private:
-	int _width, _height;
-	HDC _hDC;
-	HBITMAP _hBitmap;
+	int width, height;
+	HDC dc;
+	HBITMAP bitmap;
 	inline BitmapGdi& Move(BitmapGdi& rvalue) noexcept;
 	inline void Destroy() noexcept;
 };

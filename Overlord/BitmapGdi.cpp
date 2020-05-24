@@ -15,12 +15,12 @@ BitmapGdi& BitmapGdi::operator=(BitmapGdi&& other) noexcept
 }
 
 BitmapGdi::BitmapGdi(int width, int height) :
-	_width{width}, _height{height}
+	width{width}, height{height}
 {
 	HDC hDesktopDC = ::GetDC(HWND_DESKTOP);
-	_hDC = CreateCompatibleDC(hDesktopDC);
-	_hBitmap = CreateCompatibleBitmap(hDesktopDC, width, height);
-	SelectObject(_hDC, _hBitmap);
+	dc = CreateCompatibleDC(hDesktopDC);
+	bitmap = CreateCompatibleBitmap(hDesktopDC, width, height);
+	SelectObject(dc, bitmap);
 	ReleaseDC(HWND_DESKTOP, hDesktopDC);
 }
 
@@ -29,7 +29,7 @@ BitmapGdi::~BitmapGdi() { Destroy(); }
 void BitmapGdi::Fill(const RECT& rect, COLORREF color)
 {
 	HBRUSH brush = CreateSolidBrush(color);
-	::FillRect(_hDC, &rect, brush);
+	::FillRect(dc, &rect, brush);
 	DeleteObject(brush);
 }
 
@@ -40,31 +40,31 @@ void BitmapGdi::Fill(int x, int y, int w, int h, COLORREF color)
 
 inline BitmapGdi& BitmapGdi::Move(BitmapGdi& other) noexcept
 {
-	_width = other._width;
-	_height = other._height;
-	_hDC = other._hDC;
-	_hBitmap = other._hBitmap;
+	width = other.width;
+	height = other.height;
+	dc = other.dc;
+	bitmap = other.bitmap;
 
-	other._width = 0;
-	other._height = 0;
-	other._hDC = 0;
-	other._hBitmap = 0;
+	other.width = 0;
+	other.height = 0;
+	other.dc = 0;
+	other.bitmap = 0;
 
 	return *this;
 }
 
 inline void BitmapGdi::Destroy() noexcept
 {
-	if(_hDC) {
-		DeleteDC(_hDC);
-		_hDC = nullptr;
+	if(dc) {
+		DeleteDC(dc);
+		dc = nullptr;
 	}
 
-	if(_hBitmap) {
-		DeleteObject(_hBitmap);
-		_hBitmap = nullptr;
+	if(bitmap) {
+		DeleteObject(bitmap);
+		bitmap = nullptr;
 	}
 
-	_width = 0;
-	_height = 0;
+	width = 0;
+	height = 0;
 }

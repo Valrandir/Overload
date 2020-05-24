@@ -6,17 +6,17 @@
 class WindowGdi {
 	void AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD style);
 	void OnPaint();
-	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 protected:
-	HWND _hWnd;
-	bool _destroyed;
-	int _width, _height;
-	HCURSOR _hCursor{};
-	HDC _hDC;
-	HBITMAP _hBitmap;
+	HWND window;
+	bool destroyed;
+	int width, height;
+	HCURSOR cursor{};
+	HDC dc;
+	HBITMAP bitmap;
 
-	virtual LRESULT WndProc(UINT msg, WPARAM wParam, LPARAM lParam);
+	virtual LRESULT WndProc(UINT msg, WPARAM wparam, LPARAM lparam);
 
 public:
 	WindowGdi(LPCTSTR title, int width, int height, DWORD style = 0);
@@ -34,8 +34,8 @@ public:
 
 	virtual void DrawImage(const Image* image, int x, int y);
 
-	inline HWND GetHandle() const { return _hWnd; }
-	inline int GetWidth() const { return _width; }
-	inline int GetHeight() const { return _height; }
-	inline HDC GetDC() const { return _hDC; }
+	inline HWND GetHandle() const { return window; }
+	inline int GetWidth() const { return width; }
+	inline int GetHeight() const { return height; }
+	inline HDC GetDC() const { return dc; }
 };

@@ -24,40 +24,40 @@ public:
 	void ZoomIn();
 	void ZoomOut();
 
-	inline HWND GetHandle() const { return _hWnd; }
-	inline int GetWidth() const { return _width; }
-	inline int GetHeight() const { return _height; }
-	inline HDC GetDC() const { return _hDC; }
+	inline HWND GetHandle() const { return window; }
+	inline int GetWidth() const { return width; }
+	inline int GetHeight() const { return height; }
+	inline HDC GetDC() const { return dc; }
 
 private:
-	HWND _hWnd;
-	bool _destroyed{};
-	int _width, _height;
-	HDC _hDC;
-	HBITMAP _hBitmap;
+	HWND window{};
+	bool destroyed{};
+	int width, height;
+	HDC dc;
+	HBITMAP bitmap;
 
-	const Image* _image{};
+	const Image* image{};
 
-	ScrollBarHandler _sbh;
-	bool _mouse_dragging{};
-	POINT _mouse_origin{};
+	ScrollBarHandler sbh;
+	bool mouse_dragging{};
+	POINT mouse_origin{};
 
 	const int ZOOM_LEVEL_MAX = 4;
-	int _zoom_level{1};
-	int _zoom_factor;
+	int zoom_level{1};
+	int zoom_factor{};
 
 	void SetupScrollInfo(const Image* image);
 	void ClearBackground();
 	void DrawImage(const Image* image, int x, int y);
 
 	void OnPaint();
-	void OnScroll(UINT msg, WPARAM wParam, LPARAM lParam);
+	void OnScroll(UINT msg, WPARAM wparam, LPARAM lparam);
 	void OnLMouseMove();
 	void OnLMouseDown();
 	void OnLMouseUp();
 	void OnZoom(int direction);
 	void UpdateZoom(int direction);
 
-	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
-	LRESULT WndProc(UINT msg, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	LRESULT WndProc(UINT msg, WPARAM wparam, LPARAM lparam);
 };

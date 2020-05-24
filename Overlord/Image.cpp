@@ -10,21 +10,21 @@ static void SetMaxAlpha(Image::Pixel* bits, int width, int height);
 
 Image::~Image()
 {
-	if(_hDC) {
-		DeleteDC(_hDC);
-		_hDC = nullptr;
+	if(dc) {
+		DeleteDC(dc);
+		dc = nullptr;
 	}
 
-	if(_hBitmap) {
-		DeleteObject(_hBitmap);
-		_hBitmap = nullptr;
+	if(bitmap) {
+		DeleteObject(bitmap);
+		bitmap = nullptr;
 	}
 }
 
 size_t Image::GetPixels(Pixel*& bits) const
 {
-	auto pixel_count = (size_t)_width * _height;
-	bits = (Pixel*)BitsFromBitmap(_hDC, _hBitmap);
+	auto pixel_count = (size_t)width * height;
+	bits = (Pixel*)BitsFromBitmap(dc, bitmap);
 	return pixel_count;
 }
 
@@ -43,7 +43,7 @@ void Image::FreePixels(void* pixels_data)
 void Image::FillRect(const RECT& rect, COLORREF color)
 {
 	HBRUSH brush = CreateSolidBrush(color);
-	::FillRect(_hDC, &rect, brush);
+	::FillRect(dc, &rect, brush);
 	DeleteObject(brush);
 }
 
@@ -121,9 +121,9 @@ void Image::SaveFile(const char* filename)
 {
 	Pixel* bits;
 	GetPixels(bits);
-	SwapRedAndBlue(bits, _width, _height);
-	SetMaxAlpha(bits, _width, _height);
-	int saved = ImageIO::SaveFile(filename, _width, _height, (unsigned char*)bits);
+	SwapRedAndBlue(bits, width, height);
+	SetMaxAlpha(bits, width, height);
+	int saved = ImageIO::SaveFile(filename, width, height, (unsigned char*)bits);
 	if(!saved)
 		throw std::exception("stbi_write_png failed");
 

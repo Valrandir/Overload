@@ -4,20 +4,20 @@ int HotKeyMonitor::AddHotKey(HotKeyFunc callback, void* userdata, UINT virtualKe
 {
 	assert(callback);
 
-	if(0 == RegisterHotKey(NULL, ++_last_id, 0, virtualKeyCode))
+	if(0 == RegisterHotKey(NULL, ++last_id, 0, virtualKeyCode))
 		throw std::exception("HotKey registration failed");
 
-	_registeredHotKeys.emplace_back(_last_id, callback, userdata);
+	registered_hotkeys.emplace_back(last_id, callback, userdata);
 
-	return _last_id;
+	return last_id;
 }
 
 void HotKeyMonitor::RemoveHotKey(int id)
 {
-	auto it = std::find_if(_registeredHotKeys.cbegin(), _registeredHotKeys.cend(), [id](const HotKey& hk) { return hk.id == id; });
-	if(it != _registeredHotKeys.cend()) {
+	auto it = std::find_if(registered_hotkeys.cbegin(), registered_hotkeys.cend(), [id](const HotKey& hk) { return hk.id == id; });
+	if(it != registered_hotkeys.cend()) {
 		UnregisterHotKey(NULL, it->id);
-		_registeredHotKeys.erase(it);
+		registered_hotkeys.erase(it);
 	}
 }
 
@@ -32,13 +32,13 @@ void HotKeyMonitor::Dispatch()
 
 HotKeyMonitor::~HotKeyMonitor()
 {
-	for(const auto& it : _registeredHotKeys)
+	for(const auto& it : registered_hotkeys)
 		UnregisterHotKey(NULL, it.id);
 }
 
 void HotKeyMonitor::OnHotKey(int id)
 {
-	auto it = std::find_if(_registeredHotKeys.cbegin(), _registeredHotKeys.cend(), [id](const HotKey& hk) { return hk.id == id; });
-	if(it != _registeredHotKeys.cend())
+	auto it = std::find_if(registered_hotkeys.cbegin(), registered_hotkeys.cend(), [id](const HotKey& hk) { return hk.id == id; });
+	if(it != registered_hotkeys.cend())
 		it->callback(it->id, it->userdata);
 }
