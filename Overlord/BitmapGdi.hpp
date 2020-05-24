@@ -18,14 +18,14 @@ public:
 	virtual ~BitmapGdi();
 
 private:
-	inline BitmapGdi& Move(BitmapGdi& rvalue) noexcept;
+	inline BitmapGdi& Move(BitmapGdi&) noexcept;
 	inline void Destroy() noexcept;
 
 public:
-	inline int GetWidth() const { return width; }
-	inline int GetHeight() const { return height; }
-	inline HDC GetDC() const { return dc; }
-	inline HBITMAP GetBitmap() const { return bitmap; }
+	[[nodiscard]] int GetWidth() const noexcept { return width; }
+	[[nodiscard]] int GetHeight() const noexcept { return height; }
+	[[nodiscard]] HDC GetDC() const noexcept { return dc; }
+	[[nodiscard]] HBITMAP GetBitmap() const noexcept { return bitmap; }
 
 	void Fill(COLORREF color);
 	void Fill(const RECT& rect, COLORREF color);

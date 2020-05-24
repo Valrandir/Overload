@@ -28,10 +28,7 @@ void BitmapGdi::Initialize(int width, int height)
 	ReleaseDC(HWND_DESKTOP, hDesktopDC);
 }
 
-BitmapGdi::BitmapGdi(BitmapGdi&& other) noexcept
-{
-	Move(other);
-}
+BitmapGdi::BitmapGdi(BitmapGdi&& other) noexcept { Move(other); }
 
 BitmapGdi& BitmapGdi::operator=(BitmapGdi&& other) noexcept
 {

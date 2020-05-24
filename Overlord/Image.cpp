@@ -40,18 +40,6 @@ void Image::FreePixels(void* pixels_data)
 	free(pixels_data);
 }
 
-void Image::FillRect(const RECT& rect, COLORREF color)
-{
-	HBRUSH brush = CreateSolidBrush(color);
-	::FillRect(dc, &rect, brush);
-	DeleteObject(brush);
-}
-
-void Image::FillRect(int x, int y, int w, int h, COLORREF color)
-{
-	FillRect({x, y, x + w, y + h}, color);
-}
-
 Image* Image::CreateBlank(int width, int height, COLORREF bgColor)
 {
 	HDC desktop_dc = ::GetDC(HWND_DESKTOP);

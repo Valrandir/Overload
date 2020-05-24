@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="HotKeyMonitorTests.cpp" />
     <ClCompile Include="BitmapGdiTests.cpp" />
+    <ClCompile Include="ImageBitsTests.cpp" />
     <ClCompile Include="ImageTests.cpp" />
   </ItemGroup>
   <ItemGroup>

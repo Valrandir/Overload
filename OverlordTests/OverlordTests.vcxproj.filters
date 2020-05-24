@@ -4,5 +4,6 @@
     <ClCompile Include="HotKeyMonitorTests.cpp" />
     <ClCompile Include="ImageTests.cpp" />
     <ClCompile Include="BitmapGdiTests.cpp" />
+    <ClCompile Include="ImageBitsTests.cpp" />
   </ItemGroup>
 </Project>

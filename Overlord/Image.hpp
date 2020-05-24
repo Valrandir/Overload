@@ -18,15 +18,9 @@ public:
 	Image(const Image&&) = delete;
 	Image& operator=(const Image&) = delete;
 	Image& operator=(const Image&&) = delete;
-	inline HDC GetDC() const { return dc; }
-	inline int GetWidth() const { return width; }
-	inline int GetHeight() const { return height; }
 	size_t GetPixels(Pixel*& bits) const;
 	size_t GetPixels(Pixel*& begin, Pixel*& end) const;
 	static void FreePixels(void* pixels_data);
-
-	void FillRect(const RECT& rect, COLORREF color);
-	void FillRect(int x, int y, int w, int h, COLORREF color);
 
 	static Image* CreateBlank(int width, int height, COLORREF bgColor);
 	static Image* Capture(HWND hWnd, const RECT* captureRect);

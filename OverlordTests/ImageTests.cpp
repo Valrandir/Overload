@@ -12,8 +12,8 @@ static Image* CreateFranceFlag()
 	int width = 240 * 4;
 	int height = 120 * 4;
 	auto img = Image::CreateBlank(width, height, RGB(255, 255, 255));
-	img->FillRect(0, 0, width / 3, height, RGB(0, 0, 255));
-	img->FillRect(width / 3 * 2, 0, width, height, RGB(255, 0, 0));
+	img->Fill(0, 0, width / 3, height, RGB(0, 0, 255));
+	img->Fill(width / 3 * 2, 0, width, height, RGB(255, 0, 0));
 	return img;
 }
 
