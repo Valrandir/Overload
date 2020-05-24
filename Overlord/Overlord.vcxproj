@@ -110,6 +110,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitmapGdi.cpp" />
     <ClCompile Include="CaptureDialog.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="CompareDialog.cpp" />
@@ -124,6 +125,7 @@
     <ClCompile Include="WindowGdi.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitmapGdi.hpp" />
     <ClInclude Include="CaptureDialog.hpp" />
     <ClInclude Include="CaptureSample.hpp" />
     <ClInclude Include="CaptureSource.hpp" />

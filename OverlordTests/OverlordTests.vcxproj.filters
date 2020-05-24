@@ -3,5 +3,6 @@
   <ItemGroup>
     <ClCompile Include="HotKeyMonitorTests.cpp" />
     <ClCompile Include="ImageTests.cpp" />
+    <ClCompile Include="BitmapGdiTests.cpp" />
   </ItemGroup>
 </Project>

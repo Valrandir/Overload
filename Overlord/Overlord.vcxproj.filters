@@ -31,6 +31,9 @@
     <ClCompile Include="ImageIO.cpp">
       <Filter>Image</Filter>
     </ClCompile>
+    <ClCompile Include="BitmapGdi.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HotKeyMonitor.hpp" />
@@ -80,6 +83,9 @@
     </ClInclude>
     <ClInclude Include="CaptureSample.hpp">
       <Filter>Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapGdi.hpp">
+      <Filter>Image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

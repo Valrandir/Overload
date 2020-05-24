@@ -97,7 +97,7 @@ void CompareDialog::OnCompare()
 		comp_it->a = 0xff;
 	}
 
-	avg_diff /= img_l_pixel_count;
+	avg_diff /= (int)img_l_pixel_count;
 
 	Image::FreePixels(img_l_begin);
 	Image::FreePixels(img_r_begin);
