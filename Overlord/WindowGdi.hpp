@@ -2,19 +2,17 @@
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "Image.hpp"
+#include "BitmapGdi.hpp"
 
-class WindowGdi {
+class WindowGdi : public BitmapGdi {
 	void AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD style);
 	void OnPaint();
 	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 protected:
 	HWND window;
-	bool destroyed;
-	int width, height;
+	bool destroyed{};
 	HCURSOR cursor{};
-	HDC dc;
-	HBITMAP bitmap;
 
 	virtual LRESULT WndProc(UINT msg, WPARAM wparam, LPARAM lparam);
 
@@ -35,7 +33,4 @@ public:
 	virtual void DrawImage(const Image* image, int x, int y);
 
 	inline HWND GetHandle() const { return window; }
-	inline int GetWidth() const { return width; }
-	inline int GetHeight() const { return height; }
-	inline HDC GetDC() const { return dc; }
 };

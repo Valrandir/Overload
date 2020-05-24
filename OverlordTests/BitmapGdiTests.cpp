@@ -44,8 +44,8 @@ public:
 
 		auto width = bm.GetWidth();
 		auto height = bm.GetHeight();
-		auto hDC = bm.GetDC();
-		auto hBitmap = bm.GetBitmap();
+		auto dc = bm.GetDC();
+		auto bitmap = bm.GetBitmap();
 
 		//Act
 		BitmapGdi moved(std::move(bm));
@@ -58,8 +58,8 @@ public:
 
 		Assert::AreEqual(width, moved.GetWidth());
 		Assert::AreEqual(height, moved.GetHeight());
-		Assert::IsTrue(hDC == moved.GetDC());
-		Assert::IsTrue(hBitmap == moved.GetBitmap());
+		Assert::IsTrue(dc == moved.GetDC());
+		Assert::IsTrue(bitmap == moved.GetBitmap());
 	}
 
 	TEST_METHOD(MoveAssigned_Success) {
@@ -68,8 +68,8 @@ public:
 
 		auto width = bm.GetWidth();
 		auto height = bm.GetHeight();
-		auto hDC = bm.GetDC();
-		auto hBitmap = bm.GetBitmap();
+		auto dc = bm.GetDC();
+		auto bitmap = bm.GetBitmap();
 
 		//Act
 		BitmapGdi moved(16, 16);
@@ -83,7 +83,7 @@ public:
 
 		Assert::AreEqual(width, moved.GetWidth());
 		Assert::AreEqual(height, moved.GetHeight());
-		Assert::IsTrue(hDC == moved.GetDC());
-		Assert::IsTrue(hBitmap == moved.GetBitmap());
+		Assert::IsTrue(dc == moved.GetDC());
+		Assert::IsTrue(bitmap == moved.GetBitmap());
 	}
 };

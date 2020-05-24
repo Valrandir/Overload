@@ -10,6 +10,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 
 	this->width = width;
 	this->height = height;
+	this->image = image;
 
 	if(!GetClassInfoEx(hInstance, CLASS_NAME, &wc)) {
 		wc.cbSize = sizeof(wc);
@@ -32,13 +33,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 	window = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, x, y, width, height, hWndParent, NULL, hInstance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
-	HDC hDC = ::GetDC(window);
-	dc = CreateCompatibleDC(hDC);
-	bitmap = CreateCompatibleBitmap(hDC, width, height);
-	ReleaseDC(window, hDC);
-	SelectObject(dc, bitmap);
-
-	this->image = image;
+	BitmapGdi::Initialize(width, height);
 	ClearBackground();
 	DrawImage(image, 0, 0);
 	SetupScrollInfo(image);
@@ -46,16 +41,6 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 
 ImageView::~ImageView()
 {
-	if(dc) {
-		DeleteDC(dc);
-		dc = 0;
-	}
-
-	if(bitmap) {
-		DeleteObject(bitmap);
-		bitmap = 0;
-	}
-
 	image = nullptr;
 }
 
@@ -134,17 +119,17 @@ void ImageView::DrawImage(const Image* image, int x, int y)
 
 #ifdef IMAGE_VIEW_DEBUG
 #include <sstream>
-#endif
 
 static void DrawScrollInfo(HDC dc, int sx, int sy)
 {
-#ifdef IMAGE_VIEW_DEBUG
 	std::wostringstream woss;
 	woss << L"Scroll X: " << sx << L"    " << L"Scroll Y: " << sy;
 	auto text = woss.str();
 	TextOut(dc, 16, 16, text.c_str(), text.length());
-#endif
 }
+#else
+#define DrawScrollInfo
+#endif
 
 void ImageView::OnPaint()
 {

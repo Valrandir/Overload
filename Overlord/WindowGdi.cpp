@@ -6,8 +6,8 @@ void WindowGdi::AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD s
 	int cy = GetSystemMetrics(SM_CYSCREEN);
 
 	if(width == 0 && height == 0) {
-		width = width = cx;
-		height = height = cy;
+		this->width = width = cx;
+		this->height = height = cy;
 	}
 
 	RECT rect{0, 0, width, height};
@@ -65,8 +65,7 @@ LRESULT WindowGdi::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 	return DefWindowProc(window, msg, wparam, lparam);
 }
 
-WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style) :
-	width{width}, height{height}, destroyed{}
+WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style)
 {
 	const LPCTSTR CLASS_NAME = TEXT("WindowGdi");
 	HINSTANCE hInstance = GetModuleHandle(NULL);
@@ -89,25 +88,21 @@ WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style) :
 		RegisterClassEx(&wc);
 	}
 
+	this->width = width;
+	this->height = height;
+
 	int x, y;
 	style = (style ? style : WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX) | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 	AdjustAndCenter(x, y, width, height, style);
 	window = CreateWindowEx(0, CLASS_NAME, title, style, x, y, width, height, HWND_DESKTOP, NULL, hInstance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
-	HDC hDC = ::GetDC(window);
-	dc = CreateCompatibleDC(hDC);
-	bitmap = CreateCompatibleBitmap(hDC, width, height);
-	ReleaseDC(window, hDC);
-	SelectObject(dc, bitmap);
-	RECT rect{0, 0, width, height};
-	FillRect(dc, &rect, (HBRUSH)DKGRAY_BRUSH);
+	Initialize(this->width, this->height);
+	Fill(RGB(0x3f, 0x3f, 0x3f));
 }
 
 WindowGdi::~WindowGdi()
 {
-	DeleteDC(dc);
-	DeleteObject(bitmap);
 }
 
 void WindowGdi::SetTitle(LPCTSTR title)
@@ -159,7 +154,9 @@ void WindowGdi::DrawImage(const Image* image, int x, int y)
 {
 	int w = image->GetWidth();
 	int h = image->GetHeight();
+
+	Draw(image->GetDC(), x, y, w, h);
+
 	RECT rect{x, y, x + w, y + h};
-	BitBlt(dc, x, y, w, h, image->GetDC(), 0, 0, SRCCOPY);
 	InvalidateRect(window, &rect, FALSE);
 }

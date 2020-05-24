@@ -1,14 +1,12 @@
 #pragma once
+#include "BitmapGdi.hpp"
+
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 
-class Image {
-	int width, height;
-	HDC dc;
-	HBITMAP bitmap;
-
-	Image(int width, int height, HDC hDC, HBITMAP hBitmap) :
-		width{width}, height{height}, dc{hDC}, bitmap{hBitmap} {}
+class Image : public BitmapGdi {
+	Image(int width, int height, HDC dc, HBITMAP bitmap) :
+		BitmapGdi{width, height, dc, bitmap} {}
 
 public:
 	struct Pixel {

@@ -3,8 +3,8 @@
 #include <exception>
 
 static void GetCaptureZone(HWND hWnd, const RECT* rect, int& x, int& y, int& width, int& height);
-static BYTE* BitsFromBitmap(HDC hDC, HBITMAP hBitmap);
-static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP& hBitmap);
+static BYTE* BitsFromBitmap(HDC dc, HBITMAP bitmap);
+static void BitmapFromBits(BYTE* bits, int width, int height, HDC& dc, HBITMAP& bitmap);
 static void SwapRedAndBlue(Image::Pixel* bits, int width, int height);
 static void SetMaxAlpha(Image::Pixel* bits, int width, int height);
 
@@ -54,18 +54,18 @@ void Image::FillRect(int x, int y, int w, int h, COLORREF color)
 
 Image* Image::CreateBlank(int width, int height, COLORREF bgColor)
 {
-	HDC hSourceDC = ::GetDC(HWND_DESKTOP);
-	HDC hDC = CreateCompatibleDC(hSourceDC);
-	HBITMAP hBitmap = CreateCompatibleBitmap(hSourceDC, width, height);
-	ReleaseDC(HWND_DESKTOP, hSourceDC);
-	SelectObject(hDC, hBitmap);
+	HDC desktop_dc = ::GetDC(HWND_DESKTOP);
+	HDC dc = CreateCompatibleDC(desktop_dc);
+	HBITMAP bitmap = CreateCompatibleBitmap(desktop_dc, width, height);
+	ReleaseDC(HWND_DESKTOP, desktop_dc);
+	SelectObject(dc, bitmap);
 
 	RECT rect{0, 0, width, height};
 	HBRUSH hBrush = CreateSolidBrush(bgColor);
-	::FillRect(hDC, &rect, hBrush);
+	::FillRect(dc, &rect, hBrush);
 	DeleteObject(hBrush);
 
-	return new Image(width, height, hDC, hBitmap);
+	return new Image(width, height, dc, bitmap);
 }
 
 Image* Image::Capture(HWND hWnd, const RECT* captureRect)
@@ -73,14 +73,14 @@ Image* Image::Capture(HWND hWnd, const RECT* captureRect)
 	int x, y, width, height;
 	GetCaptureZone(hWnd, captureRect, x, y, width, height);
 
-	HDC hSourceDC = ::GetDC(hWnd);
-	HDC hDC = CreateCompatibleDC(hSourceDC);
-	HBITMAP hBitmap = CreateCompatibleBitmap(hSourceDC, width, height);
-	SelectObject(hDC, hBitmap);
-	BitBlt(hDC, 0, 0, width, height, hSourceDC, x, y, SRCCOPY);
-	ReleaseDC(hWnd, hSourceDC);
+	HDC source_dc = ::GetDC(hWnd);
+	HDC dc = CreateCompatibleDC(source_dc);
+	HBITMAP bitmap = CreateCompatibleBitmap(source_dc, width, height);
+	SelectObject(dc, bitmap);
+	BitBlt(dc, 0, 0, width, height, source_dc, x, y, SRCCOPY);
+	ReleaseDC(hWnd, source_dc);
 
-	return new Image(width, height, hDC, hBitmap);
+	return new Image(width, height, dc, bitmap);
 }
 
 Image* Image::CaptureDesktop()
@@ -91,10 +91,10 @@ Image* Image::CaptureDesktop()
 
 Image* Image::CreateFromPixels(Pixel* bits, int width, int height)
 {
-	HDC hDC;
-	HBITMAP hBitmap;
-	BitmapFromBits((BYTE*)bits, width, height, hDC, hBitmap);
-	return new Image(width, height, hDC, hBitmap);
+	HDC dc;
+	HBITMAP bitmap;
+	BitmapFromBits((BYTE*)bits, width, height, dc, bitmap);
+	return new Image(width, height, dc, bitmap);
 }
 
 Image* Image::LoadFile(const char* filename)
@@ -162,29 +162,29 @@ static void SetMaxAlpha(Image::Pixel* bits, int width, int height)
 		it->a = MAX_ALPHA;
 }
 
-static BYTE* BitsFromBitmap(HDC hDC, HBITMAP hBitmap)
+static BYTE* BitsFromBitmap(HDC dc, HBITMAP bitmap)
 {
 	BITMAPINFO bi{};
 	BITMAPINFOHEADER& bih = bi.bmiHeader;
 	bih.biSize = sizeof(bih);
-	GetDIBits(hDC, hBitmap, 0, 0, nullptr, &bi, 0);
+	GetDIBits(dc, bitmap, 0, 0, nullptr, &bi, 0);
 
 	auto height = bih.biHeight;
 	bih.biHeight = -height;
 	bih.biBitCount = 32;
 	bih.biCompression = BI_RGB;
 	BYTE* bits = (BYTE*)malloc(bih.biSizeImage);
-	GetDIBits(hDC, hBitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
+	GetDIBits(dc, bitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
 
 	return bits;
 }
 
-static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP& hBitmap)
+static void BitmapFromBits(BYTE* bits, int width, int height, HDC& dc, HBITMAP& bitmap)
 {
 	//Create bitmap
 	HDC hDesktopDC = GetDC(HWND_DESKTOP);
-	hDC = CreateCompatibleDC(hDesktopDC);
-	hBitmap = CreateCompatibleBitmap(hDesktopDC, width, height);
+	dc = CreateCompatibleDC(hDesktopDC);
+	bitmap = CreateCompatibleBitmap(hDesktopDC, width, height);
 	ReleaseDC(HWND_DESKTOP, hDesktopDC);
 
 	//Set bits
@@ -196,7 +196,7 @@ static void BitmapFromBits(BYTE* bits, int width, int height, HDC& hDC, HBITMAP&
 	bih.biPlanes = 1;
 	bih.biBitCount = 32;
 	bih.biCompression = BI_RGB;
-	SetDIBits(hDC, hBitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
+	SetDIBits(dc, bitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
 
-	SelectObject(hDC, hBitmap);
+	SelectObject(dc, bitmap);
 }

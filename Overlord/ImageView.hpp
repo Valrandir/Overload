@@ -1,11 +1,13 @@
 #pragma once
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
+#include "BitmapGdi.hpp"
+#include "Event.hpp"
 #include "Image.hpp"
 #include "ScrollHandler.hpp"
-#include "Event.hpp"
 
-class ImageView {
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
+
+class ImageView : public BitmapGdi {
 public:
 	Event<int, int> ScrollEvent;
 	Event<bool> ZoomEvent;
@@ -25,16 +27,10 @@ public:
 	void ZoomOut();
 
 	inline HWND GetHandle() const { return window; }
-	inline int GetWidth() const { return width; }
-	inline int GetHeight() const { return height; }
-	inline HDC GetDC() const { return dc; }
 
 private:
 	HWND window{};
 	bool destroyed{};
-	int width, height;
-	HDC dc;
-	HBITMAP bitmap;
 
 	const Image* image{};
 
