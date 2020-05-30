@@ -15,22 +15,22 @@ bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
 
 void CaptureDialog::Initialize()
 {
-	//int x, y, w, h;
-	//GetDlgItemPoint(dialog_wnd, IDC_STATIC_SAMPLE, x, y, w, h);
-	//imageview.Initialize(dialog_wnd, x, y, w, h, image);
+	int x, y, w, h;
+	GetDlgItemPoint(dialog_wnd, IDC_STATIC_SAMPLE, x, y, w, h);
+	imageview.Initialize(dialog_wnd, x, y, w, h, bitmap_gdi);
 
-	//if(!capture_source)
-	//	return;
+	if(!capture_source)
+		return;
 
-	//auto title = capture_source->window_title.c_str();
+	auto title = capture_source->window_title.c_str();
 
-	//std::wstringstream wss;
-	//auto r = capture_source->source_rect;
-	//wss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
-	//auto position = wss.str();
+	std::wstringstream wss;
+	auto r = capture_source->source_rect;
+	wss << L'(' << r.left << L',' << r.top << L"), " << L'(' << r.right << L',' << r.bottom << L')';
+	auto position = wss.str();
 
-	//SetDlgItemText(dialog_wnd, IDC_EDIT_TITLE, title);
-	//SetDlgItemText(dialog_wnd, IDC_EDIT_POSITION, position.c_str());
+	SetDlgItemText(dialog_wnd, IDC_EDIT_TITLE, title);
+	SetDlgItemText(dialog_wnd, IDC_EDIT_POSITION, position.c_str());
 }
 
 INT_PTR CaptureDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)

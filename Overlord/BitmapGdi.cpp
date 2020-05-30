@@ -74,6 +74,12 @@ void BitmapGdi::Destroy() noexcept
 
 ImageBits BitmapGdi::GetBits()
 {
+	auto const_this = (const BitmapGdi*)this;
+	return const_this->GetBits();
+}
+
+const ImageBits BitmapGdi::GetBits() const
+{
 	BITMAPINFO bi{};
 	BITMAPINFOHEADER& bih = bi.bmiHeader;
 	bih.biSize = sizeof(bih);

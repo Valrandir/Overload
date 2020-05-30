@@ -40,6 +40,8 @@ public:
 	const Pixel* cend() const noexcept { return _end; }
 	int Width() const noexcept { return width; }
 	int Height() const noexcept { return height; }
+	size_t ByteSize() const { return (_end - _begin) * sizeof(Byte); }
+	int PixelCount() const { return int(_end - _begin); }
 	Pixel* GetPixel(int x, int y);
 	const Pixel* GetPixel(int x, int y) const;
 

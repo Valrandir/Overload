@@ -1,4 +1,5 @@
 #include "CompareDialog.hpp"
+#include "BitmapGdi.hpp"
 #include "resource.h"
 #include <cassert>
 
@@ -68,18 +69,14 @@ INT_PTR CompareDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM 
 #include <sstream>
 
 void CompareDialog::OnCompare()
-{ /*
-	ImageBits::Pixel *bitmap_gdi_a_begin, *bitmap_gdi_b_begin;
-	auto bitmap_gdi_a_pixel_count = bitmap_gdi_a->GetPixels(bitmap_gdi_a_begin);
-	auto bitmap_gdi_b_pixel_count = bitmap_gdi_b->GetPixels(bitmap_gdi_b_begin);
-	auto bitmap_gdi_a_it = bitmap_gdi_a_begin;
-	auto bitmap_gdi_b_it = bitmap_gdi_b_begin;
+{
+	auto image_bits_a = bitmap_gdi_a->GetBits();
+	auto image_bits_b = bitmap_gdi_b->GetBits();
 
-	if(bitmap_gdi_a_pixel_count != bitmap_gdi_b_pixel_count)
+	if(image_bits_a.ByteSize() != image_bits_b.ByteSize())
 		throw new std::exception("pixel_count differ between both images");
 
-	auto comp_result_pixels = new ImageBits::Pixel[bitmap_gdi_a_pixel_count];
-	auto comp_it = comp_result_pixels;
+	auto comp_result = ImageBits::CreateEmpty(image_bits_a.Width(), image_bits_a.Height());
 
 	int max_diff = 0;
 	int avg_diff = 0;
@@ -90,28 +87,24 @@ void CompareDialog::OnCompare()
 		avg_diff += c;
 	};
 
-	for(size_t i = 0; i < bitmap_gdi_a_pixel_count; ++i, ++bitmap_gdi_a_it, ++bitmap_gdi_b_it, ++comp_it) {
-		comp(comp_it->r, bitmap_gdi_a_it->r, bitmap_gdi_b_it->r);
-		comp(comp_it->g, bitmap_gdi_a_it->g, bitmap_gdi_b_it->g);
-		comp(comp_it->b, bitmap_gdi_a_it->b, bitmap_gdi_b_it->b);
-		comp_it->a = 0xff;
+	auto comp_r = comp_result.begin();
+	auto comp_a = image_bits_a.begin();
+	auto comp_b = image_bits_b.begin();
+	for(; comp_r < comp_result.end(); ++comp_a, ++comp_b, ++comp_r) {
+		comp(comp_r->r, comp_a->r, comp_b->r);
+		comp(comp_r->g, comp_a->g, comp_b->g);
+		comp(comp_r->b, comp_a->b, comp_b->b);
+		comp_r->a = 0xff;
 	}
 
-	avg_diff /= (int)bitmap_gdi_a_pixel_count;
+	avg_diff /= image_bits_a.PixelCount();
 	avg_diff /= 3;
 
-	Image::FreePixels(bitmap_gdi_a_begin);
-	Image::FreePixels(bitmap_gdi_b_begin);
-
-	auto comp_img = Image::CreateFromPixels(comp_result_pixels, bitmap_gdi_a->GetWidth(), bitmap_gdi_a->GetHeight());
-
-	CaptureDialog::ShowDialog(comp_img);
-
-	delete[] comp_result_pixels;
+	auto comp_bitmap = BitmapGdi::CreateFromBits(comp_result);
+	CaptureDialog::ShowDialog(&comp_bitmap);
 
 	std::wstringstream wss;
 	wss << L"max_diff = " << max_diff << std::endl
 		<< L"avg_diff = " << avg_diff;
 	MessageBox(dialog_wnd, wss.str().c_str(), TEXT("Compare"), MB_OK | MB_ICONINFORMATION);
-	*/
 }

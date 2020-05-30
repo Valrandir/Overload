@@ -28,6 +28,7 @@ private:
 
 public:
 	ImageBits GetBits();
+	const ImageBits GetBits() const;
 	static BitmapGdi CreateFromBits(const ImageBits& image_bits);
 	static BitmapGdi LoadFile(const char* filename);
 	void SaveFile(const char* filename);

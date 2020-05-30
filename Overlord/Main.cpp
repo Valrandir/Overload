@@ -12,40 +12,42 @@ void OnHotKeyCapture(int, void* userdata)
 {
 	auto cs = (CaptureSample*)userdata;
 
-	//if(cs->image) {
-	//	Image::FreeImage(cs->image);
-	//	cs->image = nullptr;
-	//}
+	if(cs->bitmap_gdi) {
+		delete cs->bitmap_gdi;
+		cs->bitmap_gdi = nullptr;
+	}
 
-	//cs->image = CaptureWnd::Capture(cs);
+	cs->bitmap_gdi = CaptureWnd::Capture(cs);
 
-	//if(!CaptureDialog::ShowDialog(cs)) {
-	//	Image::FreeImage(cs->image);
-	//	cs->image = nullptr;
-	//}
+	if(!CaptureDialog::ShowDialog(cs)) {
+		delete cs->bitmap_gdi;
+		cs->bitmap_gdi = nullptr;
+	}
 }
 
 void OnHotKeyCompare(int, void* userdata)
 {
 	auto cs = (CaptureSample*)userdata;
 
-	//if(!cs->image)
-	//	return;
+	if(!cs->bitmap_gdi)
+		return;
 
-	//auto image_l = cs->image;
+	auto bitmal_l = cs->bitmap_gdi;
 
-	//cs->image = CaptureWnd::Recapture(*cs);
-	//if(!CaptureDialog::ShowDialog(cs)) {
-	//	Image::FreeImage(image_l);
-	//	return;
-	//}
+	cs->bitmap_gdi = new BitmapGdi(CaptureWnd::Recapture(*cs));
+	if(!CaptureDialog::ShowDialog(cs)) {
+		delete bitmal_l;
+		cs->bitmap_gdi = nullptr;
+		return;
+	}
 
-	//auto image_r = cs->image;
+	auto bitmal_r = cs->bitmap_gdi;
 
-	//CompareDialog::ShowDialog(image_l, image_r);
+	CompareDialog::ShowDialog(bitmal_l, bitmal_r);
 
-	//Image::FreeImage(image_l);
-	//Image::FreeImage(image_r);
+	delete bitmal_l;
+	delete bitmal_r;
+	cs->bitmap_gdi = nullptr;
 }
 
 int main()
