@@ -1,6 +1,7 @@
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
+#include "OverlordTests.hpp"
 #include "../Overlord/BitmapGdi.hpp"
 #include <type_traits>
 
@@ -42,48 +43,80 @@ public:
 		//Arrange
 		BitmapGdi bm(32, 32);
 
-		auto width = bm.GetWidth();
-		auto height = bm.GetHeight();
+		auto width = bm.Width();
+		auto height = bm.Height();
 		auto dc = bm.GetDC();
-		auto bitmap = bm.GetBitmap();
+		//auto bitmap = bm.GetBitmap();
 
 		//Act
 		BitmapGdi moved(std::move(bm));
 
 		//Assert
-		Assert::AreEqual(0, bm.GetWidth());
-		Assert::AreEqual(0, bm.GetHeight());
+		Assert::AreEqual(0, bm.Width());
+		Assert::AreEqual(0, bm.Height());
 		Assert::IsNull(bm.GetDC());
-		Assert::IsNull(bm.GetBitmap());
 
-		Assert::AreEqual(width, moved.GetWidth());
-		Assert::AreEqual(height, moved.GetHeight());
+		Assert::AreEqual(width, moved.Width());
+		Assert::AreEqual(height, moved.Height());
 		Assert::IsTrue(dc == moved.GetDC());
-		Assert::IsTrue(bitmap == moved.GetBitmap());
 	}
 
 	TEST_METHOD(MoveAssigned_Success) {
 		//Arrange
 		BitmapGdi bm(32, 32);
 
-		auto width = bm.GetWidth();
-		auto height = bm.GetHeight();
+		auto width = bm.Width();
+		auto height = bm.Height();
 		auto dc = bm.GetDC();
-		auto bitmap = bm.GetBitmap();
 
 		//Act
 		BitmapGdi moved(16, 16);
-		moved =std::move(bm);
+		moved = std::move(bm);
 
 		//Assert
-		Assert::AreEqual(0, bm.GetWidth());
-		Assert::AreEqual(0, bm.GetHeight());
+		Assert::AreEqual(0, bm.Width());
+		Assert::AreEqual(0, bm.Height());
 		Assert::IsNull(bm.GetDC());
-		Assert::IsNull(bm.GetBitmap());
 
-		Assert::AreEqual(width, moved.GetWidth());
-		Assert::AreEqual(height, moved.GetHeight());
+		Assert::AreEqual(width, moved.Width());
+		Assert::AreEqual(height, moved.Height());
 		Assert::IsTrue(dc == moved.GetDC());
-		Assert::IsTrue(bitmap == moved.GetBitmap());
+	}
+
+	TEST_METHOD(Create_Save_Load_Show) {
+		//Arrange
+		auto filename = "Create_Save_Load_ShellOpen.png";
+		COLORREF c[] = {
+			{RGB(255, 0, 0)},
+			{RGB(0, 255, 0)},
+			{RGB(0, 0, 255)},
+			{RGB(255, 255, 0)},
+			{RGB(0, 255, 255)},
+			{RGB(255, 0, 255)},
+		};
+
+		constexpr int width = 640, height = 640;
+		BitmapGdi bm(width, height);
+		constexpr int cc = sizeof(c) / sizeof(COLORREF);
+		constexpr auto step_x = width / cc / 2;
+		constexpr auto step_y = height / cc / 2;
+		int x = 0, y = 0;
+		int w = width, h = height;
+		for(auto i = 0; i < cc; ++i) {
+			bm.Fill(x, y, w, h, c[i]);
+			x += step_x;
+			y += step_y;
+			w -= step_x * 2;
+			h -= step_y * 2;
+		}
+
+		//Act
+		bm.SaveFile(filename);
+		BitmapGdi loaded = BitmapGdi::LoadFile(filename);
+
+		HDC hdc = GetDC(0);
+		BitBlt(hdc, 0, 0, width, height, loaded.GetDC(), 0, 0, SRCCOPY);
+
+		//Assert
 	}
 };

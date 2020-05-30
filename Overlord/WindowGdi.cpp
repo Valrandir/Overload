@@ -98,7 +98,7 @@ WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style)
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 	Initialize(this->width, this->height);
-	Fill(RGB(0x3f, 0x3f, 0x3f));
+	Clear(RGB(0x3f, 0x3f, 0x3f));
 }
 
 WindowGdi::~WindowGdi()
@@ -149,13 +149,12 @@ void WindowGdi::Close()
 	destroyed = true;
 	DestroyWindow(window);
 }
-
-void WindowGdi::DrawImage(const Image* image, int x, int y)
+void WindowGdi::DrawBitmap(const BitmapGdi& source, int x, int y)
 {
-	int w = image->GetWidth();
-	int h = image->GetHeight();
+	int w = source.Width();
+	int h = source.Height();
 
-	Draw(image->GetDC(), x, y, w, h);
+	Draw(source.GetDC(), x, y, w, h);
 
 	RECT rect{x, y, x + w, y + h};
 	InvalidateRect(window, &rect, FALSE);

@@ -2,10 +2,10 @@
 
 namespace ImageComparer
 {
-	Image* Compare(const Image* a, const Image* b)
+	BitmapGdi Compare(const BitmapGdi& a, const BitmapGdi& b)
 	{
 		//Image* compare = new Image()
 		//Image::GetPixels
-		return nullptr;
+		throw "not implemented";
 	}
 }

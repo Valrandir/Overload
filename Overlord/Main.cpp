@@ -12,40 +12,40 @@ void OnHotKeyCapture(int, void* userdata)
 {
 	auto cs = (CaptureSample*)userdata;
 
-	if(cs->image) {
-		Image::FreeImage(cs->image);
-		cs->image = nullptr;
-	}
+	//if(cs->image) {
+	//	Image::FreeImage(cs->image);
+	//	cs->image = nullptr;
+	//}
 
-	cs->image = CaptureWnd::Capture(cs);
+	//cs->image = CaptureWnd::Capture(cs);
 
-	if(!CaptureDialog::ShowDialog(cs)) {
-		Image::FreeImage(cs->image);
-		cs->image = nullptr;
-	}
+	//if(!CaptureDialog::ShowDialog(cs)) {
+	//	Image::FreeImage(cs->image);
+	//	cs->image = nullptr;
+	//}
 }
 
 void OnHotKeyCompare(int, void* userdata)
 {
 	auto cs = (CaptureSample*)userdata;
 
-	if(!cs->image)
-		return;
+	//if(!cs->image)
+	//	return;
 
-	auto image_l = cs->image;
+	//auto image_l = cs->image;
 
-	cs->image = CaptureWnd::Recapture(*cs);
-	if(!CaptureDialog::ShowDialog(cs)) {
-		Image::FreeImage(image_l);
-		return;
-	}
+	//cs->image = CaptureWnd::Recapture(*cs);
+	//if(!CaptureDialog::ShowDialog(cs)) {
+	//	Image::FreeImage(image_l);
+	//	return;
+	//}
 
-	auto image_r = cs->image;
+	//auto image_r = cs->image;
 
-	CompareDialog::ShowDialog(image_l, image_r);
+	//CompareDialog::ShowDialog(image_l, image_r);
 
-	Image::FreeImage(image_l);
-	Image::FreeImage(image_r);
+	//Image::FreeImage(image_l);
+	//Image::FreeImage(image_r);
 }
 
 int main()

@@ -1,13 +1,10 @@
 #pragma once
 #include "CaptureSource.hpp"
-#include "Image.hpp"
+#include "BitmapGdi.hpp"
 
 struct CaptureSample : public CaptureSource {
 	CaptureSample() :
 		CaptureSource{} {}
 
-	CaptureSample(const CaptureSource& cs) :
-		CaptureSource{cs} {}
-
-	Image* image{};
+	BitmapGdi* bitmap_gdi{};
 };

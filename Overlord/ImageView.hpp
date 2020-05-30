@@ -1,7 +1,6 @@
 #pragma once
 #include "BitmapGdi.hpp"
 #include "Event.hpp"
-#include "Image.hpp"
 #include "ScrollHandler.hpp"
 
 #define WIN32_LEAN_AND_MEAN
@@ -13,7 +12,7 @@ public:
 	Event<bool> ZoomEvent;
 
 	ImageView() = default;
-	void Initialize(HWND hWndParent, int x, int y, int width, int height, const Image* image);
+	void Initialize(HWND hWndParent, int x, int y, int width, int height, const BitmapGdi* bitmap_gdi);
 	~ImageView();
 	ImageView(const ImageView&) = delete;
 	ImageView& operator=(const ImageView&) = delete;
@@ -32,7 +31,7 @@ private:
 	HWND window{};
 	bool destroyed{};
 
-	const Image* image{};
+	const BitmapGdi* bitmap_gdi{};
 
 	ScrollBarHandler sbh;
 	bool mouse_dragging{};
@@ -42,9 +41,9 @@ private:
 	int zoom_level{1};
 	int zoom_factor{};
 
-	void SetupScrollInfo(const Image* image);
+	void SetupScrollInfo(const BitmapGdi& bitmap_gdi);
 	void ClearBackground();
-	void DrawImage(const Image* image, int x, int y);
+	void DrawImage(const BitmapGdi& bitmap_gdi, int x, int y);
 
 	void OnPaint();
 	void OnScroll(UINT msg, WPARAM wparam, LPARAM lparam);

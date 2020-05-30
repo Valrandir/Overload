@@ -116,15 +116,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="HotKeyMonitorTests.cpp" />
     <ClCompile Include="BitmapGdiTests.cpp" />
+    <ClCompile Include="HotKeyMonitorTests.cpp" />
     <ClCompile Include="ImageBitsTests.cpp" />
-    <ClCompile Include="ImageTests.cpp" />
+    <ClCompile Include="CaptureWndTests.cpp" />
+    <ClCompile Include="OverlordTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Overlord\Overlord.vcxproj">
       <Project>{637620fa-454f-4391-baa1-c1fbde28256c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OverlordTests.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

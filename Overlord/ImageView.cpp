@@ -2,7 +2,7 @@
 #include <cassert>
 #include <exception>
 
-void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height, const Image* image)
+void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height, const BitmapGdi* bitmap_gdi)
 {
 	const LPCTSTR CLASS_NAME = TEXT("ImageView");
 	HINSTANCE hInstance = GetModuleHandle(NULL);
@@ -10,7 +10,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 
 	this->width = width;
 	this->height = height;
-	this->image = image;
+	this->bitmap_gdi = bitmap_gdi;
 
 	if(!GetClassInfoEx(hInstance, CLASS_NAME, &wc)) {
 		wc.cbSize = sizeof(wc);
@@ -35,13 +35,13 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 
 	BitmapGdi::Initialize(width, height);
 	ClearBackground();
-	DrawImage(image, 0, 0);
-	SetupScrollInfo(image);
+	DrawImage(*bitmap_gdi, 0, 0);
+	SetupScrollInfo(*bitmap_gdi);
 }
 
 ImageView::~ImageView()
 {
-	image = nullptr;
+	bitmap_gdi = nullptr;
 }
 
 void ImageView::Show()
@@ -69,7 +69,7 @@ void ImageView::Scroll(int offset_x, int offset_y)
 {
 	if(sbh.OffsetScroll(offset_x, offset_y)) {
 		auto sp = sbh.GetPosition();
-		DrawImage(image, -sp.x, -sp.y);
+		DrawImage(*bitmap_gdi, -sp.x, -sp.y);
 	}
 }
 
@@ -83,13 +83,9 @@ void ImageView::ZoomOut()
 	UpdateZoom(-1);
 }
 
-void ImageView::SetupScrollInfo(const Image* image)
+void ImageView::SetupScrollInfo(const BitmapGdi& bitmap_gdi)
 {
-	assert(image);
-	if(!image)
-		throw new std::exception("image is null");
-
-	sbh.Initialize(window, width, height, image->GetWidth(), image->GetHeight());
+	sbh.Initialize(window, width, height, bitmap_gdi.Width(), bitmap_gdi.Height());
 }
 
 void ImageView::ClearBackground()
@@ -98,21 +94,18 @@ void ImageView::ClearBackground()
 	FillRect(dc, &rect, (HBRUSH)LTGRAY_BRUSH);
 }
 
-void ImageView::DrawImage(const Image* image, int x, int y)
+void ImageView::DrawImage(const BitmapGdi& bitmap_gdi, int x, int y)
 {
-	if(!image)
-		return;
-
-	int w = image->GetWidth();
-	int h = image->GetHeight();
+	int w = bitmap_gdi.Width();
+	int h = bitmap_gdi.Height();
 	RECT rect{x, y, x + w, y + h};
 
 	if(zoom_level > 1) {
-		auto zx = zoom_factor * image->GetWidth();
-		auto zy = zoom_factor * image->GetHeight();
-		StretchBlt(dc, x, y, zx, zy, image->GetDC(), 0, 0, image->GetWidth(), image->GetHeight(), SRCCOPY);
+		auto zx = zoom_factor * bitmap_gdi.Width();
+		auto zy = zoom_factor * bitmap_gdi.Height();
+		StretchBlt(dc, x, y, zx, zy, bitmap_gdi.GetDC(), 0, 0, bitmap_gdi.Width(), bitmap_gdi.Height(), SRCCOPY);
 	} else
-		BitBlt(dc, x, y, w, h, image->GetDC(), 0, 0, SRCCOPY);
+		BitBlt(dc, x, y, w, h, bitmap_gdi.GetDC(), 0, 0, SRCCOPY);
 
 	InvalidateRect(window, NULL, FALSE);
 }
@@ -151,7 +144,7 @@ void ImageView::OnScroll(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	sbh.HandleScroll(msg, wparam, lparam);
 	auto sp = sbh.GetPosition();
-	DrawImage(image, -sp.x, -sp.y);
+	DrawImage(*bitmap_gdi, -sp.x, -sp.y);
 }
 
 void ImageView::OnLMouseMove()
@@ -216,10 +209,10 @@ void ImageView::UpdateZoom(int direction)
 		zoom_level = ZOOM_LEVEL_MAX;
 
 	zoom_factor = GetZoomFactor(zoom_level);
-	sbh.Initialize(window, width, height, image->GetWidth() * zoom_factor, image->GetHeight() * zoom_factor);
+	sbh.Initialize(window, width, height, bitmap_gdi->Width() * zoom_factor, bitmap_gdi->Height() * zoom_factor);
 	auto sp = sbh.GetPosition();
 	ClearBackground();
-	DrawImage(image, -sp.x, -sp.y);
+	DrawImage(*bitmap_gdi, -sp.x, -sp.y);
 }
 
 LRESULT CALLBACK ImageView::WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam)

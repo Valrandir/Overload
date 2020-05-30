@@ -41,7 +41,7 @@ BitmapGdi& BitmapGdi::operator=(BitmapGdi&& other) noexcept
 
 BitmapGdi::~BitmapGdi() { Destroy(); }
 
-inline BitmapGdi& BitmapGdi::Move(BitmapGdi& other) noexcept
+BitmapGdi& BitmapGdi::Move(BitmapGdi& other) noexcept
 {
 	width = other.width;
 	height = other.height;
@@ -56,7 +56,7 @@ inline BitmapGdi& BitmapGdi::Move(BitmapGdi& other) noexcept
 	return *this;
 }
 
-inline void BitmapGdi::Destroy() noexcept
+void BitmapGdi::Destroy() noexcept
 {
 	if(dc) {
 		DeleteDC(dc);
@@ -72,7 +72,67 @@ inline void BitmapGdi::Destroy() noexcept
 	height = 0;
 }
 
-void BitmapGdi::Fill(COLORREF color)
+ImageBits BitmapGdi::GetBits()
+{
+	BITMAPINFO bi{};
+	BITMAPINFOHEADER& bih = bi.bmiHeader;
+	bih.biSize = sizeof(bih);
+	GetDIBits(dc, bitmap, 0, 0, nullptr, &bi, 0);
+
+	auto width = bih.biWidth;
+	auto height = bih.biHeight;
+	auto bits = ImageBits::AllocBits(width, height);
+
+	bih.biHeight = -height;
+	bih.biBitCount = 32;
+	bih.biCompression = BI_RGB;
+	GetDIBits(dc, bitmap, 0, height, bits, &bi, DIB_RGB_COLORS);
+
+	return ImageBits::CreateFromBits(width, height, bits);
+}
+
+BitmapGdi BitmapGdi::CreateFromBits(const ImageBits& image_bits)
+{
+	//Create bitmap
+	auto width = image_bits.Width();
+	auto height = image_bits.Height();
+	HDC desktop_dc = ::GetDC(HWND_DESKTOP);
+	HDC dc = CreateCompatibleDC(desktop_dc);
+	HBITMAP bitmap = CreateCompatibleBitmap(desktop_dc, width, height);
+	ReleaseDC(HWND_DESKTOP, desktop_dc);
+
+	//Set bits
+	BITMAPINFO bi{};
+	BITMAPINFOHEADER& bih = bi.bmiHeader;
+	bih.biSize = sizeof(bih);
+	bih.biWidth = width;
+	bih.biHeight = -height;
+	bih.biPlanes = 1;
+	bih.biBitCount = 32;
+	bih.biCompression = BI_RGB;
+	SetDIBits(dc, bitmap, 0, height, image_bits.cbegin(), &bi, DIB_RGB_COLORS);
+
+	SelectObject(dc, bitmap);
+
+	return BitmapGdi(width, height, dc, bitmap);
+}
+
+BitmapGdi BitmapGdi::LoadFile(const char* filename)
+{
+	return CreateFromBits(ImageBits::LoadFile(filename));
+}
+
+void BitmapGdi::SaveFile(const char* filename)
+{
+	auto image_bits = GetBits();
+
+	for(auto& it : image_bits)
+		it.a = 255;
+
+	image_bits.SaveFile(filename);
+}
+
+void BitmapGdi::Clear(COLORREF color)
 {
 	INITIALIZE_CHECK
 	Fill({0, 0, width, height}, color);
@@ -92,8 +152,8 @@ void BitmapGdi::Fill(int x, int y, int w, int h, COLORREF color)
 	Fill({x, y, x + w, y + h}, color);
 }
 
-void BitmapGdi::Draw(HDC source, int x, int y, int w, int h)
+void BitmapGdi::Draw(HDC source, int x, int y, int w, int h, int src_x, int src_y)
 {
 	INITIALIZE_CHECK
-	BitBlt(dc, x, y, w, h, source, 0, 0, SRCCOPY);
+	BitBlt(dc, x, y, w, h, source, src_x, src_y, SRCCOPY);
 }

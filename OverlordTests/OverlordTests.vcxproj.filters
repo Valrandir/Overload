@@ -2,8 +2,12 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="HotKeyMonitorTests.cpp" />
-    <ClCompile Include="ImageTests.cpp" />
-    <ClCompile Include="BitmapGdiTests.cpp" />
     <ClCompile Include="ImageBitsTests.cpp" />
+    <ClCompile Include="OverlordTests.cpp" />
+    <ClCompile Include="BitmapGdiTests.cpp" />
+    <ClCompile Include="CaptureWndTests.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="OverlordTests.hpp" />
   </ItemGroup>
 </Project>

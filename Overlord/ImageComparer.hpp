@@ -1,7 +1,7 @@
 #pragma once
-#include "Image.hpp"
+#include "BitmapGdi.hpp"
 
 namespace ImageComparer
 {
-	Image* Compare(const Image* a, const Image* b);
+	BitmapGdi Compare(const BitmapGdi& a, const BitmapGdi& b);
 };

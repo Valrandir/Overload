@@ -3,31 +3,7 @@
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="HotKeyMonitor.cpp" />
-    <ClCompile Include="CaptureDialog.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="DialogBase.cpp">
-      <Filter>Dialogs\Base</Filter>
-    </ClCompile>
-    <ClCompile Include="CompareDialog.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="ScrollHandler.cpp" />
-    <ClCompile Include="CaptureWnd.cpp">
-      <Filter>Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="WindowGdi.cpp">
-      <Filter>Windows</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageView.cpp">
-      <Filter>UserControls</Filter>
-    </ClCompile>
-    <ClCompile Include="Image.cpp">
-      <Filter>Image</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageComparer.cpp">
-      <Filter>Image</Filter>
-    </ClCompile>
     <ClCompile Include="ImageIO.cpp">
       <Filter>Image</Filter>
     </ClCompile>
@@ -36,6 +12,28 @@
     </ClCompile>
     <ClCompile Include="ImageBits.cpp">
       <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageCapture.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageView.cpp">
+      <Filter>UserControls</Filter>
+    </ClCompile>
+    <ClCompile Include="CaptureWnd.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowGdi.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageComparer.cpp" />
+    <ClCompile Include="DialogBase.cpp">
+      <Filter>Dialogs\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="CaptureDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CompareDialog.cpp">
+      <Filter>Dialogs</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,32 +44,8 @@
     <ClInclude Include="CaptureSource.hpp">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="CaptureDialog.hpp">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
-    <ClInclude Include="DialogBase.hpp">
-      <Filter>Dialogs\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="CompareDialog.hpp">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="ScrollHandler.hpp" />
-    <ClInclude Include="CaptureWnd.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="WindowGdi.hpp">
-      <Filter>Windows</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageView.hpp">
-      <Filter>UserControls</Filter>
-    </ClInclude>
     <ClInclude Include="Event.hpp" />
-    <ClInclude Include="Image.hpp">
-      <Filter>Image</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageComparer.hpp">
-      <Filter>Image</Filter>
-    </ClInclude>
     <ClInclude Include="lib\stb\stb_image.h">
       <Filter>ExternalLibraries\stb</Filter>
     </ClInclude>
@@ -92,6 +66,28 @@
     </ClInclude>
     <ClInclude Include="ImageBits.hpp">
       <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageCapture.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageView.hpp">
+      <Filter>UserControls</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowGdi.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureWnd.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageComparer.hpp" />
+    <ClInclude Include="DialogBase.hpp">
+      <Filter>Dialogs\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="CompareDialog.hpp">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="CaptureDialog.hpp">
+      <Filter>Dialogs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

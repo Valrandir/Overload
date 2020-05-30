@@ -116,7 +116,7 @@
     <ClCompile Include="CompareDialog.cpp" />
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="HotKeyMonitor.cpp" />
-    <ClCompile Include="Image.cpp" />
+    <ClCompile Include="ImageCapture.cpp" />
     <ClCompile Include="ImageBits.cpp" />
     <ClCompile Include="ImageComparer.cpp" />
     <ClCompile Include="ImageIO.cpp" />
@@ -135,7 +135,7 @@
     <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="HotKeyMonitor.hpp" />
-    <ClInclude Include="Image.hpp" />
+    <ClInclude Include="ImageCapture.hpp" />
     <ClInclude Include="ImageBits.hpp" />
     <ClInclude Include="ImageComparer.hpp" />
     <ClInclude Include="ImageIO.hpp" />

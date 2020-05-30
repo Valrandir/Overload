@@ -1,4 +1,6 @@
 #include "CaptureWnd.hpp"
+#include "ImageCapture.hpp"
+#include <utility>
 
 static void DragRect(RECT& rect, const POINT origin, int x, int y)
 {
@@ -110,7 +112,7 @@ void CaptureWnd::OnMouseUp(int x, int y)
 	ShrinkRect(sel_rect);
 
 	if(RectSizeIsNotZero(sel_rect)) {
-		captured_image = Image::Capture(window, &sel_rect);
+		captured_image = new BitmapGdi(ImageCapture::CaptureWindow(window, sel_rect));
 		Close();
 	}
 }
@@ -118,16 +120,15 @@ void CaptureWnd::OnMouseUp(int x, int y)
 CaptureWnd::CaptureWnd() :
 	WindowGdi(TEXT(""), 0, 0, WS_POPUP)
 {
-	Image* desktopimage = Image::CaptureDesktop();
-	DrawImage(desktopimage, 0, 0);
-	Image::FreeImage(desktopimage);
+	BitmapGdi desktop_bitmap = ImageCapture::CaptureDesktop();
+	DrawBitmap(desktop_bitmap, 0, 0);
 	SetCursor(IDC_CROSS);
 	Show();
 }
 
 CaptureWnd::~CaptureWnd() {}
 
-Image* CaptureWnd::Capture(CaptureSource* outcapture_source)
+BitmapGdi* CaptureWnd::Capture(CaptureSource* outcapture_source)
 {
 	CaptureWnd capture_wnd;
 
@@ -143,9 +144,9 @@ Image* CaptureWnd::Capture(CaptureSource* outcapture_source)
 	return capture_wnd.captured_image;
 }
 
-Image* CaptureWnd::Recapture(const CaptureSource& capture_source)
+BitmapGdi CaptureWnd::Recapture(const CaptureSource& capture_source)
 {
 	//SetActiveWindow(capture_source.window_handle);
 	SetForegroundWindow(capture_source.window_handle);
-	return Image::Capture(HWND_DESKTOP, &capture_source.source_rect);
+	return ImageCapture::CaptureDesktop(capture_source.source_rect);
 }

@@ -1,7 +1,6 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include "Image.hpp"
 #include "BitmapGdi.hpp"
 
 class WindowGdi : public BitmapGdi {
@@ -30,7 +29,7 @@ public:
 	virtual bool Update();
 	virtual void Close();
 
-	virtual void DrawImage(const Image* image, int x, int y);
+	virtual void DrawBitmap(const BitmapGdi& source, int x, int y);
 
 	inline HWND GetHandle() const { return window; }
 };

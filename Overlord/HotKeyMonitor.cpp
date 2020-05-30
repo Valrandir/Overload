@@ -5,7 +5,7 @@ int HotKeyMonitor::AddHotKey(HotKeyFunc callback, void* userdata, UINT virtualKe
 	assert(callback);
 
 	if(0 == RegisterHotKey(NULL, ++last_id, 0, virtualKeyCode))
-		throw std::exception("HotKey registration failed");
+		throw std::exception("HotKey registration failed"); //TODO: Reconsider using exceptions
 
 	registered_hotkeys.emplace_back(last_id, callback, userdata);
 
