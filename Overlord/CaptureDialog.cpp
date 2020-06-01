@@ -1,5 +1,5 @@
 #include "CaptureDialog.hpp"
-#include "resource.h"
+#include "Overlord.rc.h"
 #include <sstream>
 
 bool CaptureDialog::ShowDialog(const BitmapGdi* bitmap_gdi, const CaptureSource* capture_source)

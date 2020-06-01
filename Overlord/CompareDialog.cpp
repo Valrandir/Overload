@@ -1,6 +1,6 @@
 #include "CompareDialog.hpp"
 #include "BitmapGdi.hpp"
-#include "resource.h"
+#include "Overlord.rc.h"
 #include <cassert>
 
 static void ScrollCallback(int offset_x, int offset_y, void* userdata)

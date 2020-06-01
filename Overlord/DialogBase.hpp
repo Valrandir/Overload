@@ -1,3 +1,5 @@
+//VIS LAYOUT https://docs.microsoft.com/en-us/windows/win32/uxguide/vis-layout#recommended-sizing-and-spacing
+
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>

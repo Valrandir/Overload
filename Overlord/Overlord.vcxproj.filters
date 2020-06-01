@@ -35,12 +35,18 @@
     <ClCompile Include="CompareDialog.cpp">
       <Filter>Dialogs</Filter>
     </ClCompile>
+    <ClCompile Include="SamplerDialog.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="CaptureCompareScenario.cpp">
+      <Filter>Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerDialogScenario.cpp">
+      <Filter>Scenarios</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HotKeyMonitor.hpp" />
-    <ClInclude Include="resource.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
     <ClInclude Include="CaptureSource.hpp">
       <Filter>Entities</Filter>
     </ClInclude>
@@ -89,6 +95,12 @@
     <ClInclude Include="CaptureDialog.hpp">
       <Filter>Dialogs</Filter>
     </ClInclude>
+    <ClInclude Include="SamplerDialog.hpp">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Overlord.rc.h">
+      <Filter>Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -117,6 +129,9 @@
     </Filter>
     <Filter Include="ExternalLibraries\stb">
       <UniqueIdentifier>{17b8f43d-f66d-4cc4-bd7e-975dddeb52a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenarios">
+      <UniqueIdentifier>{ded3cc9a-2b0d-4f6a-86a8-f065770ca559}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

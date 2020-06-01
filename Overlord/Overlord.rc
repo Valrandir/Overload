@@ -1,6 +1,6 @@
 // Microsoft Visual C++ generated resource script.
 //
-#include "resource.h"
+#include "Overlord.rc.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -13,47 +13,108 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// English (United States) resources
+// Neutral (Default) resources
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_NEUD)
+LANGUAGE LANG_NEUTRAL, SUBLANG_DEFAULT
 #pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
 
 #ifdef APSTUDIO_INVOKED
-/////////////////////////////////////////////////////////////////////////////
-//
-// TEXTINCLUDE
-//
-
-1 TEXTINCLUDE 
+GUIDELINES DESIGNINFO
 BEGIN
-    "resource.h\0"
-END
+    IDD_DIALOG_SAMPLER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 468
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 301
+    END
 
-2 TEXTINCLUDE 
-BEGIN
-    "#include ""winres.h""\r\n"
-    "\0"
-END
+    IDD_CAPTURE_SAMPLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 304
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 228
+    END
 
-3 TEXTINCLUDE 
-BEGIN
-    "\r\n"
-    "\0"
+    IDD_DIALOG_COMPARE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 558
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 241
+    END
 END
-
 #endif    // APSTUDIO_INVOKED
 
-#endif    // English (United States) resources
-/////////////////////////////////////////////////////////////////////////////
-
 
 /////////////////////////////////////////////////////////////////////////////
-// English (Canada) resources
+//
+// Dialog
+//
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENC)
-LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_CAN
-#pragma code_page(1252)
+IDD_DIALOG_SAMPLER DIALOGEX 0, 0, 475, 308
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Sampler Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,364,287,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,418,287,50,14
+END
+
+IDD_CAPTURE_SAMPLE DIALOGEX 0, 0, 311, 235
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,193,214,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,254,214,50,14
+    EDITTEXT        IDC_EDIT_TITLE,8,8,152,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_EDIT_POSITION,8,24,152,12,ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
+    CONTROL         "",IDC_STATIC_SAMPLE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,8,40,296,172,WS_EX_STATICEDGE
+END
+
+IDD_DIALOG_COMPARE DIALOGEX 0, 0, 565, 248
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Compare Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,452,228,52,16
+    PUSHBUTTON      "Cancel",IDCANCEL,508,228,52,16
+    CONTROL         "",IDC_STATIC_IMG_1,"Static",SS_OWNERDRAW | SS_SUNKEN | NOT WS_VISIBLE,4,4,276,216
+    CONTROL         "",IDC_STATIC_IMG_2,"Static",SS_OWNERDRAW | SS_SUNKEN | NOT WS_VISIBLE,284,4,276,216
+    DEFPUSHBUTTON   "Compare",IDCOMPARE,396,228,52,16
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_DIALOG_SAMPLER AFX_DIALOG_LAYOUT
+BEGIN
+    0,
+    100, 100, 0, 0,
+    0, 0, 0, 0
+END
+
+IDD_CAPTURE_SAMPLE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DIALOG_COMPARE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -103,80 +164,43 @@ END
 // remains consistent on all systems.
 IDI_ICON1               ICON                    "Overlord.ico"
 
+#endif    // Neutral (Default) resources
+/////////////////////////////////////////////////////////////////////////////
+
 
 /////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
 
 #ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO
-BEGIN
-    IDD_CAPTURE_SAMPLE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 304
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 228
-    END
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
 
-    IDD_DIALOG_COMPARE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 558
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 241
-    END
+1 TEXTINCLUDE 
+BEGIN
+    "Overlord.rc.h\0"
 END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""winres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
 #endif    // APSTUDIO_INVOKED
 
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_CAPTURE_SAMPLE DIALOGEX 0, 0, 311, 235
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "Dialog"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,193,214,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,254,214,50,14
-    EDITTEXT        IDC_EDIT_TITLE,8,8,152,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
-    EDITTEXT        IDC_EDIT_POSITION,8,24,152,12,ES_AUTOHSCROLL | ES_READONLY | ES_NUMBER | NOT WS_BORDER,WS_EX_STATICEDGE
-    CONTROL         "",IDC_STATIC_SAMPLE,"Static",SS_OWNERDRAW | SS_REALSIZEIMAGE,8,40,296,172,WS_EX_STATICEDGE
-END
-
-IDD_DIALOG_COMPARE DIALOGEX 0, 0, 565, 248
-STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "Compare Dialog"
-FONT 8, "MS Shell Dlg", 400, 0, 0x1
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,452,228,52,16
-    PUSHBUTTON      "Cancel",IDCANCEL,508,228,52,16
-    CONTROL         "",IDC_STATIC_IMG_1,"Static",SS_OWNERDRAW | SS_SUNKEN | NOT WS_VISIBLE,4,4,276,216
-    CONTROL         "",IDC_STATIC_IMG_2,"Static",SS_OWNERDRAW | SS_SUNKEN | NOT WS_VISIBLE,284,4,276,216
-    DEFPUSHBUTTON   "Compare",IDCOMPARE,396,228,52,16
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// AFX_DIALOG_LAYOUT
-//
-
-IDD_CAPTURE_SAMPLE AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
-IDD_DIALOG_COMPARE AFX_DIALOG_LAYOUT
-BEGIN
-    0
-END
-
-#endif    // English (Canada) resources
+#endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////
 
 
