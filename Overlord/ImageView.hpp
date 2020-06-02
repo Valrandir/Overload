@@ -31,7 +31,7 @@ private:
 	HWND window{};
 	bool destroyed{};
 
-	const BitmapGdi* bitmap_gdi{};
+	const BitmapGdi* bitmap_gdi{}; //Not Owned
 
 	ScrollBarHandler sbh;
 	bool mouse_dragging{};

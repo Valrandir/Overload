@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="HotKeyMonitor.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="ImageIO.cpp">
       <Filter>Image</Filter>
@@ -35,18 +34,18 @@
     <ClCompile Include="CompareDialog.cpp">
       <Filter>Dialogs</Filter>
     </ClCompile>
-    <ClCompile Include="SamplerDialog.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
     <ClCompile Include="CaptureCompareScenario.cpp">
       <Filter>Scenarios</Filter>
     </ClCompile>
     <ClCompile Include="SamplerDialogScenario.cpp">
       <Filter>Scenarios</Filter>
     </ClCompile>
+    <ClCompile Include="SamplerDialog.cpp">
+      <Filter>Dialogs\SamplerDialog</Filter>
+    </ClCompile>
+    <ClCompile Include="HotkeyMonitor.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HotKeyMonitor.hpp" />
     <ClInclude Include="CaptureSource.hpp">
       <Filter>Entities</Filter>
     </ClInclude>
@@ -95,12 +94,13 @@
     <ClInclude Include="CaptureDialog.hpp">
       <Filter>Dialogs</Filter>
     </ClInclude>
-    <ClInclude Include="SamplerDialog.hpp">
-      <Filter>Dialogs</Filter>
-    </ClInclude>
     <ClInclude Include="Overlord.rc.h">
       <Filter>Resources</Filter>
     </ClInclude>
+    <ClInclude Include="SamplerDialog.hpp">
+      <Filter>Dialogs\SamplerDialog</Filter>
+    </ClInclude>
+    <ClInclude Include="HotkeyMonitor.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -132,6 +132,9 @@
     </Filter>
     <Filter Include="Scenarios">
       <UniqueIdentifier>{ded3cc9a-2b0d-4f6a-86a8-f065770ca559}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs\SamplerDialog">
+      <UniqueIdentifier>{59e97872-1dd8-4830-964b-0a8518b92b1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

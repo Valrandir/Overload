@@ -1,7 +1,7 @@
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-#include "../Overlord/HotKeyMonitor.hpp"
+#include "../Overlord/HotkeyMonitor.hpp"
 
 void HotKeyCallback(int id, void* userdata)
 {
@@ -9,11 +9,11 @@ void HotKeyCallback(int id, void* userdata)
 	++*cb_count;
 }
 
-TEST_CLASS(HotKeyMonitorTests) {
+TEST_CLASS(HotkeyMonitorTests) {
 public:
 	TEST_METHOD(Dispatch_TwoHotKeyPost_CallbackTwice) {
 		//Arrange
-		HotKeyMonitor hkm;
+		HotkeyMonitor hkm;
 		int cb_count{};
 		auto id = hkm.AddHotKey(HotKeyCallback, &cb_count, VK_NUMPAD5);
 		PostMessage(NULL, WM_HOTKEY, id, 0);
@@ -28,7 +28,7 @@ public:
 
 	TEST_METHOD(Dispatch_HotKeyRemoved_DoNotCallback) {
 		//Arrange
-		HotKeyMonitor hkm;
+		HotkeyMonitor hkm;
 		int cb_count{};
 		auto id = hkm.AddHotKey(HotKeyCallback, &cb_count, VK_NUMPAD5);
 		hkm.RemoveHotKey(id);

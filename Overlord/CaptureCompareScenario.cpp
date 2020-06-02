@@ -2,7 +2,7 @@
 #include "CaptureSample.hpp"
 #include "CaptureWnd.hpp"
 #include "CompareDialog.hpp"
-#include "HotKeyMonitor.hpp"
+#include "HotkeyMonitor.hpp"
 #include "WindowGdi.hpp"
 
 #define WIN32_LEAN_AND_MEAN
@@ -54,9 +54,9 @@ int CaptureCompareScenario()
 {
 	CaptureSample cs;
 
-	HotKeyMonitor hkm;
-	hkm.AddHotKey(OnHotKeyCapture, &cs, VK_NUMPAD4);
-	hkm.AddHotKey(OnHotKeyCompare, &cs, VK_NUMPAD6);
+	HotkeyMonitor hkm;
+	hkm.AddHotKey(OnHotKeyCapture, &cs, 0, VK_NUMPAD4);
+	hkm.AddHotKey(OnHotKeyCompare, &cs, 0, VK_NUMPAD6);
 
 	WindowGdi window(TEXT("Overlord"), 640, 480);
 	window.Show();

@@ -2,17 +2,17 @@
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include <vector>
 #include <cassert>
+#include <vector>
 
 using HotKeyFunc = void (*)(int, void*);
 
-class HotKeyMonitor {
+class HotkeyMonitor {
 public:
-	int AddHotKey(HotKeyFunc callback, void* userdata, UINT virtualKeyCode);
+	int AddHotKey(HotKeyFunc callback, void* userdata, UINT modifiers, UINT virtual_key_code);
 	void RemoveHotKey(int id);
 	void Dispatch();
-	~HotKeyMonitor();
+	~HotkeyMonitor();
 
 private:
 	struct HotKey {
@@ -24,8 +24,11 @@ private:
 			id{id}, callback{callback}, userdata{userdata} {}
 	};
 
+	HWND receiver_window{};
 	std::vector<HotKey> registered_hotkeys;
 	int last_id{};
 
+public:
+	void SetReceiverWindow(HWND receiver_window);
 	void OnHotKey(int id);
 };

@@ -1,10 +1,10 @@
-#include "HotKeyMonitor.hpp"
+#include "HotkeyMonitor.hpp"
 
-int HotKeyMonitor::AddHotKey(HotKeyFunc callback, void* userdata, UINT virtualKeyCode)
+int HotkeyMonitor::AddHotKey(HotKeyFunc callback, void* userdata, UINT modifiers, UINT virtual_key_code)
 {
 	assert(callback);
 
-	if(0 == RegisterHotKey(NULL, ++last_id, 0, virtualKeyCode))
+	if(0 == RegisterHotKey(receiver_window, ++last_id, modifiers, virtual_key_code))
 		throw std::exception("HotKey registration failed"); //TODO: Reconsider using exceptions
 
 	registered_hotkeys.emplace_back(last_id, callback, userdata);
@@ -12,7 +12,7 @@ int HotKeyMonitor::AddHotKey(HotKeyFunc callback, void* userdata, UINT virtualKe
 	return last_id;
 }
 
-void HotKeyMonitor::RemoveHotKey(int id)
+void HotkeyMonitor::RemoveHotKey(int id)
 {
 	auto it = std::find_if(registered_hotkeys.cbegin(), registered_hotkeys.cend(), [id](const HotKey& hk) { return hk.id == id; });
 	if(it != registered_hotkeys.cend()) {
@@ -21,7 +21,7 @@ void HotKeyMonitor::RemoveHotKey(int id)
 	}
 }
 
-void HotKeyMonitor::Dispatch()
+void HotkeyMonitor::Dispatch()
 {
 	const HWND CURRENT_THREAD_MESSAGE_QUEUE = (HWND)-1;
 	MSG msg;
@@ -30,13 +30,18 @@ void HotKeyMonitor::Dispatch()
 		OnHotKey(LOWORD(msg.wParam));
 }
 
-HotKeyMonitor::~HotKeyMonitor()
+HotkeyMonitor::~HotkeyMonitor()
 {
 	for(const auto& it : registered_hotkeys)
 		UnregisterHotKey(NULL, it.id);
 }
 
-void HotKeyMonitor::OnHotKey(int id)
+void HotkeyMonitor::SetReceiverWindow(HWND receiver_window)
+{
+	this->receiver_window = receiver_window;
+}
+
+void HotkeyMonitor::OnHotKey(int id)
 {
 	auto it = std::find_if(registered_hotkeys.cbegin(), registered_hotkeys.cend(), [id](const HotKey& hk) { return hk.id == id; });
 	if(it != registered_hotkeys.cend())
