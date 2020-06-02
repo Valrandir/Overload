@@ -1,8 +1,6 @@
 #include "SamplerDialog.hpp"
+#include "CaptureWnd.hpp"
 #include "Overlord.rc.h"
-
-static void OnHotKeyCaptureInitial(int, void* userdata);
-static void OnHotKeyCaptureNext(int, void* userdata);
 
 bool SamplerDialog::ShowDialog()
 {
@@ -21,8 +19,8 @@ void SamplerDialog::Initialize()
 void SamplerDialog::InitializeHotKeys()
 {
 	hotkey_monitor.SetReceiverWindow(dialog_wnd);
-	hotkey_monitor.AddHotKey(OnHotKeyCaptureInitial, nullptr, MOD_CONTROL | MOD_SHIFT, 'H');
-	hotkey_monitor.AddHotKey(OnHotKeyCaptureNext, nullptr, MOD_CONTROL | MOD_SHIFT, 'K');
+	hotkey_monitor.AddHotKey(OnHotKeyCaptureInitial, this, MOD_CONTROL | MOD_SHIFT, 'H');
+	hotkey_monitor.AddHotKey(OnHotKeyCaptureNext, this, MOD_CONTROL | MOD_SHIFT, 'K');
 }
 
 INT_PTR SamplerDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -45,12 +43,39 @@ INT_PTR SamplerDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM 
 	return DialogBase::DlgProc(dialog_wnd, msg, wparam, lparam);
 }
 
-static void OnHotKeyCaptureInitial(int, void* userdata)
+void SamplerDialog::CaptureRootElement()
 {
-	MessageBox(0, TEXT("OnHotKeyCaptureInitial"), TEXT("HotKey"), MB_OK);
+	auto bitmap = CaptureWnd::Capture();
+	if(!bitmap)
+		return;
+
+	SetActiveWindow(dialog_wnd);
+
+	for(auto& e : elements)
+		delete e;
+	elements.clear();
+
+	int x, y, w, h;
+	GetDlgItemPoint(dialog_wnd, IDC_STATIC_IMG_1, x, y, w, h);
+	root_element = new Element{std::move(*bitmap)};
+	root_element->image_view.Initialize(dialog_wnd, x, y, w, h, &root_element->bitmap_gdi);
+
+	elements.push_back(root_element);
 }
 
-static void OnHotKeyCaptureNext(int, void* userdata)
+void SamplerDialog::OnHotKeyCaptureInitial(int, void* userdata)
 {
-	MessageBox(0, TEXT("OnHotKeyCaptureNext"), TEXT("HotKey"), MB_OK);
+	auto& dialog = *(SamplerDialog*)userdata;
+	dialog.CaptureRootElement();
+}
+
+void SamplerDialog::OnHotKeyCaptureNext(int, void* userdata)
+{
+	auto& dialog = *(SamplerDialog*)userdata;
+}
+
+SamplerDialog::~SamplerDialog()
+{
+	for(auto& e : elements)
+		delete e;
 }

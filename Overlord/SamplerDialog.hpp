@@ -7,8 +7,13 @@
 
 class SamplerDialog : private DialogBase {
 	struct Element {
-		BitmapGdi bitmap;
-		ImageView view;
+		BitmapGdi bitmap_gdi;
+		ImageView image_view;
+
+		Element(BitmapGdi&& bitmap_gdi)
+		{
+			this->bitmap_gdi = std::move(bitmap_gdi);
+		}
 	};
 
 public:
@@ -19,6 +24,13 @@ public:
 
 private:
 	HotkeyMonitor hotkey_monitor;
+	Element* root_element{};
 	std::list<Element*> elements;
 	SamplerDialog() {}
+	void CaptureRootElement();
+	static void OnHotKeyCaptureInitial(int, void* userdata);
+	static void OnHotKeyCaptureNext(int, void* userdata);
+
+public:
+	~SamplerDialog();
 };

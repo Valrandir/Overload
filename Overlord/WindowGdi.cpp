@@ -1,6 +1,6 @@
 #include "WindowGdi.hpp"
 
-void WindowGdi::AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD style)
+void WindowGdi::AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD style, DWORD ex_style)
 {
 	int cx = GetSystemMetrics(SM_CXSCREEN);
 	int cy = GetSystemMetrics(SM_CYSCREEN);
@@ -11,7 +11,7 @@ void WindowGdi::AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD s
 	}
 
 	RECT rect{0, 0, width, height};
-	AdjustWindowRect(&rect, style, FALSE);
+	AdjustWindowRectEx(&rect, style, FALSE, ex_style);
 	width = rect.right - rect.left;
 	height = rect.bottom - rect.top;
 	x = (cx - width) >> 1;
@@ -65,7 +65,7 @@ LRESULT WindowGdi::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 	return DefWindowProc(window, msg, wparam, lparam);
 }
 
-WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style)
+WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style, DWORD ex_style)
 {
 	const LPCTSTR CLASS_NAME = TEXT("WindowGdi");
 	HINSTANCE hInstance = GetModuleHandle(NULL);
@@ -93,8 +93,8 @@ WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style)
 
 	int x, y;
 	style = (style ? style : WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX) | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
-	AdjustAndCenter(x, y, width, height, style);
-	window = CreateWindowEx(0, CLASS_NAME, title, style, x, y, width, height, HWND_DESKTOP, NULL, hInstance, NULL);
+	AdjustAndCenter(x, y, width, height, style, ex_style);
+	window = CreateWindowEx(ex_style, CLASS_NAME, title, style, x, y, width, height, HWND_DESKTOP, NULL, hInstance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 	Initialize(this->width, this->height);
@@ -110,12 +110,12 @@ void WindowGdi::SetTitle(LPCTSTR title)
 	SetWindowText(window, title);
 }
 
-void WindowGdi::SetStyle(DWORD style)
+void WindowGdi::SetStyle(DWORD style, DWORD ex_style)
 {
 	style |= WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
 	SetWindowLongPtr(window, GWL_STYLE, style);
 	int x, y, w = width, h = height;
-	AdjustAndCenter(x, y, w, h, style);
+	AdjustAndCenter(x, y, w, h, style, ex_style);
 	SetWindowPos(window, 0, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
 }
 

@@ -5,20 +5,20 @@
 void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height, const BitmapGdi* bitmap_gdi)
 {
 	const LPCTSTR CLASS_NAME = TEXT("ImageView");
-	HINSTANCE hInstance = GetModuleHandle(NULL);
+	HINSTANCE instance = GetModuleHandle(NULL);
 	WNDCLASSEX wc;
 
 	this->width = width;
 	this->height = height;
 	this->bitmap_gdi = bitmap_gdi;
 
-	if(!GetClassInfoEx(hInstance, CLASS_NAME, &wc)) {
+	if(!GetClassInfoEx(instance, CLASS_NAME, &wc)) {
 		wc.cbSize = sizeof(wc);
 		wc.style = CS_OWNDC;
 		wc.lpfnWndProc = WndProcStatic;
 		wc.cbClsExtra = 0;
 		wc.cbWndExtra = 0;
-		wc.hInstance = hInstance;
+		wc.hInstance = instance;
 		wc.hIcon = LoadIcon(NULL, IDI_APPLICATION);
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_HIGHLIGHT + 1);
@@ -30,7 +30,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 	}
 
 	DWORD style = WS_CHILDWINDOW | WS_HSCROLL | WS_VSCROLL | WS_VISIBLE;
-	window = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, x, y, width, height, hWndParent, NULL, hInstance, NULL);
+	window = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, x, y, width, height, hWndParent, NULL, instance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 	BitmapGdi::Initialize(width, height);
@@ -41,6 +41,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 
 ImageView::~ImageView()
 {
+	Close();
 	bitmap_gdi = nullptr;
 }
 
@@ -61,8 +62,10 @@ bool ImageView::Update()
 
 void ImageView::Close()
 {
-	destroyed = true;
-	DestroyWindow(window);
+	if(!destroyed) {
+		destroyed = true;
+		DestroyWindow(window);
+	}
 }
 
 void ImageView::Scroll(int offset_x, int offset_y)

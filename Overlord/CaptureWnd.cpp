@@ -118,7 +118,7 @@ void CaptureWnd::OnMouseUp(int x, int y)
 }
 
 CaptureWnd::CaptureWnd() :
-	WindowGdi(TEXT(""), 0, 0, WS_POPUP)
+	WindowGdi(TEXT(""), 0, 0, WS_POPUP, WS_EX_TOPMOST)
 {
 	BitmapGdi desktop_bitmap = ImageCapture::CaptureDesktop();
 	DrawBitmap(desktop_bitmap, 0, 0);
