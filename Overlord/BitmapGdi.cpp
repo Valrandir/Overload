@@ -1,7 +1,7 @@
 #include "BitmapGdi.hpp"
 #include <cassert>
 
-#define INITIALIZE_CHECK assert(dc);
+#define INITIALIZE_ASSERT assert(dc);
 
 BitmapGdi::BitmapGdi() :
 	width{0}, height{0}, dc{0}, bitmap{0} {}
@@ -74,12 +74,14 @@ void BitmapGdi::Destroy() noexcept
 
 ImageBits BitmapGdi::GetBits()
 {
+	INITIALIZE_ASSERT
 	auto const_this = (const BitmapGdi*)this;
 	return const_this->GetBits();
 }
 
 const ImageBits BitmapGdi::GetBits() const
 {
+	INITIALIZE_ASSERT
 	BITMAPINFO bi{};
 	BITMAPINFOHEADER& bih = bi.bmiHeader;
 	bih.biSize = sizeof(bih);
@@ -130,6 +132,7 @@ BitmapGdi BitmapGdi::LoadFile(const char* filename)
 
 void BitmapGdi::SaveFile(const char* filename)
 {
+	INITIALIZE_ASSERT
 	auto image_bits = GetBits();
 
 	for(auto& it : image_bits)
@@ -140,13 +143,13 @@ void BitmapGdi::SaveFile(const char* filename)
 
 void BitmapGdi::Clear(COLORREF color)
 {
-	INITIALIZE_CHECK
+	INITIALIZE_ASSERT
 	Fill({0, 0, width, height}, color);
 }
 
 void BitmapGdi::Fill(const RECT& rect, COLORREF color)
 {
-	INITIALIZE_CHECK
+	INITIALIZE_ASSERT
 	HBRUSH brush = CreateSolidBrush(color);
 	::FillRect(dc, &rect, brush);
 	DeleteObject(brush);
@@ -154,12 +157,12 @@ void BitmapGdi::Fill(const RECT& rect, COLORREF color)
 
 void BitmapGdi::Fill(int x, int y, int w, int h, COLORREF color)
 {
-	INITIALIZE_CHECK
+	INITIALIZE_ASSERT
 	Fill({x, y, x + w, y + h}, color);
 }
 
 void BitmapGdi::Draw(HDC source, int x, int y, int w, int h, int src_x, int src_y)
 {
-	INITIALIZE_CHECK
+	INITIALIZE_ASSERT
 	BitBlt(dc, x, y, w, h, source, src_x, src_y, SRCCOPY);
 }

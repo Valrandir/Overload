@@ -115,6 +115,7 @@
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="CompareDialog.cpp" />
     <ClCompile Include="DialogBase.cpp" />
+    <ClCompile Include="LayoutHandler.cpp" />
     <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageCapture.cpp" />
     <ClCompile Include="ImageBits.cpp" />
@@ -122,6 +123,7 @@
     <ClCompile Include="ImageIO.cpp" />
     <ClCompile Include="ImageView.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="RectUtility.cpp" />
     <ClCompile Include="SamplerDialog.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="CaptureCompareScenario.cpp" />
@@ -136,6 +138,7 @@
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="CompareDialog.hpp" />
     <ClInclude Include="DialogBase.hpp" />
+    <ClInclude Include="LayoutHandler.hpp" />
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="HotkeyMonitor.hpp" />
     <ClInclude Include="ImageCapture.hpp" />
@@ -147,6 +150,7 @@
     <ClInclude Include="lib\stb\stb_image.h" />
     <ClInclude Include="lib\stb\stb_image_write.h" />
     <ClInclude Include="Overlord.rc.h" />
+    <ClInclude Include="RectUtility.hpp" />
     <ClInclude Include="SamplerDialog.hpp" />
     <ClInclude Include="ScrollHandler.hpp" />
     <ClInclude Include="WindowGdi.hpp" />

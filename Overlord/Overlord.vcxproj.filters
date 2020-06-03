@@ -24,9 +24,8 @@
     <ClCompile Include="WindowGdi.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
-    <ClCompile Include="ImageComparer.cpp" />
     <ClCompile Include="DialogBase.cpp">
-      <Filter>Dialogs\Base</Filter>
+      <Filter>Dialogs\DialogBase</Filter>
     </ClCompile>
     <ClCompile Include="CaptureDialog.cpp">
       <Filter>Dialogs</Filter>
@@ -44,6 +43,13 @@
       <Filter>Dialogs\SamplerDialog</Filter>
     </ClCompile>
     <ClCompile Include="HotkeyMonitor.cpp" />
+    <ClCompile Include="ImageComparer.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="LayoutHandler.cpp">
+      <Filter>Dialogs\DialogBase</Filter>
+    </ClCompile>
+    <ClCompile Include="RectUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
@@ -84,9 +90,8 @@
     <ClInclude Include="CaptureWnd.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="ImageComparer.hpp" />
     <ClInclude Include="DialogBase.hpp">
-      <Filter>Dialogs\Base</Filter>
+      <Filter>Dialogs\DialogBase</Filter>
     </ClInclude>
     <ClInclude Include="CompareDialog.hpp">
       <Filter>Dialogs</Filter>
@@ -101,6 +106,13 @@
       <Filter>Dialogs\SamplerDialog</Filter>
     </ClInclude>
     <ClInclude Include="HotkeyMonitor.hpp" />
+    <ClInclude Include="ImageComparer.hpp">
+      <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="LayoutHandler.hpp">
+      <Filter>Dialogs\DialogBase</Filter>
+    </ClInclude>
+    <ClInclude Include="RectUtility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -111,9 +123,6 @@
     </Filter>
     <Filter Include="Dialogs">
       <UniqueIdentifier>{6a96ef68-7838-4da5-a494-0c43b185fbac}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dialogs\Base">
-      <UniqueIdentifier>{a8c44e32-7aab-4af7-9489-ffbca6bf5109}</UniqueIdentifier>
     </Filter>
     <Filter Include="Windows">
       <UniqueIdentifier>{d625cd4d-d328-40fc-9c28-dc358370b21f}</UniqueIdentifier>
@@ -135,6 +144,9 @@
     </Filter>
     <Filter Include="Dialogs\SamplerDialog">
       <UniqueIdentifier>{59e97872-1dd8-4830-964b-0a8518b92b1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs\DialogBase">
+      <UniqueIdentifier>{a8c44e32-7aab-4af7-9489-ffbca6bf5109}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
