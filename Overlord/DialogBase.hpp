@@ -10,11 +10,13 @@ public:
 	static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h);
 
 private:
+	void InitializeLayout();
 	static INT_PTR CALLBACK DlgProcStatic(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 protected:
 	HWND dialog_wnd{};
 	LayoutHandler layout_handler;
+	UINT dialog_resource_id{};
 
 	static const int DIALOG_SUCCESS = 1;
 	static const int DIALOG_CANCEL = 2;

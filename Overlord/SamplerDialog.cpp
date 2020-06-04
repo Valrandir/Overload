@@ -12,7 +12,6 @@ void SamplerDialog::Initialize()
 {
 	HICON icon = LoadIcon(GetModuleHandle(0), MAKEINTRESOURCEW(IDI_ICON1));
 	SendMessageW(dialog_wnd, WM_SETICON, ICON_BIG, LPARAM(icon));
-
 	InitializeHotKeys();
 }
 

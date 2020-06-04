@@ -1,44 +1,44 @@
 #include "LayoutHandler.hpp"
 #include "RectUtility.hpp"
 #include <cassert>
+#include <vector>
 
 #define INITIALIZE_ASSERT assert(dialog_wnd);
-
 using UserData = std::pair<LayoutHandler*, SIZE*>;
+static std::vector<LayoutHandler::Layout> ReadAfxDialogLayout(UINT dialog_resource_id);
+static void EnforceMinimumSize(RECT& new_rect, const SIZE& min_size, WPARAM wparam);
 
-void LayoutHandler::Initialize(HWND dialog_wnd, SIZE initial_dialog_size)
+void LayoutHandler::Initialize(UINT dialog_resource_id, HWND dialog_wnd)
 {
+	RECT rect;
+	GetWindowRect(dialog_wnd, &rect);
+	this->dialog_size_min = SIZE{rect.right - rect.left, rect.bottom - rect.top};
+	GetClientRect(dialog_wnd, &rect);
+	this->dialog_size = SIZE{rect.right - rect.left, rect.bottom - rect.top};
 	this->dialog_wnd = dialog_wnd;
-	this->dialog_size = initial_dialog_size;
-	this->dialog_size_min = initial_dialog_size;
+
+	auto layouts = ReadAfxDialogLayout(dialog_resource_id);
+	if(layouts.size() == 0)
+		return;
+
+	auto child_wnd = GetWindow(dialog_wnd, GW_CHILD);
+
+	for(auto& layout : layouts) {
+		assert(child_wnd && "AfxDialogLayout count mismatch");
+		GetWindowRect(child_wnd, &layout.Initial);
+		AddLayout(layout, child_wnd);
+		child_wnd = GetWindow(child_wnd, GW_HWNDNEXT);
+	}
+
+	assert(!child_wnd && "AfxDialogLayout count mismatch");
 }
 
-void LayoutHandler::DefineLayout(LayoutHandler::Layout layout, HWND dialog_wnd, int dlgitemid)
+void LayoutHandler::AddLayout(Layout layout, HWND child_wnd)
 {
 	INITIALIZE_ASSERT
 	layouts.push_back(layout);
-	HWND dlgitem = GetDlgItem(dialog_wnd, dlgitemid);
-	SetWindowLongPtr(dlgitem, GWLP_USERDATA, (LONG_PTR)&layouts.back());
-}
-
-static void EnforceMinimumSize(RECT& new_rect, const SIZE& min_size, WPARAM wparam)
-{
-	int x, y, w, h;
-	RectToPoint(new_rect, x, y, w, h);
-
-	SIZE offset = {w - min_size.cx, h - min_size.cy};
-
-	if(offset.cx < 0)
-		if(wparam == WMSZ_LEFT || wparam == WMSZ_TOPLEFT || wparam == WMSZ_BOTTOMLEFT)
-			new_rect.left += offset.cx;
-		else
-			new_rect.right -= offset.cx;
-
-	if(offset.cy < 0)
-		if(wparam == WMSZ_TOP || wparam == WMSZ_TOPLEFT || wparam == WMSZ_TOPRIGHT)
-			new_rect.top += offset.cy;
-		else
-			new_rect.bottom -= offset.cy;
+	size_t index = layouts.size() - 1;
+	SetWindowLongPtr(child_wnd, GWLP_USERDATA, (LONG_PTR)index);
 }
 
 void LayoutHandler::OnSizing(RECT& new_rect, WPARAM wparam)
@@ -64,22 +64,91 @@ void LayoutHandler::OnSize(int width, int height)
 BOOL CALLBACK LayoutHandler::EnumChildProc(HWND hwnd, LPARAM lparam)
 {
 	auto userdata = (UserData*)lparam;
-	auto layout = (const Layout*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
-	//if(layout)
-	userdata->first->MoveChild(hwnd, *layout, *userdata->second);
+	auto self = userdata->first;
+	auto offset = userdata->second;
+	auto index = (size_t)GetWindowLongPtr(hwnd, GWLP_USERDATA);
+
+	if(index < self->layouts.size())
+		self->LayoutChild(hwnd, self->layouts[index], *offset);
+
 	return TRUE;
 }
 
-void LayoutHandler::MoveChild(HWND child, const Layout& layout, const SIZE& offset)
+void LayoutHandler::LayoutChild(HWND child, const Layout& layout, const SIZE& offset)
 {
 	RECT rect;
 	GetWindowRect(child, &rect);
 
-	OffsetRect(&rect, offset.cx, offset.cy);
+	int ox = rect.left - layout.Initial.left + offset.cx;
+	int oy = rect.top - layout.Initial.top + offset.cy;
+	int ow = rect.right - rect.left - (layout.Initial.right - layout.Initial.left) + offset.cx;
+	int oh = rect.bottom - rect.top - (layout.Initial.bottom - layout.Initial.top) + offset.cy;
+
+	rect = layout.Initial;
+
+	auto mx = int(ox * (layout.Move.x_ratio / 100.0f));
+	auto my = int(oy * (layout.Move.y_ratio / 100.0f));
+	OffsetRect(&rect, mx, my);
+
+	auto sx = int(ow * (layout.Size.x_ratio / 100.0f));
+	//auto sx = ow;
+	auto sy = int(oh * (layout.Size.y_ratio / 100.0f));
+	rect.right += sx;
+	rect.bottom += sy;
+
 	int x, y, w, h;
 	RectToPoint(rect, x, y, w, h);
-
 	POINT p{x, y};
 	ScreenToClient(dialog_wnd, &p);
 	MoveWindow(child, p.x, p.y, w, h, TRUE);
+}
+
+std::vector<LayoutHandler::Layout> ReadAfxDialogLayout(UINT dialog_resource_id)
+{
+	HRSRC res_info = FindResource(NULL, MAKEINTRESOURCE(dialog_resource_id), TEXT("AFX_DIALOG_LAYOUT"));
+	DWORD res_size = SizeofResource(NULL, res_info);
+	HGLOBAL res_data = LoadResource(NULL, res_info);
+	void* res_ptr = LockResource(res_data);
+
+	std::vector<LayoutHandler::Layout> layouts;
+
+	auto it = (unsigned short*)res_ptr;
+	auto end = (unsigned short*)(((unsigned char*)res_ptr) + res_size);
+
+	auto version = *it++;
+	if(version == 0) {
+		while(it + 4 <= end) {
+			LayoutHandler::Layout layout;
+			layout.Move.x_ratio = *it++;
+			layout.Move.y_ratio = *it++;
+			layout.Size.x_ratio = *it++;
+			layout.Size.y_ratio = *it++;
+			layouts.push_back(layout);
+		}
+	}
+
+	UnlockResource(res_data);
+	FreeResource(res_data);
+
+	return layouts;
+}
+
+static void EnforceMinimumSize(RECT& new_rect, const SIZE& min_size, WPARAM wparam)
+{
+	int x, y, w, h;
+	RectToPoint(new_rect, x, y, w, h);
+
+	SIZE offset = {w - min_size.cx, h - min_size.cy};
+
+	if(offset.cx < 0)
+		if(wparam == WMSZ_LEFT || wparam == WMSZ_TOPLEFT || wparam == WMSZ_BOTTOMLEFT)
+			new_rect.left += offset.cx;
+		else
+			new_rect.right -= offset.cx;
+
+	if(offset.cy < 0)
+		if(wparam == WMSZ_TOP || wparam == WMSZ_TOPLEFT || wparam == WMSZ_TOPRIGHT)
+			new_rect.top += offset.cy;
+		else
+			new_rect.bottom -= offset.cy;
 }
