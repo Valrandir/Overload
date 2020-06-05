@@ -115,7 +115,7 @@
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="CompareDialog.cpp" />
     <ClCompile Include="DialogBase.cpp" />
-    <ClCompile Include="LayoutHandler.cpp" />
+    <ClCompile Include="DialogLayout.cpp" />
     <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageCapture.cpp" />
     <ClCompile Include="ImageBits.cpp" />
@@ -138,7 +138,7 @@
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="CompareDialog.hpp" />
     <ClInclude Include="DialogBase.hpp" />
-    <ClInclude Include="LayoutHandler.hpp" />
+    <ClInclude Include="DialogLayout.hpp" />
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="HotkeyMonitor.hpp" />
     <ClInclude Include="ImageCapture.hpp" />

@@ -14,6 +14,7 @@
 #define IDC_STATIC_IMG_2                1010
 #define IDC_TREE1                       1011
 #define IDC_TREE2                       1012
+#define IDC_TREE3                       1013
 
 // Next default values for new objects
 // 

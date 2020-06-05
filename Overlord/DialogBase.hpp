@@ -1,6 +1,6 @@
 //VIS LAYOUT https://docs.microsoft.com/en-us/windows/win32/uxguide/vis-layout#recommended-sizing-and-spacing
 #pragma once
-#include "LayoutHandler.hpp"
+#include "DialogLayout.hpp"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
@@ -15,7 +15,7 @@ private:
 
 protected:
 	HWND dialog_wnd{};
-	LayoutHandler layout_handler;
+	DialogLayout layout;
 	UINT dialog_resource_id{};
 
 	static const int DIALOG_SUCCESS = 1;

@@ -3,7 +3,7 @@
 #include <windows.h>
 #include <vector>
 
-class LayoutHandler {
+class DialogLayout {
 public:
 	struct LayoutRatio {
 		/// <summary>Percents 0 - 100</summary>

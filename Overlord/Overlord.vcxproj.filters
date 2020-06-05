@@ -46,10 +46,10 @@
     <ClCompile Include="ImageComparer.cpp">
       <Filter>Image</Filter>
     </ClCompile>
-    <ClCompile Include="LayoutHandler.cpp">
+    <ClCompile Include="RectUtility.cpp" />
+    <ClCompile Include="DialogLayout.cpp">
       <Filter>Dialogs\DialogBase</Filter>
     </ClCompile>
-    <ClCompile Include="RectUtility.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
@@ -109,10 +109,10 @@
     <ClInclude Include="ImageComparer.hpp">
       <Filter>Image</Filter>
     </ClInclude>
-    <ClInclude Include="LayoutHandler.hpp">
+    <ClInclude Include="RectUtility.hpp" />
+    <ClInclude Include="DialogLayout.hpp">
       <Filter>Dialogs\DialogBase</Filter>
     </ClInclude>
-    <ClInclude Include="RectUtility.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

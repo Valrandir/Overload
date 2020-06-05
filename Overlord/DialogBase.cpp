@@ -18,7 +18,7 @@ void DialogBase::GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& 
 
 void DialogBase::InitializeLayout()
 {
-	layout_handler.Initialize(dialog_resource_id, dialog_wnd);
+	layout.Initialize(dialog_resource_id, dialog_wnd);
 }
 
 INT_PTR CALLBACK DialogBase::DlgProcStatic(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -44,11 +44,11 @@ INT_PTR DialogBase::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lpa
 	switch(msg) {
 		case WM_SIZING: {
 			RECT& new_rect = *(RECT*)lparam;
-			layout_handler.OnSizing(new_rect, wparam);
+			layout.OnSizing(new_rect, wparam);
 			return true;
 		}
 		case WM_SIZE:
-			layout_handler.OnSize(LOWORD(lparam), HIWORD(lparam));
+			layout.OnSize(LOWORD(lparam), HIWORD(lparam));
 			return true;
 		case WM_CLOSE:
 			EndDialog(dialog_wnd, DIALOG_CANCEL);
