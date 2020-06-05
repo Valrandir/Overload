@@ -8,13 +8,26 @@ using UserData = std::pair<DialogLayout*, SIZE*>;
 static std::vector<DialogLayout::Layout> ReadAfxDialogLayout(UINT dialog_resource_id);
 static void EnforceMinimumSize(RECT& new_rect, const SIZE& min_size, WPARAM wparam);
 
+/// <summary>
+/// Return the rectangle of the specified child window, relative to the specified parent window.
+/// </summary>
+static RECT GetChildWindowRect(HWND parent_wnd, HWND child_wnd)
+{
+	RECT rect;
+	GetWindowRect(child_wnd, &rect);
+	POINT p{rect.left, rect.top};
+	ScreenToClient(parent_wnd, &p);
+	OffsetRect(&rect, p.x - rect.left, p.y - rect.top);
+	return rect;
+}
+
 void DialogLayout::Initialize(UINT dialog_resource_id, HWND dialog_wnd)
 {
 	RECT rect;
 	GetWindowRect(dialog_wnd, &rect);
 	this->dialog_size_min = SIZE{rect.right - rect.left, rect.bottom - rect.top};
 	GetClientRect(dialog_wnd, &rect);
-	this->dialog_size = SIZE{rect.right - rect.left, rect.bottom - rect.top};
+	this->dialog_size_initial = SIZE{rect.right - rect.left, rect.bottom - rect.top};
 	this->dialog_wnd = dialog_wnd;
 
 	auto layouts = ReadAfxDialogLayout(dialog_resource_id);
@@ -25,7 +38,7 @@ void DialogLayout::Initialize(UINT dialog_resource_id, HWND dialog_wnd)
 
 	for(auto& layout : layouts) {
 		assert(child_wnd && "AfxDialogLayout count mismatch");
-		GetWindowRect(child_wnd, &layout.Initial);
+		layout.Initial = GetChildWindowRect(dialog_wnd, child_wnd);
 		AddLayout(layout, child_wnd);
 		child_wnd = GetWindow(child_wnd, GW_HWNDNEXT);
 	}
@@ -46,19 +59,14 @@ void DialogLayout::OnSizing(RECT& new_rect, WPARAM wparam)
 	EnforceMinimumSize(new_rect, dialog_size_min, wparam);
 }
 
+#include <sstream>
+
 void DialogLayout::OnSize(int width, int height)
 {
-	auto offset = SIZE{width - dialog_size.cx, height - dialog_size.cy};
-
-	if(offset.cx == 0 && offset.cy == 0)
-		return;
-
-	dialog_size.cx = width;
-	dialog_size.cy = height;
+	auto offset = SIZE{width - dialog_size_initial.cx, height - dialog_size_initial.cy};
 
 	UserData userdata(this, &offset);
 	EnumChildWindows(dialog_wnd, EnumChildProc, (LPARAM)&userdata);
-	InvalidateRect(dialog_wnd, NULL, FALSE);
 }
 
 BOOL CALLBACK DialogLayout::EnumChildProc(HWND hwnd, LPARAM lparam)
@@ -74,33 +82,17 @@ BOOL CALLBACK DialogLayout::EnumChildProc(HWND hwnd, LPARAM lparam)
 	return TRUE;
 }
 
-void DialogLayout::LayoutChild(HWND child, const Layout& layout, const SIZE& offset)
+void DialogLayout::LayoutChild(HWND child_wnd, const Layout& layout, const SIZE& offset)
 {
-	RECT rect;
-	GetWindowRect(child, &rect);
+	RECT old_rect = GetChildWindowRect(dialog_wnd, child_wnd);
+	InvalidateRect(dialog_wnd, &old_rect, FALSE);
 
-	int ox = rect.left - layout.Initial.left + offset.cx;
-	int oy = rect.top - layout.Initial.top + offset.cy;
-	int ow = rect.right - rect.left - (layout.Initial.right - layout.Initial.left) + offset.cx;
-	int oh = rect.bottom - rect.top - (layout.Initial.bottom - layout.Initial.top) + offset.cy;
-
-	rect = layout.Initial;
-
-	auto mx = int(ox * (layout.Move.x_ratio / 100.0f));
-	auto my = int(oy * (layout.Move.y_ratio / 100.0f));
-	OffsetRect(&rect, mx, my);
-
-	auto sx = int(ow * (layout.Size.x_ratio / 100.0f));
-	//auto sx = ow;
-	auto sy = int(oh * (layout.Size.y_ratio / 100.0f));
-	rect.right += sx;
-	rect.bottom += sy;
-
-	int x, y, w, h;
-	RectToPoint(rect, x, y, w, h);
-	POINT p{x, y};
-	ScreenToClient(dialog_wnd, &p);
-	MoveWindow(child, p.x, p.y, w, h, TRUE);
+	SIZE initial_size{layout.Initial.right - layout.Initial.left, layout.Initial.bottom - layout.Initial.top};
+	int mx = layout.Initial.left + (layout.Move.Horizontal() ? int(offset.cx * layout.Move.x_ratio) : 0);
+	int my = layout.Initial.top + (layout.Move.Vertical() ? int(offset.cy * layout.Move.y_ratio) : 0);
+	int sx = layout.Size.Horizontal() ? initial_size.cx + int(offset.cx * layout.Size.x_ratio) : initial_size.cx;
+	int sy = layout.Size.Vertical() ? initial_size.cy + int(offset.cy * layout.Size.y_ratio) : initial_size.cy;
+	MoveWindow(child_wnd, mx, my, sx, sy, TRUE);
 }
 
 std::vector<DialogLayout::Layout> ReadAfxDialogLayout(UINT dialog_resource_id)
@@ -119,10 +111,10 @@ std::vector<DialogLayout::Layout> ReadAfxDialogLayout(UINT dialog_resource_id)
 	if(version == 0) {
 		while(it + 4 <= end) {
 			DialogLayout::Layout layout;
-			layout.Move.x_ratio = *it++;
-			layout.Move.y_ratio = *it++;
-			layout.Size.x_ratio = *it++;
-			layout.Size.y_ratio = *it++;
+			layout.Move.x_ratio = *it++ / 100.f;
+			layout.Move.y_ratio = *it++ / 100.f;
+			layout.Size.x_ratio = *it++ / 100.f;
+			layout.Size.y_ratio = *it++ / 100.f;
 			layouts.push_back(layout);
 		}
 	}
@@ -135,9 +127,8 @@ std::vector<DialogLayout::Layout> ReadAfxDialogLayout(UINT dialog_resource_id)
 
 static void EnforceMinimumSize(RECT& new_rect, const SIZE& min_size, WPARAM wparam)
 {
-	int x, y, w, h;
-	RectToPoint(new_rect, x, y, w, h);
-
+	int w = new_rect.right - new_rect.left;
+	int h = new_rect.bottom - new_rect.top;
 	SIZE offset = {w - min_size.cx, h - min_size.cy};
 
 	if(offset.cx < 0)

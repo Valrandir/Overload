@@ -16,18 +16,13 @@ void DialogBase::GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& 
 	RectToPoint(wp.rcNormalPosition, x, y, w, h);
 }
 
-void DialogBase::InitializeLayout()
-{
-	layout.Initialize(dialog_resource_id, dialog_wnd);
-}
-
 INT_PTR CALLBACK DialogBase::DlgProcStatic(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	if(msg == WM_INITDIALOG) {
 		SetWindowLongPtr(dialog_wnd, GWLP_USERDATA, (LONG_PTR)lparam);
 		DialogBase* db = (DialogBase*)lparam;
 		db->dialog_wnd = dialog_wnd;
-		db->InitializeLayout();
+		db->layout.Initialize(db->dialog_resource_id, dialog_wnd);
 		db->Initialize();
 		return true;
 	}

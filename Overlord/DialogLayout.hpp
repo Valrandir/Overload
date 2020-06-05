@@ -6,14 +6,11 @@
 class DialogLayout {
 public:
 	struct LayoutRatio {
-		/// <summary>Percents 0 - 100</summary>
-		int x_ratio{};
+		float x_ratio{};
+		float y_ratio{};
 
-		/// <summary>Percents 0 - 100</summary>
-		int y_ratio{};
-
-		//bool IsHorizontal() const { return x_ratio > 0; }
-		//bool IsVertical() const { return y_ratio > 0; }
+		bool Horizontal() const { return x_ratio > 0; }
+		bool Vertical() const { return y_ratio > 0; }
 		//bool IsNone() const { return !IsHorizontal() && !IsVertical(); }
 	};
 
@@ -30,10 +27,10 @@ public:
 
 private:
 	HWND dialog_wnd{};
-	SIZE dialog_size{};
+	SIZE dialog_size_initial{};
 	SIZE dialog_size_min{};
 	std::vector<Layout> layouts;
 
 	static BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lparam);
-	void LayoutChild(HWND child, const Layout& layout, const SIZE& offset);
+	void LayoutChild(HWND child_wnd, const Layout& layout, const SIZE& offset);
 };
