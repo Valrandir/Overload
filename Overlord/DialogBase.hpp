@@ -7,7 +7,8 @@
 class DialogBase {
 public:
 	bool ShowModal(UINT dialog_resource_id);
-	static void GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h);
+	static RECT GetDlgItemRect(HWND parent_window, int dlg_item);
+	static RECT GetDlgItemRect(HWND dlg_item);
 
 private:
 	static INT_PTR CALLBACK DlgProcStatic(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam);
@@ -22,6 +23,7 @@ protected:
 	DialogBase() {}
 	virtual void Initialize() = 0;
 	virtual INT_PTR DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam);
+	virtual void OnSize(LPARAM lparam);
 
 private:
 	DialogBase(const DialogBase&) = delete;

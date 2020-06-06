@@ -1,5 +1,4 @@
 #include "DialogBase.hpp"
-#include "RectUtility.hpp"
 #include <utility>
 
 bool DialogBase::ShowModal(UINT dialog_resource_id)
@@ -8,12 +7,17 @@ bool DialogBase::ShowModal(UINT dialog_resource_id)
 	return DIALOG_SUCCESS == DialogBoxParam(GetModuleHandle(0), MAKEINTRESOURCE(dialog_resource_id), HWND_DESKTOP, DialogBase::DlgProcStatic, (LPARAM)this);
 }
 
-void DialogBase::GetDlgItemPoint(HWND parent_window, int dlg_item, int& x, int& y, int& w, int& h)
+RECT DialogBase::GetDlgItemRect(HWND parent_window, int dlg_item)
+{
+	return GetDlgItemRect(GetDlgItem(parent_window, dlg_item));
+}
+
+RECT DialogBase::GetDlgItemRect(HWND dlg_item)
 {
 	WINDOWPLACEMENT wp{};
 	wp.length = sizeof(wp);
-	GetWindowPlacement(GetDlgItem(parent_window, dlg_item), &wp);
-	RectToPoint(wp.rcNormalPosition, x, y, w, h);
+	GetWindowPlacement(dlg_item, &wp);
+	return wp.rcNormalPosition;
 }
 
 INT_PTR CALLBACK DialogBase::DlgProcStatic(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
@@ -43,7 +47,7 @@ INT_PTR DialogBase::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lpa
 			return true;
 		}
 		case WM_SIZE:
-			layout.OnSize(LOWORD(lparam), HIWORD(lparam));
+			OnSize(lparam);
 			return true;
 		case WM_CLOSE:
 			EndDialog(dialog_wnd, DIALOG_CANCEL);
@@ -51,4 +55,9 @@ INT_PTR DialogBase::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lpa
 	}
 
 	return false;
+}
+
+void DialogBase::OnSize(LPARAM lparam)
+{
+	layout.OnSize(LOWORD(lparam), HIWORD(lparam));
 }

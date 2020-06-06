@@ -1,16 +1,23 @@
 #include "ImageView.hpp"
 #include <cassert>
 #include <exception>
+#include "DialogBase.hpp"
+#include "RectUtility.hpp"
 
-void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height, const BitmapGdi* bitmap_gdi)
+void ImageView::Initialize(HWND parent_window, HWND placeholder, const BitmapGdi* bitmap_gdi)
 {
 	const LPCTSTR CLASS_NAME = TEXT("ImageView");
 	HINSTANCE instance = GetModuleHandle(NULL);
 	WNDCLASSEX wc;
 
-	this->width = width;
-	this->height = height;
+	RECT placeholder_rect = DialogBase::GetDlgItemRect(placeholder);
+	auto pos = RectToPoint(placeholder_rect);
+	auto size = RectToSize(placeholder_rect);
+
+	width = size.cx;
+	height = size.cy;
 	this->bitmap_gdi = bitmap_gdi;
+	this->placeholder = placeholder;
 
 	if(!GetClassInfoEx(instance, CLASS_NAME, &wc)) {
 		wc.cbSize = sizeof(wc);
@@ -30,7 +37,7 @@ void ImageView::Initialize(HWND hWndParent, int x, int y, int width, int height,
 	}
 
 	DWORD style = WS_CHILDWINDOW | WS_HSCROLL | WS_VSCROLL | WS_VISIBLE;
-	window = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, x, y, width, height, hWndParent, NULL, instance, NULL);
+	window = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, pos.x, pos.y, width, height, parent_window, NULL, instance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 	BitmapGdi::Initialize(width, height);
@@ -58,6 +65,14 @@ bool ImageView::Update()
 		DispatchMessage(&msg);
 
 	return !destroyed;
+}
+
+void ImageView::UpdateLayout()
+{
+	RECT rect = DialogBase::GetDlgItemRect(placeholder);
+	POINT p = RectToPoint(rect);
+	SIZE s = RectToSize(rect);
+	MoveWindow(window, p.x, p.y, s.cx, s.cy, TRUE);
 }
 
 void ImageView::Close()

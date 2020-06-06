@@ -123,7 +123,6 @@
     <ClCompile Include="ImageIO.cpp" />
     <ClCompile Include="ImageView.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="RectUtility.cpp" />
     <ClCompile Include="SamplerDialog.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="CaptureCompareScenario.cpp" />

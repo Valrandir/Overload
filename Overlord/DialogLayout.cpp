@@ -1,5 +1,4 @@
 #include "DialogLayout.hpp"
-#include "RectUtility.hpp"
 #include <cassert>
 #include <vector>
 

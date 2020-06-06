@@ -46,7 +46,6 @@
     <ClCompile Include="ImageComparer.cpp">
       <Filter>Image</Filter>
     </ClCompile>
-    <ClCompile Include="RectUtility.cpp" />
     <ClCompile Include="DialogLayout.cpp">
       <Filter>Dialogs\DialogBase</Filter>
     </ClCompile>

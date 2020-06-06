@@ -15,9 +15,8 @@ bool CaptureDialog::ShowDialog(const CaptureSample* capture_sample)
 
 void CaptureDialog::Initialize()
 {
-	int x, y, w, h;
-	GetDlgItemPoint(dialog_wnd, IDC_STATIC_SAMPLE, x, y, w, h);
-	imageview.Initialize(dialog_wnd, x, y, w, h, bitmap_gdi);
+	HWND placeholder = GetDlgItem(dialog_wnd, IDC_STATIC_SAMPLE);
+	imageview.Initialize(dialog_wnd, placeholder, bitmap_gdi);
 
 	if(!capture_source)
 		return;

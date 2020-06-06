@@ -21,6 +21,7 @@ public:
 	void Initialize() override;
 	void InitializeHotKeys();
 	INT_PTR DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam) override;
+	void OnSize(LPARAM lparam) override;
 
 private:
 	HotkeyMonitor hotkey_monitor;

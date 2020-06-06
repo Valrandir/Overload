@@ -30,15 +30,13 @@ bool CompareDialog::ShowDialog(const BitmapGdi* bitmap_gdi_a, const BitmapGdi* b
 
 void CompareDialog::Initialize()
 {
-	int x, y, w, h;
-
-	GetDlgItemPoint(dialog_wnd, IDC_STATIC_IMG_1, x, y, w, h);
-	imageview_a.Initialize(dialog_wnd, x, y, w, h, bitmap_gdi_a);
+	HWND placeholder = GetDlgItem(dialog_wnd, IDC_STATIC_IMG_1);
+	imageview_a.Initialize(dialog_wnd, placeholder, bitmap_gdi_a);
 	imageview_a.ScrollEvent.SetHandler(ScrollCallback, &imageview_b);
 	imageview_a.ZoomEvent.SetHandler(ZoomCallback, &imageview_b);
 
-	GetDlgItemPoint(dialog_wnd, IDC_STATIC_IMG_2, x, y, w, h);
-	imageview_b.Initialize(dialog_wnd, x, y, w, h, bitmap_gdi_b);
+	placeholder = GetDlgItem(dialog_wnd, IDC_STATIC_IMG_2);
+	imageview_b.Initialize(dialog_wnd, placeholder, bitmap_gdi_b);
 	imageview_b.ScrollEvent.SetHandler(ScrollCallback, &imageview_a);
 	imageview_b.ZoomEvent.SetHandler(ZoomCallback, &imageview_a);
 }

@@ -42,6 +42,13 @@ INT_PTR SamplerDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM 
 	return DialogBase::DlgProc(dialog_wnd, msg, wparam, lparam);
 }
 
+void SamplerDialog::OnSize(LPARAM lparam)
+{
+	DialogBase::OnSize(lparam);
+	if(root_element)
+		root_element->image_view.UpdateLayout();
+}
+
 void SamplerDialog::CaptureRootElement()
 {
 	auto bitmap = CaptureWnd::Capture();
@@ -54,10 +61,9 @@ void SamplerDialog::CaptureRootElement()
 		delete e;
 	elements.clear();
 
-	int x, y, w, h;
-	GetDlgItemPoint(dialog_wnd, IDC_STATIC_IMG_1, x, y, w, h);
+	HWND placeholder = GetDlgItem(dialog_wnd, IDC_STATIC_IMG_1);
 	root_element = new Element{std::move(*bitmap)};
-	root_element->image_view.Initialize(dialog_wnd, x, y, w, h, &root_element->bitmap_gdi);
+	root_element->image_view.Initialize(dialog_wnd, placeholder, &root_element->bitmap_gdi);
 
 	elements.push_back(root_element);
 }

@@ -12,13 +12,14 @@ public:
 	Event<bool> ZoomEvent;
 
 	ImageView() = default;
-	void Initialize(HWND hWndParent, int x, int y, int width, int height, const BitmapGdi* bitmap_gdi);
+	void Initialize(HWND parent_window, HWND placeholder, const BitmapGdi* bitmap_gdi);
 	~ImageView();
 	ImageView(const ImageView&) = delete;
 	ImageView& operator=(const ImageView&) = delete;
 
 	void Show();
 	bool Update();
+	void UpdateLayout();
 	void Close();
 
 	void Scroll(int offset_x, int offset_y);
@@ -29,6 +30,7 @@ public:
 
 private:
 	HWND window{};
+	HWND placeholder{};
 	bool destroyed{};
 
 	const BitmapGdi* bitmap_gdi{}; //Not Owned
