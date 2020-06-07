@@ -1,6 +1,10 @@
 #include "ImageBits.hpp"
 #include "ImageIO.hpp"
 #include <exception>
+#include <fstream>
+
+//#define WIN32_LEAN_AND_MEAN
+//#include <Windows.h>
 
 ImageBits::ImageBits(ImageBits&& other) noexcept
 {
@@ -92,7 +96,7 @@ ImageBits ImageBits::CreateEmpty(int width, int height)
 	return CreateFromBits(width, height, bits);
 }
 
-ImageBits ImageBits::LoadFile(const char* filename)
+ImageBits ImageBits::LoadPNG(const char* filename)
 {
 	int width, height;
 
@@ -108,12 +112,48 @@ ImageBits ImageBits::LoadFile(const char* filename)
 	return image_bits;
 }
 
-void ImageBits::SaveFile(const char* filename)
+ImageBits ImageBits::LoadBits(const char* filename)
+{
+	std::ifstream in(filename, std::ostream::binary);
+	if(in.fail())
+		throw new std::exception("ifstream failed"); //TODO: Reconsider using exceptions
+
+	FileHeader fh;
+	in.read((char*)&fh, sizeof(fh));
+	in.seekg(fh.header_bytesize);
+
+	if((size_t)fh.width * fh.height * sizeof(Pixel) != fh.data_bytesize)
+		throw new std::exception("width * height * Pixel does not match data_bytesize"); //TODO: Reconsider using exceptions
+
+	Pixel* data = new Pixel[fh.width * fh.height];
+	in.read((char*)data, fh.data_bytesize);
+	in.close();
+
+	return ImageBits(data, data + fh.data_bytesize, fh.width, fh.height);
+}
+
+void ImageBits::SavePNG(const char* filename)
 {
 	int saved = ImageIO::SaveFile(filename, width, height, (Byte*)_begin);
 
 	if(!saved)
 		throw std::exception("stbi_write_png failed"); //TODO: Reconsider using exceptions
+}
+
+void ImageBits::SaveBits(const char* filename)
+{
+	FileHeader fh;
+	fh.data_bytesize = ByteSize();
+	fh.width = width;
+	fh.height = height;
+
+	std::ofstream out(filename, std::ostream::binary);
+	if(out.fail())
+		throw new std::exception("ofstream failed"); //TODO: Reconsider using exceptions
+
+	out.write((char*)&fh, sizeof(fh));
+	out.write((char*)_begin, fh.data_bytesize);
+	out.close();
 }
 
 void ImageBits::Clear(const Pixel& color)
@@ -154,7 +194,7 @@ void ImageBits::Fill(int x, int y, const ImageBits& source, BlendMode blend_mode
 	for(; dest_y < dest_y_end; dest_y += width, src_y += source.Width()) {
 		auto dest_x = dest_y;
 		auto src_x = src_y;
-		auto dest_x_end = dest_x + x2 -x - sx;
+		auto dest_x_end = dest_x + x2 - x - sx;
 		for(; dest_x < dest_x_end; ++dest_x, ++src_x)
 			Blend(*dest_x, *src_x, blend_mode);
 	}

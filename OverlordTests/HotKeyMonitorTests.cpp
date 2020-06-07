@@ -15,7 +15,7 @@ public:
 		//Arrange
 		HotkeyMonitor hkm;
 		int cb_count{};
-		auto id = hkm.AddHotKey(HotKeyCallback, &cb_count, VK_NUMPAD5);
+		auto id = hkm.AddHotKey(HotKeyCallback, &cb_count, VK_NUMPAD5, 0);
 		PostMessage(NULL, WM_HOTKEY, id, 0);
 		PostMessage(NULL, WM_HOTKEY, id, 0);
 
@@ -30,7 +30,7 @@ public:
 		//Arrange
 		HotkeyMonitor hkm;
 		int cb_count{};
-		auto id = hkm.AddHotKey(HotKeyCallback, &cb_count, VK_NUMPAD5);
+		auto id = hkm.AddHotKey(HotKeyCallback, &cb_count, VK_NUMPAD5, 0);
 		hkm.RemoveHotKey(id);
 		PostMessage(NULL, WM_HOTKEY, id, 0);
 

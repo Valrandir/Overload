@@ -2,20 +2,19 @@
 
 void WindowGdi::AdjustAndCenter(int& x, int& y, int& width, int& height, DWORD style, DWORD ex_style)
 {
-	int cx = GetSystemMetrics(SM_CXSCREEN);
-	int cy = GetSystemMetrics(SM_CYSCREEN);
+	auto ss = GetScreenSize();
 
 	if(width == 0 && height == 0) {
-		this->width = width = cx;
-		this->height = height = cy;
+		this->width = width = ss.cx;
+		this->height = height = ss.cy;
 	}
 
 	RECT rect{0, 0, width, height};
 	AdjustWindowRectEx(&rect, style, FALSE, ex_style);
 	width = rect.right - rect.left;
 	height = rect.bottom - rect.top;
-	x = (cx - width) >> 1;
-	y = (cy - height) >> 1;
+	x = (ss.cx - width) >> 1;
+	y = (ss.cy - height) >> 1;
 }
 
 void WindowGdi::OnPaint()
@@ -158,4 +157,9 @@ void WindowGdi::DrawBitmap(const BitmapGdi& source, int x, int y)
 
 	RECT rect{x, y, x + w, y + h};
 	InvalidateRect(window, &rect, FALSE);
+}
+
+SIZE GetScreenSize()
+{
+	return SIZE{GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)};
 }

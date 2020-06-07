@@ -50,7 +50,7 @@ void OnHotKeyCompare(int, void* userdata)
 	cs->bitmap_gdi = nullptr;
 }
 
-int CaptureCompareScenario()
+int ScenarioCaptureCompare()
 {
 	CaptureSample cs;
 

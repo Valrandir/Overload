@@ -137,12 +137,27 @@ public:
 		//Act
 		auto image_bits = ImageBits::CreateEmpty(w, h);
 		image_bits.Clear(clear_color);
-		image_bits.SaveFile(filename);
+		image_bits.SavePNG(filename);
 
 		//Assert
 		auto picked_pixel = image_bits.GetPixel(w - 1, h - 1);
 		Assert::IsTrue(*picked_pixel == clear_color);
 		//ShellOpen(filename);
+	}
+
+	TEST_METHOD(SaveBits_LoadBits_SavePng) {
+		//Arrange
+		auto filename_bits = "SaveBits_LoadBits_ColorMatch.bits";
+		auto filename_png = "SaveBits_LoadBits_ColorMatch.png";
+		auto flag = CreateTestFlag(300, 150);
+
+		//Act
+		flag.SaveBits(filename_bits);
+		auto loaded = ImageBits::LoadBits(filename_bits);
+		loaded.SavePNG(filename_png);
+
+		//Assert
+		ShellOpen(filename_png);
 	}
 
 	TEST_METHOD(Create_FillColor_ColorMatch) {
@@ -159,10 +174,10 @@ public:
 		image_bits.Clear(clear_color);
 		image_bits.Fill(w / 10, h / 10, w / 3, h / 3, fill_color1);
 		image_bits.Fill(w / 5, h / 5, w / 3, h / 3, fill_color2, ImageBits::BlendMode::Alpha);
-		image_bits.SaveFile(filename);
+		image_bits.SavePNG(filename);
 
 		//Assert
-		auto actual = ImageBits::LoadFile(filename);
+		auto actual = ImageBits::LoadPNG(filename);
 		AssertPixel(actual, 32, 32, 255, 0, 0, 200);
 		AssertPixel(actual, 128, 48, 0, 230, 0, 221);
 		AssertPixel(actual, 64, 48, 45, 209, 0, 243);
@@ -184,14 +199,14 @@ public:
 		background.Fill(bg_w - flag_w / 2, flag_h / -2, flag); //Top Right
 		background.Fill(flag_w / -2, bg_h - flag_h / 2, flag); //Bottom Left
 		background.Fill(bg_w - flag_w / 2, bg_h - flag_h / 2, flag); //Bottom Right
-		background.SaveFile(filename);
+		background.SavePNG(filename);
 
 		//Assert
 		//ShellOpen(filename);
 		auto pink = ImageBits::Pixel(255, 0, 255);
 		auto red = ImageBits::Pixel(255, 0, 0);
 		auto blue = ImageBits::Pixel(0, 0, 255);
-		auto actual = ImageBits::LoadFile(filename);
+		auto actual = ImageBits::LoadPNG(filename);
 		AssertPixel(actual, 145, 70, red);
 		AssertPixel(actual, 146, 71, pink);
 		AssertPixel(actual, 149, 74, pink);

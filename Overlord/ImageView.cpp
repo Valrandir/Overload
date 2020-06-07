@@ -57,22 +57,19 @@ void ImageView::Show()
 	ShowWindow(window, SW_SHOW);
 }
 
-bool ImageView::Update()
-{
-	MSG msg;
-
-	while(!destroyed && PeekMessage(&msg, window, 0, 0, PM_REMOVE))
-		DispatchMessage(&msg);
-
-	return !destroyed;
-}
-
 void ImageView::UpdateLayout()
 {
 	RECT rect = DialogBase::GetDlgItemRect(placeholder);
 	POINT p = RectToPoint(rect);
 	SIZE s = RectToSize(rect);
+	BitmapGdi::Initialize(s.cx, s.cy);
 	MoveWindow(window, p.x, p.y, s.cx, s.cy, TRUE);
+
+	Scroll(0, 0);
+	sbh.Initialize(window, s.cx, s.cy, bitmap_gdi->Width() * zoom_factor, bitmap_gdi->Height() * zoom_factor);
+	auto sp = sbh.GetPosition();
+	ClearBackground();
+	DrawImage(*bitmap_gdi, 0, 0);
 }
 
 void ImageView::Close()

@@ -40,7 +40,7 @@ public:
 	const Pixel* cend() const noexcept { return _end; }
 	int Width() const noexcept { return width; }
 	int Height() const noexcept { return height; }
-	size_t ByteSize() const { return (_end - _begin) * sizeof(Byte); }
+	size_t ByteSize() const { return (_end - _begin) * sizeof(Pixel); }
 	int PixelCount() const { return int(_end - _begin); }
 	Pixel* GetPixel(int x, int y);
 	const Pixel* GetPixel(int x, int y) const;
@@ -55,9 +55,11 @@ public:
 	static void FreeBits(Byte* bits);
 	static ImageBits CreateFromBits(int width, int height, Byte* bits, bool created_from_imageio = false);
 	static ImageBits CreateEmpty(int width, int height);
-	static ImageBits LoadFile(const char* filename);
+	static ImageBits LoadPNG(const char* filename);
+	static ImageBits LoadBits(const char* filename);
 
-	void SaveFile(const char* filename);
+	void SavePNG(const char* filename);
+	void SaveBits(const char* filename);
 	void Clear(const Pixel& color);
 	void Fill(int x, int y, int w, int h, const Pixel& color, BlendMode blend_mode = BlendMode::Replace);
 	void Fill(int x, int y, const ImageBits& source, BlendMode blend_mode = BlendMode::Replace);
@@ -65,6 +67,12 @@ public:
 private:
 	bool AdjustClip(int& x, int& y, int& x2, int& y2, int w, int h);
 	void Blend(Pixel& dest, const Pixel& src, BlendMode blend_mode);
+
+	struct FileHeader {
+		const size_t header_bytesize = sizeof(FileHeader);
+		size_t data_bytesize{};
+		int width{}, height{};
+	};
 };
 
 inline bool operator==(const ImageBits::Pixel&, const ImageBits::Pixel&);

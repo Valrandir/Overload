@@ -1,6 +1,6 @@
 #include "SamplerDialog.hpp"
 
-int SamplerDialogScenario()
+int ScenarioSamplerDialog()
 {
 	SamplerDialog::ShowDialog();
 	return 0;

@@ -6,18 +6,18 @@ static bool SetupSingleHV(HWND window, int scroll_pos, int view_size, int conten
 static void HandleScrollHV(HWND window, WPARAM wparam, LPARAM lparam, int sb_hv, LONG& sref, LONG view_size, LONG content_size);
 static void OffsetScrollHV(HWND window, int sb_hv, LONG offset, LONG& sref, LONG max);
 
-void ScrollBarHandler::Initialize(HWND parent_window, int _view_width, int _view_height, int content_width, int content_height)
+void ScrollBarHandler::Initialize(HWND parent_window, int view_width, int view_height, int content_width, int content_height)
 {
-	UpdateContentSizeHV(_view_width, content.cx, content_width, position.x);
-	UpdateContentSizeHV(_view_height, content.cy, content_height, position.y);
+	UpdateContentSizeHV(view_width, content.cx, content_width, position.x);
+	UpdateContentSizeHV(view_height, content.cy, content_height, position.y);
 
 	this->parent_window = parent_window;
-	view.cx = _view_width;
-	view.cy = _view_height;
+	view.cx = view_width;
+	view.cy = view_height;
 	content.cx = content_width;
 	content.cy = content_height;
-	h_scroll_enabled = SetupSingleHV(parent_window, position.x, _view_width, content_width, SB_HORZ);
-	v_scroll_enabled = SetupSingleHV(parent_window, position.y, _view_height, content_height, SB_VERT);
+	h_scroll_enabled = SetupSingleHV(parent_window, position.x, view_width, content_width, SB_HORZ);
+	v_scroll_enabled = SetupSingleHV(parent_window, position.y, view_height, content_height, SB_VERT);
 }
 
 void ScrollBarHandler::HandleScroll(UINT msg, WPARAM wparam, LPARAM lparam)

@@ -30,8 +30,8 @@ public:
 	ImageBits GetBits();
 	const ImageBits GetBits() const;
 	static BitmapGdi CreateFromBits(const ImageBits& image_bits);
-	static BitmapGdi LoadFile(const char* filename);
-	void SaveFile(const char* filename);
+	static BitmapGdi LoadPNG(const char* filename);
+	void SavePNG(const char* filename);
 
 	void Clear(COLORREF color);
 	void Fill(const RECT& rect, COLORREF color);

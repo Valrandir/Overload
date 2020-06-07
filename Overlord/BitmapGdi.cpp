@@ -125,12 +125,12 @@ BitmapGdi BitmapGdi::CreateFromBits(const ImageBits& image_bits)
 	return BitmapGdi(width, height, dc, bitmap);
 }
 
-BitmapGdi BitmapGdi::LoadFile(const char* filename)
+BitmapGdi BitmapGdi::LoadPNG(const char* filename)
 {
-	return CreateFromBits(ImageBits::LoadFile(filename));
+	return CreateFromBits(ImageBits::LoadPNG(filename));
 }
 
-void BitmapGdi::SaveFile(const char* filename)
+void BitmapGdi::SavePNG(const char* filename)
 {
 	INITIALIZE_ASSERT
 	auto image_bits = GetBits();
@@ -138,7 +138,7 @@ void BitmapGdi::SaveFile(const char* filename)
 	for(auto& it : image_bits)
 		it.a = 255;
 
-	image_bits.SaveFile(filename);
+	image_bits.SavePNG(filename);
 }
 
 void BitmapGdi::Clear(COLORREF color)

@@ -33,3 +33,5 @@ public:
 
 	inline HWND GetHandle() const { return window; }
 };
+
+SIZE GetScreenSize();

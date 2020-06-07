@@ -2,8 +2,9 @@
 #include <Windows.h>
 #include <exception>
 
-extern int SamplerDialogScenario();
-int (*CurrentScenario)() = SamplerDialogScenario;
+extern int ScenarioSamplerDialog();
+extern int ScenarioAreaView();
+int (*CurrentScenario)() = ScenarioAreaView;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
 {

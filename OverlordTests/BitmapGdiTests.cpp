@@ -111,8 +111,8 @@ public:
 		}
 
 		//Act
-		bm.SaveFile(filename);
-		BitmapGdi loaded = BitmapGdi::LoadFile(filename);
+		bm.SavePNG(filename);
+		BitmapGdi loaded = BitmapGdi::LoadPNG(filename);
 
 		HDC hdc = GetDC(0);
 		BitBlt(hdc, 0, 0, width, height, loaded.GetDC(), 0, 0, SRCCOPY);

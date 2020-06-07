@@ -18,7 +18,6 @@ public:
 	ImageView& operator=(const ImageView&) = delete;
 
 	void Show();
-	bool Update();
 	void UpdateLayout();
 	void Close();
 

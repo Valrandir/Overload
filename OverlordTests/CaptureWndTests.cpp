@@ -27,7 +27,7 @@ public:
 		}
 
 		//Act
-		bitmap_gdi->SaveFile(filename);
+		bitmap_gdi->SavePNG(filename);
 		delete bitmap_gdi;
 
 		//Assert

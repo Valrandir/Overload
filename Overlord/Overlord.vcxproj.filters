@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="ImageIO.cpp">
       <Filter>Image</Filter>
     </ClCompile>
@@ -16,7 +15,7 @@
       <Filter>Image</Filter>
     </ClCompile>
     <ClCompile Include="ImageView.cpp">
-      <Filter>UserControls</Filter>
+      <Filter>Windows\UserControls</Filter>
     </ClCompile>
     <ClCompile Include="CaptureWnd.cpp">
       <Filter>Windows</Filter>
@@ -25,48 +24,56 @@
       <Filter>Windows</Filter>
     </ClCompile>
     <ClCompile Include="DialogBase.cpp">
-      <Filter>Dialogs\DialogBase</Filter>
+      <Filter>Windows\Dialogs\DialogBase</Filter>
     </ClCompile>
     <ClCompile Include="CaptureDialog.cpp">
-      <Filter>Dialogs</Filter>
+      <Filter>Windows\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="CompareDialog.cpp">
-      <Filter>Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="CaptureCompareScenario.cpp">
-      <Filter>Scenarios</Filter>
-    </ClCompile>
-    <ClCompile Include="SamplerDialogScenario.cpp">
-      <Filter>Scenarios</Filter>
+      <Filter>Windows\Dialogs</Filter>
     </ClCompile>
     <ClCompile Include="SamplerDialog.cpp">
-      <Filter>Dialogs\SamplerDialog</Filter>
+      <Filter>Windows\Dialogs\SamplerDialog</Filter>
     </ClCompile>
     <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageComparer.cpp">
       <Filter>Image</Filter>
     </ClCompile>
     <ClCompile Include="DialogLayout.cpp">
-      <Filter>Dialogs\DialogBase</Filter>
+      <Filter>Windows\Dialogs\DialogBase</Filter>
+    </ClCompile>
+    <ClCompile Include="ScrollHandler.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioCaptureCompare.cpp">
+      <Filter>Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioSamplerDialog.cpp">
+      <Filter>Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioAreaView.cpp">
+      <Filter>Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="AreaView.cpp">
+      <Filter>AreaView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
       <Filter>Entities</Filter>
     </ClInclude>
-    <ClInclude Include="ScrollHandler.hpp" />
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="lib\stb\stb_image.h">
-      <Filter>ExternalLibraries\stb</Filter>
+      <Filter>Image\ExternalLibraries\stb</Filter>
     </ClInclude>
     <ClInclude Include="lib\stb\stb_image_write.h">
-      <Filter>ExternalLibraries\stb</Filter>
+      <Filter>Image\ExternalLibraries\stb</Filter>
     </ClInclude>
     <ClInclude Include="ImageIO.hpp">
       <Filter>Image</Filter>
     </ClInclude>
     <ClInclude Include="lib\stb\stb_custom.h">
-      <Filter>ExternalLibraries\stb</Filter>
+      <Filter>Image\ExternalLibraries\stb</Filter>
     </ClInclude>
     <ClInclude Include="CaptureSample.hpp">
       <Filter>Entities</Filter>
@@ -81,7 +88,7 @@
       <Filter>Image</Filter>
     </ClInclude>
     <ClInclude Include="ImageView.hpp">
-      <Filter>UserControls</Filter>
+      <Filter>Windows\UserControls</Filter>
     </ClInclude>
     <ClInclude Include="WindowGdi.hpp">
       <Filter>Windows</Filter>
@@ -90,27 +97,41 @@
       <Filter>Windows</Filter>
     </ClInclude>
     <ClInclude Include="DialogBase.hpp">
-      <Filter>Dialogs\DialogBase</Filter>
+      <Filter>Windows\Dialogs\DialogBase</Filter>
     </ClInclude>
     <ClInclude Include="CompareDialog.hpp">
-      <Filter>Dialogs</Filter>
+      <Filter>Windows\Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="CaptureDialog.hpp">
-      <Filter>Dialogs</Filter>
+      <Filter>Windows\Dialogs</Filter>
     </ClInclude>
     <ClInclude Include="Overlord.rc.h">
       <Filter>Resources</Filter>
     </ClInclude>
     <ClInclude Include="SamplerDialog.hpp">
-      <Filter>Dialogs\SamplerDialog</Filter>
+      <Filter>Windows\Dialogs\SamplerDialog</Filter>
     </ClInclude>
     <ClInclude Include="HotkeyMonitor.hpp" />
     <ClInclude Include="ImageComparer.hpp">
       <Filter>Image</Filter>
     </ClInclude>
-    <ClInclude Include="RectUtility.hpp" />
     <ClInclude Include="DialogLayout.hpp">
-      <Filter>Dialogs\DialogBase</Filter>
+      <Filter>Windows\Dialogs\DialogBase</Filter>
+    </ClInclude>
+    <ClInclude Include="RectUtility.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="ScrollHandler.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="AreaView.hpp">
+      <Filter>AreaView</Filter>
+    </ClInclude>
+    <ClInclude Include="Size.hpp">
+      <Filter>AreaView</Filter>
+    </ClInclude>
+    <ClInclude Include="Rect.hpp">
+      <Filter>AreaView</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -120,32 +141,35 @@
     <Filter Include="Entities">
       <UniqueIdentifier>{55a96db0-d244-4084-a69c-0bfa2dce578c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dialogs">
-      <UniqueIdentifier>{6a96ef68-7838-4da5-a494-0c43b185fbac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Windows">
       <UniqueIdentifier>{d625cd4d-d328-40fc-9c28-dc358370b21f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="UserControls">
-      <UniqueIdentifier>{53793d9a-2f43-450e-a71d-a01a3b14dbd5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ExternalLibraries">
-      <UniqueIdentifier>{4bae19fd-300f-445b-9829-13ce4c96124a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Image">
       <UniqueIdentifier>{5ee52e98-970a-4e5f-91ce-f81f26ba3e3d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ExternalLibraries\stb">
-      <UniqueIdentifier>{17b8f43d-f66d-4cc4-bd7e-975dddeb52a9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scenarios">
       <UniqueIdentifier>{ded3cc9a-2b0d-4f6a-86a8-f065770ca559}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dialogs\SamplerDialog">
+    <Filter Include="Windows\UserControls">
+      <UniqueIdentifier>{53793d9a-2f43-450e-a71d-a01a3b14dbd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Dialogs">
+      <UniqueIdentifier>{6a96ef68-7838-4da5-a494-0c43b185fbac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\Dialogs\SamplerDialog">
       <UniqueIdentifier>{59e97872-1dd8-4830-964b-0a8518b92b1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Dialogs\DialogBase">
+    <Filter Include="Windows\Dialogs\DialogBase">
       <UniqueIdentifier>{a8c44e32-7aab-4af7-9489-ffbca6bf5109}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image\ExternalLibraries">
+      <UniqueIdentifier>{4bae19fd-300f-445b-9829-13ce4c96124a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Image\ExternalLibraries\stb">
+      <UniqueIdentifier>{17b8f43d-f66d-4cc4-bd7e-975dddeb52a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AreaView">
+      <UniqueIdentifier>{76f7052a-2161-4c84-b83f-d89d95ec46e0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
