@@ -40,6 +40,9 @@ void ImageView::Initialize(HWND parent_window, HWND placeholder, const BitmapGdi
 	window = CreateWindowEx(WS_EX_CLIENTEDGE, CLASS_NAME, TEXT(""), style, pos.x, pos.y, width, height, parent_window, NULL, instance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
+	ms.SetWindow(window);
+	ms.ScrollEvent.SetHandler(OnMouseScrollEvent, this);
+
 	BitmapGdi::Initialize(width, height);
 	ClearBackground();
 	DrawImage(*bitmap_gdi, 0, 0);
@@ -162,41 +165,6 @@ void ImageView::OnScroll(UINT msg, WPARAM wparam, LPARAM lparam)
 	DrawImage(*bitmap_gdi, -sp.x, -sp.y);
 }
 
-void ImageView::OnLMouseMove()
-{
-	if(!mouse_dragging)
-		return;
-
-	POINT screen_pos;
-	GetCursorPos(&screen_pos);
-
-	auto offset_x = mouse_origin.x - screen_pos.x;
-	auto offset_y = mouse_origin.y - screen_pos.y;
-	mouse_origin.x = screen_pos.x;
-	mouse_origin.y = screen_pos.y;
-
-	Scroll(offset_x, offset_y);
-	ScrollEvent(offset_x, offset_y);
-}
-
-void ImageView::OnLMouseDown()
-{
-	mouse_dragging = true;
-
-	POINT screen_pos;
-	GetCursorPos(&screen_pos);
-
-	mouse_origin.x = screen_pos.x;
-	mouse_origin.y = screen_pos.y;
-
-	SetCapture(window);
-}
-
-void ImageView::OnLMouseUp()
-{
-	ReleaseCapture();
-}
-
 void ImageView::OnZoom(int direction)
 {
 	UpdateZoom(direction);
@@ -230,6 +198,14 @@ void ImageView::UpdateZoom(int direction)
 	DrawImage(*bitmap_gdi, -sp.x, -sp.y);
 }
 
+void ImageView::OnMouseScrollEvent(int offset_x, int offset_y, void* userdata)
+{
+	auto self = (ImageView*)userdata;
+
+	self->Scroll(offset_x, offset_y);
+	self->ScrollEvent(offset_x, offset_y);
+}
+
 LRESULT CALLBACK ImageView::WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	ImageView* wb;
@@ -242,21 +218,12 @@ LRESULT CALLBACK ImageView::WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LP
 
 LRESULT ImageView::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 {
+	if(ms.ProcessMessage(msg, wparam))
+		return 0;
+
 	switch(msg) {
 		case WM_PAINT:
 			OnPaint();
-			return 0;
-		case WM_MOUSEMOVE:
-			if(wparam & MK_LBUTTON) {
-				OnLMouseMove();
-				return 0;
-			}
-			break;
-		case WM_LBUTTONDOWN:
-			OnLMouseDown();
-			return 0;
-		case WM_LBUTTONUP:
-			OnLMouseUp();
 			return 0;
 		case WM_MOUSEWHEEL:
 			if((short)HIWORD(wparam) > 0)
@@ -267,9 +234,6 @@ LRESULT ImageView::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 		case WM_HSCROLL:
 		case WM_VSCROLL:
 			OnScroll(msg, wparam, lparam);
-			return 0;
-		case WM_CAPTURECHANGED:
-			mouse_dragging = false;
 			return 0;
 		case WM_DESTROY:
 			Close();

@@ -2,9 +2,10 @@
 #include <Windows.h>
 #include <exception>
 
-extern int ScenarioSamplerDialog();
 extern int ScenarioAreaView();
-int (*CurrentScenario)() = ScenarioAreaView;
+extern int ScenarioCaptureCompare();
+extern int ScenarioSamplerDialog();
+int (*CurrentScenario)() = ScenarioSamplerDialog;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ INT nShowCmd)
 {

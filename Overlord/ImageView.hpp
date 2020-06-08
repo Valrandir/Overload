@@ -1,6 +1,7 @@
 #pragma once
 #include "BitmapGdi.hpp"
 #include "Event.hpp"
+#include "MouseScroll.hpp"
 #include "ScrollHandler.hpp"
 
 #define WIN32_LEAN_AND_MEAN
@@ -35,9 +36,7 @@ private:
 	const BitmapGdi* bitmap_gdi{}; //Not Owned
 
 	ScrollBarHandler sbh;
-	bool mouse_dragging{};
-	POINT mouse_origin{};
-
+	MouseScroll ms;
 	const int ZOOM_LEVEL_MAX = 4;
 	int zoom_level{1};
 	int zoom_factor{};
@@ -48,12 +47,10 @@ private:
 
 	void OnPaint();
 	void OnScroll(UINT msg, WPARAM wparam, LPARAM lparam);
-	void OnLMouseMove();
-	void OnLMouseDown();
-	void OnLMouseUp();
 	void OnZoom(int direction);
 	void UpdateZoom(int direction);
 
+	static void OnMouseScrollEvent(int x, int y, void* userdata);
 	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	LRESULT WndProc(UINT msg, WPARAM wparam, LPARAM lparam);
 };

@@ -123,6 +123,7 @@
     <ClCompile Include="ImageIO.cpp" />
     <ClCompile Include="ImageView.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MouseScroll.cpp" />
     <ClCompile Include="SamplerDialog.cpp" />
     <ClCompile Include="ScenarioAreaView.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
@@ -141,6 +142,7 @@
     <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="DialogLayout.hpp" />
     <ClInclude Include="Event.hpp" />
+    <ClInclude Include="MouseScroll.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="Rect.hpp" />
     <ClInclude Include="HotkeyMonitor.hpp" />

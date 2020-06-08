@@ -57,6 +57,9 @@
     <ClCompile Include="AreaView.cpp">
       <Filter>AreaView</Filter>
     </ClCompile>
+    <ClCompile Include="MouseScroll.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="Point.hpp">
       <Filter>AreaView</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseScroll.hpp">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,3 +1,4 @@
+#pragma once
 template<typename... TArgs>
 class Event {
 	using TFunc = void (*)(TArgs..., void* userdata);
