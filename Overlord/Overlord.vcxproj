@@ -141,6 +141,7 @@
     <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="DialogLayout.hpp" />
     <ClInclude Include="Event.hpp" />
+    <ClInclude Include="Point.hpp" />
     <ClInclude Include="Rect.hpp" />
     <ClInclude Include="HotkeyMonitor.hpp" />
     <ClInclude Include="ImageCapture.hpp" />

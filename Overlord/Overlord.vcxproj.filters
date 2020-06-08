@@ -133,6 +133,9 @@
     <ClInclude Include="Rect.hpp">
       <Filter>AreaView</Filter>
     </ClInclude>
+    <ClInclude Include="Point.hpp">
+      <Filter>AreaView</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">

@@ -16,9 +16,10 @@ int ScenarioAreaView()
 	auto bits = ImageBits::LoadBits("C:\\out\\nature_huge.bits");
 	auto bitmap = BitmapGdi::CreateFromBits(bits);
 
-	AreaView av({bitmap.Width(), bitmap.Height()}, {0, 0, window.Width(), window.Height()});
+	AreaView av({bitmap.Width(), bitmap.Height()}, {window.Width(), window.Height()});
 
-	window.DrawBitmap(bitmap, 0, 0);
+	auto p = av.Offset();
+	window.DrawBitmap(bitmap, p.x, p.y);
 
 	while(window.Update()) {
 		Sleep(1);
