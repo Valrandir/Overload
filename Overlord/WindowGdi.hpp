@@ -28,6 +28,7 @@ public:
 	virtual void Hide();
 	virtual bool Update();
 	virtual void Close();
+	virtual bool OnKeyDown(WPARAM wparam);
 
 	virtual void DrawBitmap(const BitmapGdi& source, int x, int y);
 

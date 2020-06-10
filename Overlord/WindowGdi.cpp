@@ -48,10 +48,8 @@ LRESULT WindowGdi::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 			::SetCursor(cursor);
 			return 0;
 		case WM_KEYDOWN:
-			if(LOWORD(wparam) == VK_ESCAPE) {
-				Close();
+			if(OnKeyDown(wparam))
 				return 0;
-			}
 			break;
 		case WM_PAINT:
 			OnPaint();
@@ -148,6 +146,17 @@ void WindowGdi::Close()
 	destroyed = true;
 	DestroyWindow(window);
 }
+
+bool WindowGdi::OnKeyDown(WPARAM wparam)
+{
+	if(LOWORD(wparam) == VK_ESCAPE) {
+		Close();
+		return true;
+	}
+
+	return false;
+}
+
 void WindowGdi::DrawBitmap(const BitmapGdi& source, int x, int y)
 {
 	int w = source.Width();

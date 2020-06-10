@@ -1,18 +1,21 @@
 #pragma once
+#include "Point.hpp"
 
 struct Rect {
 	int x, y, w, h;
 
-	Rect& Move(int x, int y)
+	Rect& Move(Point p)
 	{
-		this->x = x;
-		this->y = y;
+		this->x = p.x;
+		this->y = p.y;
+		return *this;
 	}
 
-	Rect& Offset(int x, int y)
+	Rect& Offset(Point o)
 	{
-		this->x += x;
-		this->y += y;
+		this->x += o.x;
+		this->y += o.y;
+		return *this;
 	}
 
 	Rect& Zoom(float factor)
@@ -23,5 +26,6 @@ struct Rect {
 		y -= fy;
 		w += fx;
 		h += fy;
+		return *this;
 	}
 };

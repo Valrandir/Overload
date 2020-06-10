@@ -9,9 +9,22 @@
 /// </summary>
 class AreaView {
 public:
+	AreaView() :
+		area{}, view{}, zoomed_view{} {}
+
 	/// <param name="area">The size of the area</param>
 	/// <param name="view">the size of the view</param>
 	AreaView(Size area, Size view);
+
+	/// <summary>
+	/// Get the size of the area
+	/// </summary>
+	Size AreaSize() const { return area;}
+
+	/// <summary>
+	/// Get the view rectangle
+	/// </summary>
+	Rect ViewSize() const { return zoomed_view; }
 
 	/// <summary>
 	/// Get the view position
@@ -24,9 +37,25 @@ public:
 	Point Offset() const { return {-zoomed_view.x, -zoomed_view.y}; }
 
 	/// <summary>
+	/// Get the offset for drawing in the area, according to the position of the view
+	/// </summary>
+	void Offset(Point offset);
+
+	/// <summary>
 	/// Return the zoom factor
 	/// </summary>
 	float Zoom() const { return zoom; }
+
+	/// <summary>
+	/// Apply the specified zoom
+	/// </summary>
+	void Zoom(float factor);
+
+	/// <summary>
+	/// Change the current zoom
+	/// </summary>
+	/// <param name="offset_factor">How much to change the current zoom</param>
+	void OffsetZoom(float offset_factor);
 
 	/// <summary>
 	/// Position the view in the center of the area.
@@ -39,9 +68,11 @@ public:
 	void ZoomToArea();
 
 	/// <summary>
-	/// Apply the specified zoom
+	/// Calculate and return the two rectangle representing the minimap, offset for left-bottom display
 	/// </summary>
-	void Zoom(float factor);
+	/// <param name="out_miniarea">Return the outer rect</param>
+	/// <param name="out_miniview">Return the inner rect</param>
+	void GetMinimapInfo(Rect& out_miniarea, Rect& out_miniview);
 
 private:
 	void ApplyZoom() { Zoom(zoom); }
