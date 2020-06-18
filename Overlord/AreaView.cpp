@@ -1,67 +1,50 @@
 #include "AreaView.hpp"
 #include <algorithm>
 
+static void ClampOffsetRectToSize(const Rect& rect, const Size& size, int& x, int& y);
+
 AreaView::AreaView(Size area, Size view)
 {
 	this->area = area,
-	this->view = Rect{0, 0, view.w, view.h};
-	this->zoomed_view = this->view;
-	CenterView();
+	this->view = view;
+	camera = {0, 0, view.w, view.h};
+	camera_nozoom = {camera.w, camera.h};
 }
 
-void AreaView::Offset(Point offset)
+void AreaView::OffsetCameraPosition(int x, int y)
 {
-	view.Offset(offset);
-	ApplyZoom();
+	ClampCamera(x, y);
+	camera.Offset({x, y});
 }
 
-void AreaView::Zoom(float factor)
+void AreaView::OffsetCameraZoom(float zoom_offset)
 {
-	zoom = factor;
+	zoom = std::clamp(zoom + zoom_offset, 0.f, 4.f);
 
-	if(factor == 1.f) //Use Epsilon?
-		zoomed_view = view;
-	else {
-		factor /= 2;
-		zoomed_view.x = int(view.x * factor);
-		zoomed_view.y = int(view.y * factor);
-		zoomed_view.w = int(view.w * factor);
-		zoomed_view.h = int(view.h * factor);
-	}
+	const float EPSILON = 0.01f;
+	if(abs(1 - zoom) < EPSILON) {
+		zoom = 1.f;
+		camera.Resize(camera_nozoom);
+	} else
+		camera.Zoom(zoom_offset);
 }
 
-void AreaView::OffsetZoom(float offset_factor)
+void AreaView::ClampCamera(int& x, int& y)
 {
-	Zoom(std::clamp(zoom += offset_factor, 0.f, 4.f));
+	ClampOffsetRectToSize(camera, area, x, y);
 }
 
-void AreaView::CenterView()
+void ClampOffsetRectToSize(const Rect& rect, const Size& size, int& x, int& y)
 {
-	view.x = (area.w - view.w) >> 1;
-	view.y = (area.w - view.h) >> 1;
-	ApplyZoom();
-}
+	if(rect.x + x < 0)
+		x = rect.x - x;
 
-void AreaView::ZoomToArea()
-{
-	auto zx = (float)view.w / area.w;
-	auto zy = (float)view.h / area.h;
-	Zoom(zx < zy ? zx : zy);
-}
+	if(rect.y + y < 0)
+		y = rect.y - y;
 
-void AreaView::GetMinimapInfo(Rect& out_miniarea, Rect& out_miniview)
-{
-	int w = view.w / 10;
-	int h = view.h / 10;
-	int x = w / 2;
-	int y = view.h - h - h / 2;
-	out_miniarea = {x, y, w, h};
+	if(rect.x + rect.w + x > size.w)
+		x = size.w - (rect.x + rect.w);
 
-	float xf = (float)w / area.w;
-	float yf = (float)h / area.h;
-	int vx = int(zoomed_view.x * xf);
-	int vy = int(zoomed_view.y * yf);
-	int vw = int(zoomed_view.w * xf);
-	int vh = int(zoomed_view.h * yf);
-	out_miniview = {x + vx, y + vy, vw, vh};
+	if(rect.y + rect.h + y > size.h)
+		y = size.h - (rect.y + rect.h);
 }

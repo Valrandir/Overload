@@ -110,12 +110,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AreaMinimap.cpp" />
     <ClCompile Include="BitmapGdi.cpp" />
     <ClCompile Include="CaptureDialog.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="CompareDialog.cpp" />
     <ClCompile Include="DialogBase.cpp" />
     <ClCompile Include="DialogLayout.cpp" />
+    <ClCompile Include="GdiPen.cpp" />
     <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageCapture.cpp" />
     <ClCompile Include="ImageBits.cpp" />
@@ -133,6 +135,7 @@
     <ClCompile Include="AreaView.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AreaMinimap.hpp" />
     <ClInclude Include="BitmapGdi.hpp" />
     <ClInclude Include="CaptureDialog.hpp" />
     <ClInclude Include="CaptureSample.hpp" />
@@ -142,6 +145,7 @@
     <ClInclude Include="DialogBase.hpp" />
     <ClInclude Include="DialogLayout.hpp" />
     <ClInclude Include="Event.hpp" />
+    <ClInclude Include="GdiPen.hpp" />
     <ClInclude Include="MouseScroll.hpp" />
     <ClInclude Include="Point.hpp" />
     <ClInclude Include="Rect.hpp" />

@@ -1,5 +1,6 @@
 #pragma once
 #include "Point.hpp"
+#include "Size.hpp"
 
 struct Rect {
 	int x, y, w, h;
@@ -15,6 +16,17 @@ struct Rect {
 	{
 		this->x += o.x;
 		this->y += o.y;
+		return *this;
+	}
+
+	Rect& Resize(Size size)
+	{
+		auto rw = (size.w - w) >> 1;
+		auto rh = (size.h - h) >> 1;
+		x -= rw;
+		y -= rh;
+		w += rw;
+		h += rh;
 		return *this;
 	}
 

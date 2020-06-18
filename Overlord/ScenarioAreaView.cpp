@@ -1,3 +1,4 @@
+#include "AreaMinimap.hpp"
 #include "AreaView.hpp"
 #include "BitmapGdi.hpp"
 #include "MouseScroll.hpp"
@@ -14,7 +15,6 @@ struct AreaViewWindow : public WindowGdi {
 	{
 		ms.SetWindow(window);
 		av = AreaView({bitmap.Width(), bitmap.Height()}, {Width(), Height()});
-		av.CenterView();
 
 		ms.ScrollEvent.SetHandler(OnMouseScrollEvent, this);
 
@@ -32,9 +32,9 @@ struct AreaViewWindow : public WindowGdi {
 	bool OnKeyDown(WPARAM wparam) override
 	{
 		if(LOWORD(wparam) == VK_PRIOR)
-			av.OffsetZoom(-.1f);
+			av.OffsetCameraZoom(-.1f);
 		else if(LOWORD(wparam) == VK_NEXT)
-			av.OffsetZoom(.1f);
+			av.OffsetCameraZoom(.1f);
 		else
 			return WindowGdi::OnKeyDown(wparam);
 
@@ -42,30 +42,21 @@ struct AreaViewWindow : public WindowGdi {
 		return true;
 	}
 
-	void DrawMinimap()
-	{
-		Rect area, view;
-		av.GetMinimapInfo(area, view);
-		Rectangle(GetDC(), area.x, area.y, area.x + area.w, area.y + area.h);
-		Rectangle(GetDC(), view.x, view.y, view.x + view.w, view.y + view.h);
-	}
-
 	void DrawBitmap()
 	{
-		auto v = av.ViewSize();
-		auto o = av.Offset();
-
 		Clear(RGB(64, 64, 64));
 		InvalidateRect(window, 0, FALSE);
 
-		//StretchBlt(WindowGdi::dc, -v.x, -v.y, v.w, v.h, bitmap.GetDC(), o.x, o.y, v.w, v.h, SRCCOPY);
-		DrawMinimap();
+		const auto& camera = av.Camera();
+		const auto& view = av.View();
+		StretchBlt(WindowGdi::dc, 0, 0, view.w, view.h, bitmap.GetDC(), camera.x, camera.y, camera.w, camera.h, SRCCOPY);
+		AreaMinimap::DrawMinimap(GetDC(), av);
 	}
 
 	static void OnMouseScrollEvent(int offset_x, int offset_y, void* userdata)
 	{
 		auto& self = *(AreaViewWindow*)userdata;
-		self.av.Offset({offset_x, offset_y});
+		self.av.OffsetCameraPosition(offset_x, offset_y);
 		self.DrawBitmap();
 	}
 };
@@ -76,7 +67,7 @@ int ScenarioAreaView()
 
 	auto ss = GetScreenSize();
 	AreaViewWindow window(ss.cx / 2, ss.cy / 2, std::move(bitmap));
-	window.Show();	
+	window.Show();
 	window.DrawBitmap();
 
 	while(window.Update()) {

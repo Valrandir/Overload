@@ -60,6 +60,12 @@
     <ClCompile Include="MouseScroll.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
+    <ClCompile Include="AreaMinimap.cpp">
+      <Filter>AreaView</Filter>
+    </ClCompile>
+    <ClCompile Include="GdiPen.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
@@ -140,6 +146,12 @@
       <Filter>AreaView</Filter>
     </ClInclude>
     <ClInclude Include="MouseScroll.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="AreaMinimap.hpp">
+      <Filter>AreaView</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiPen.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
