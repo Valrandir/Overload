@@ -8,7 +8,7 @@
 struct AreaViewWindow : public WindowGdi {
 	MouseScroll ms;
 	AreaView av;
-	BitmapGdi bitmap;
+	BitmapGdi bitmap, zoomed;
 
 	AreaViewWindow(int width, int height, BitmapGdi&& bitmap) :
 		WindowGdi(TEXT("Area View"), width, height)
@@ -19,6 +19,7 @@ struct AreaViewWindow : public WindowGdi {
 		ms.ScrollEvent.SetHandler(OnMouseScrollEvent, this);
 
 		this->bitmap = std::move(bitmap);
+		this->zoomed = this->bitmap.Clone();
 	}
 
 	LRESULT WndProc(UINT msg, WPARAM wparam, LPARAM lparam) override
@@ -31,11 +32,13 @@ struct AreaViewWindow : public WindowGdi {
 
 	bool OnKeyDown(WPARAM wparam) override
 	{
-		if(LOWORD(wparam) == VK_PRIOR)
+		if(LOWORD(wparam) == VK_PRIOR) {
 			av.OffsetCameraZoom(-.1f);
-		else if(LOWORD(wparam) == VK_NEXT)
+			ResizeBitmap();
+		} else if(LOWORD(wparam) == VK_NEXT) {
 			av.OffsetCameraZoom(.1f);
-		else
+			ResizeBitmap();
+		} else
 			return WindowGdi::OnKeyDown(wparam);
 
 		DrawBitmap();
@@ -49,8 +52,24 @@ struct AreaViewWindow : public WindowGdi {
 
 		const auto& camera = av.Camera();
 		const auto& view = av.View();
-		StretchBlt(WindowGdi::dc, 0, 0, view.w, view.h, bitmap.GetDC(), camera.x, camera.y, camera.w, camera.h, SRCCOPY);
+
+		BitBlt(WindowGdi::dc, 0, 0, view.w, view.h, zoomed.GetDC(), camera.x, camera.y, SRCCOPY);
 		AreaMinimap::DrawMinimap(GetDC(), av);
+	}
+
+	void ResizeBitmap()
+	{
+		const auto& camera = av.Camera();
+		const auto& view = av.View();
+		const auto& zoom = av.Zoom();
+
+		int w = (int)(bitmap.Width() * zoom);
+		int h = (int)(bitmap.Height() * zoom);
+		w = bitmap.Width() - (w - bitmap.Width());
+		h = bitmap.Height() - (h - bitmap.Height());
+
+		zoomed.Initialize(w, h);
+		StretchBlt(zoomed.GetDC(), 0, 0, w, h, bitmap.GetDC(), 0, 0, bitmap.Width(), bitmap.Height(), SRCCOPY);
 	}
 
 	static void OnMouseScrollEvent(int offset_x, int offset_y, void* userdata)

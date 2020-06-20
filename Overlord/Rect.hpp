@@ -21,19 +21,20 @@ struct Rect {
 
 	Rect& Resize(Size size)
 	{
-		auto rw = (size.w - w) >> 1;
-		auto rh = (size.h - h) >> 1;
+		auto rw = (size.w - w) / 2;
+		auto rh = (size.h - h) / 2;
 		x -= rw;
 		y -= rh;
-		w += rw;
-		h += rh;
+		w = size.w;
+		h = size.h;
 		return *this;
 	}
 
 	Rect& Zoom(float factor)
 	{
-		int fx = int(factor / 2 * x);
-		int fy = int(factor / 2 * y);
+		--factor;
+		int fx = int(factor * w) / 2;
+		int fy = int(factor * h) / 2;
 		x -= fx;
 		y -= fy;
 		w += fx;

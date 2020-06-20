@@ -1,5 +1,6 @@
 #include "BitmapGdi.hpp"
 #include <cassert>
+#include <utility>
 
 #define INITIALIZE_ASSERT assert(dc);
 
@@ -165,4 +166,11 @@ void BitmapGdi::Draw(HDC source, int x, int y, int w, int h, int src_x, int src_
 {
 	INITIALIZE_ASSERT
 	BitBlt(dc, x, y, w, h, source, src_x, src_y, SRCCOPY);
+}
+
+BitmapGdi BitmapGdi::Clone() const
+{
+	BitmapGdi clone(width, height);
+	clone.Draw(dc, 0, 0, width, height);
+	return std::move(clone);
 }

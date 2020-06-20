@@ -19,7 +19,6 @@ public:
 	void OffsetCameraZoom(float zoom_offset);
 
 private:
-	void ClampCamera(int& x, int& y);
 	Size area, view;
 	Rect camera;
 	Size camera_nozoom;

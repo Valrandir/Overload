@@ -37,4 +37,5 @@ public:
 	void Fill(const RECT& rect, COLORREF color);
 	void Fill(int x, int y, int w, int h, COLORREF color);
 	void Draw(HDC source, int x, int y, int w, int h, int src_x = {}, int src_y = {});
+	BitmapGdi Clone() const;
 };
