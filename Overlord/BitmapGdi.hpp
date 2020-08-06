@@ -13,29 +13,29 @@ public:
 	BitmapGdi();
 	BitmapGdi(int width, int height);
 	BitmapGdi(int width, int height, HDC dc, HBITMAP bitmap);
-	void Initialize(int width, int height);
+	virtual void Initialize(int width, int height);
 	BitmapGdi(BitmapGdi&&) noexcept;
 	BitmapGdi& operator=(BitmapGdi&&) noexcept;
 	virtual ~BitmapGdi();
 
-	int Width() const noexcept { return width; }
-	int Height() const noexcept { return height; }
-	HDC GetDC() const noexcept { return dc; }
+	virtual int Width() const noexcept { return width; }
+	virtual int Height() const noexcept { return height; }
+	virtual HDC GetDC() const noexcept { return dc; }
 
-private:
+protected:
 	BitmapGdi& Move(BitmapGdi&) noexcept;
 	void Destroy() noexcept;
 
 public:
-	ImageBits GetBits();
-	const ImageBits GetBits() const;
+	virtual ImageBits GetBits();
+	virtual const ImageBits GetBits() const;
 	static BitmapGdi CreateFromBits(const ImageBits& image_bits);
 	static BitmapGdi LoadPNG(const char* filename);
-	void SavePNG(const char* filename);
+	virtual void SavePNG(const char* filename);
 
-	void Clear(COLORREF color);
-	void Fill(const RECT& rect, COLORREF color);
-	void Fill(int x, int y, int w, int h, COLORREF color);
-	void Draw(HDC source, int x, int y, int w, int h, int src_x = {}, int src_y = {});
-	BitmapGdi Clone() const;
+	virtual void Clear(COLORREF color);
+	virtual void Fill(const RECT& rect, COLORREF color);
+	virtual void Fill(int x, int y, int w, int h, COLORREF color);
+	virtual void Draw(HDC source, int x, int y, int w, int h, int src_x = {}, int src_y = {});
+	virtual BitmapGdi Clone() const;
 };

@@ -25,7 +25,7 @@ void AreaView::OffsetCameraZoom(float zoom_offset)
 	if(abs(1 - zoom) < EPSILON)
 		zoom = 1.f;
 
-	camera.Resize(camera_nozoom).Zoom(zoom);
+	camera.Resize(camera_nozoom).Zoom(1 / zoom);
 	ClampOffsetRectToSize(camera, area);
 }
 

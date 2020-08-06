@@ -1,14 +1,15 @@
 #include "AreaMinimap.hpp"
 #include "AreaView.hpp"
-#include "BitmapGdi.hpp"
+#include "BitmapGdiZoom.hpp"
 #include "MouseScroll.hpp"
 #include "WindowGdi.hpp"
+#include <sstream>
 #include <utility>
 
 struct AreaViewWindow : public WindowGdi {
 	MouseScroll ms;
 	AreaView av;
-	BitmapGdi bitmap, zoomed;
+	BitmapGdiZoom zoomable;
 
 	AreaViewWindow(int width, int height, BitmapGdi&& bitmap) :
 		WindowGdi(TEXT("Area View"), width, height)
@@ -18,8 +19,7 @@ struct AreaViewWindow : public WindowGdi {
 
 		ms.ScrollEvent.SetHandler(OnMouseScrollEvent, this);
 
-		this->bitmap = std::move(bitmap);
-		this->zoomed = this->bitmap.Clone();
+		this->zoomable = std::move(bitmap);
 	}
 
 	LRESULT WndProc(UINT msg, WPARAM wparam, LPARAM lparam) override
@@ -32,10 +32,10 @@ struct AreaViewWindow : public WindowGdi {
 
 	bool OnKeyDown(WPARAM wparam) override
 	{
-		if(LOWORD(wparam) == VK_PRIOR) {
+		if(LOWORD(wparam) == VK_SUBTRACT) {
 			av.OffsetCameraZoom(-.1f);
 			ResizeBitmap();
-		} else if(LOWORD(wparam) == VK_NEXT) {
+		} else if(LOWORD(wparam) == VK_ADD) {
 			av.OffsetCameraZoom(.1f);
 			ResizeBitmap();
 		} else
@@ -53,23 +53,22 @@ struct AreaViewWindow : public WindowGdi {
 		const auto& camera = av.Camera();
 		const auto& view = av.View();
 
-		BitBlt(WindowGdi::dc, 0, 0, view.w, view.h, zoomed.GetDC(), camera.x, camera.y, SRCCOPY);
+		BitBlt(WindowGdi::dc, 0, 0, view.w, view.h, zoomable.GetDC(), camera.x, camera.y, SRCCOPY);
 		AreaMinimap::DrawMinimap(GetDC(), av);
+
+		std::wstringstream ss;
+		ss << "Zoomed w=" << zoomable.Width() << " h=" << zoomable.Height();
+		const auto& text = ss.str();
+		TextOut(WindowGdi::dc, 0, 0, text.c_str(), (int)text.length());
 	}
 
 	void ResizeBitmap()
 	{
-		const auto& camera = av.Camera();
-		const auto& view = av.View();
-		const auto& zoom = av.Zoom();
+		//const auto& camera = av.Camera();
+		//const auto& view = av.View();
+		//const auto& zoom = av.Zoom();
 
-		int w = (int)(bitmap.Width() * zoom);
-		int h = (int)(bitmap.Height() * zoom);
-		w = bitmap.Width() - (w - bitmap.Width());
-		h = bitmap.Height() - (h - bitmap.Height());
-
-		zoomed.Initialize(w, h);
-		StretchBlt(zoomed.GetDC(), 0, 0, w, h, bitmap.GetDC(), 0, 0, bitmap.Width(), bitmap.Height(), SRCCOPY);
+		zoomable.Zoom(av.Zoom());
 	}
 
 	static void OnMouseScrollEvent(int offset_x, int offset_y, void* userdata)

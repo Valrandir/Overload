@@ -66,6 +66,9 @@
     <ClCompile Include="GdiPen.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
+    <ClCompile Include="BitmapGdiZoom.cpp">
+      <Filter>Image</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
@@ -153,6 +156,9 @@
     </ClInclude>
     <ClInclude Include="GdiPen.hpp">
       <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="BitmapGdiZoom.hpp">
+      <Filter>Image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
