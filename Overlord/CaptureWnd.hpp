@@ -18,6 +18,6 @@ public:
 	virtual ~CaptureWnd();
 	CaptureWnd(const CaptureWnd&) = delete;
 	CaptureWnd& operator=(const CaptureWnd&) = delete;
-	static BitmapGdi* Capture(CaptureSource* outcapture_source = nullptr);
+	static BitmapGdi* Capture(CaptureSource* out_capture_source = nullptr);
 	static BitmapGdi Recapture(const CaptureSource& capture_source);
 };

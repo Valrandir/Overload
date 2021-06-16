@@ -46,10 +46,16 @@ static bool RectSizeIsNotZero(const RECT& rect)
 	return rect.left < rect.right && rect.top < rect.bottom;
 }
 
+static POINT GetRectCenterPoint(const RECT& rect)
+{
+	auto w = rect.right - rect.left;
+	auto h = rect.bottom - rect.top;
+	return POINT{rect.right - w / 2, rect.bottom - h / 2};
+}
+
 static HWND GetWindowFromRect(const RECT& rect)
 {
-	POINT{rect.left, rect.top};
-	HWND hWnd = WindowFromPoint(POINT{rect.left, rect.top});
+	HWND hWnd = WindowFromPoint(GetRectCenterPoint(rect));
 
 	if(!hWnd)
 		throw new std::exception("WindowFromPoint failed");
@@ -128,17 +134,17 @@ CaptureWnd::CaptureWnd() :
 
 CaptureWnd::~CaptureWnd() {}
 
-BitmapGdi* CaptureWnd::Capture(CaptureSource* outcapture_source)
+BitmapGdi* CaptureWnd::Capture(CaptureSource* out_capture_source)
 {
 	CaptureWnd capture_wnd;
 
 	while(capture_wnd.Update())
 		Sleep(1);
 
-	if(outcapture_source) {
-		outcapture_source->source_rect = capture_wnd.sel_rect;
-		outcapture_source->window_handle = GetWindowFromRect(capture_wnd.sel_rect);
-		outcapture_source->window_title = GetWindowText(outcapture_source->window_handle);
+	if(out_capture_source) {
+		out_capture_source->source_rect = capture_wnd.sel_rect;
+		out_capture_source->window_handle = GetWindowFromRect(capture_wnd.sel_rect);
+		out_capture_source->window_title = GetWindowText(out_capture_source->window_handle);
 	}
 
 	return capture_wnd.captured_image;

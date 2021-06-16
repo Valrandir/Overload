@@ -30,6 +30,14 @@ void HotkeyMonitor::Dispatch()
 		OnHotKey(LOWORD(msg.wParam));
 }
 
+void HotkeyMonitor::Flush()
+{
+	const HWND CURRENT_THREAD_MESSAGE_QUEUE = (HWND)-1;
+	MSG msg;
+
+	while(PeekMessage(&msg, CURRENT_THREAD_MESSAGE_QUEUE, WM_HOTKEY, WM_HOTKEY, PM_REMOVE));
+}
+
 HotkeyMonitor::~HotkeyMonitor()
 {
 	for(const auto& it : registered_hotkeys)

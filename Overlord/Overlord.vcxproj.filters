@@ -35,7 +35,6 @@
     <ClCompile Include="SamplerDialog.cpp">
       <Filter>Windows\Dialogs\SamplerDialog</Filter>
     </ClCompile>
-    <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageComparer.cpp">
       <Filter>Image</Filter>
     </ClCompile>
@@ -68,6 +67,18 @@
     </ClCompile>
     <ClCompile Include="BitmapGdiZoom.cpp">
       <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioPathOfExile.cpp">
+      <Filter>Scenarios</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyOut.cpp">
+      <Filter>Commands</Filter>
+    </ClCompile>
+    <ClCompile Include="HotkeyMonitor.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,7 +134,6 @@
     <ClInclude Include="SamplerDialog.hpp">
       <Filter>Windows\Dialogs\SamplerDialog</Filter>
     </ClInclude>
-    <ClInclude Include="HotkeyMonitor.hpp" />
     <ClInclude Include="ImageComparer.hpp">
       <Filter>Image</Filter>
     </ClInclude>
@@ -159,6 +169,15 @@
     </ClInclude>
     <ClInclude Include="BitmapGdiZoom.hpp">
       <Filter>Image</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyOut.hpp">
+      <Filter>Commands</Filter>
+    </ClInclude>
+    <ClInclude Include="HotkeyMonitor.hpp">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.hpp">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -197,6 +216,12 @@
     </Filter>
     <Filter Include="AreaView">
       <UniqueIdentifier>{76f7052a-2161-4c84-b83f-d89d95ec46e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Commands">
+      <UniqueIdentifier>{04216e3e-b7c1-4cd1-b676-1da25e8ba055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{95f26cd8-f856-47a1-a256-a4f85b5152cc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

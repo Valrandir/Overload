@@ -12,6 +12,7 @@ public:
 	int AddHotKey(HotKeyFunc callback, void* userdata, UINT modifiers, UINT virtual_key_code);
 	void RemoveHotKey(int id);
 	void Dispatch();
+	static void Flush();
 	~HotkeyMonitor();
 
 private:

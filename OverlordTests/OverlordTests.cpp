@@ -4,7 +4,7 @@
 
 void ShellOpen(const char* filename)
 {
-	ShellExecuteA(0, "open",  filename, 0, 0, SW_SHOW);
+	ShellExecuteA(0, "open", filename, 0, 0, SW_SHOW);
 }
 
 void ShellExplore(const char* path)
