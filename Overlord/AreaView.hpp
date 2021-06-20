@@ -17,6 +17,7 @@ public:
 
 	void OffsetCameraPosition(int x, int y);
 	void OffsetCameraZoom(float zoom_offset);
+	void ResetZoom();
 
 private:
 	Size area, view;

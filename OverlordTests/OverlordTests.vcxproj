@@ -62,12 +62,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Overlord;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Tests|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)Overlord;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)Overlord;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -116,11 +119,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BitmapGdiTests.cpp" />
-    <ClCompile Include="HotKeyMonitorTests.cpp" />
-    <ClCompile Include="ImageBitsTests.cpp" />
-    <ClCompile Include="CaptureWndTests.cpp" />
-    <ClCompile Include="OverlordTests.cpp" />
+    <ClCompile Include="BitmapGdiTest.cpp" />
+    <ClCompile Include="HotKeyMonitorTest.cpp" />
+    <ClCompile Include="ImageBitsTest.cpp" />
+    <ClCompile Include="CaptureWndTest.cpp" />
+    <ClCompile Include="OverlordTest.cpp" />
+    <ClCompile Include="RectTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Overlord\Overlord.vcxproj">
@@ -128,7 +132,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="OverlordTests.hpp" />
+    <ClInclude Include="OverlordTest.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

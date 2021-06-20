@@ -1,11 +1,11 @@
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-#include "OverlordTests.hpp"
-#include "../Overlord/BitmapGdi.hpp"
+#include "OverlordTest.hpp"
+#include "BitmapGdi.hpp"
 #include <type_traits>
 
-TEST_CLASS(BitmapGdiTests) {
+TEST_CLASS(BitmapGdiTest) {
 public:
 	TEST_METHOD(IsCopyConstructible_False) {
 		//Act

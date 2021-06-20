@@ -4,14 +4,13 @@
 #include <utility>
 
 class BitmapGdiZoom : public BitmapGdi {
-	BitmapGdi original;
+	BitmapGdi original_bitmap;
 	float zoom{};
 
 public:
 	BitmapGdiZoom();
 	BitmapGdiZoom(int width, int height);
 	BitmapGdiZoom(int width, int height, HDC dc, HBITMAP bitmap);
-	virtual void Initialize(int width, int height);
 	BitmapGdiZoom(BitmapGdi&&) noexcept;
 	BitmapGdiZoom& operator=(BitmapGdi&&) noexcept;
 	BitmapGdiZoom(BitmapGdiZoom&&) noexcept;
@@ -23,7 +22,7 @@ private:
 	void Destroy() noexcept;
 
 public:
-	const BitmapGdi& Original() { return original; }
+	const BitmapGdi& Original() { return original_bitmap; }
 	const float Zoom() { return zoom; }
 
 	void Zoom(float factor);

@@ -1,8 +1,8 @@
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-#include "OverlordTests.hpp"
-#include "../Overlord/ImageBits.hpp"
+#include "OverlordTest.hpp"
+#include "ImageBits.hpp"
 #include <type_traits>
 
 #define WIN32_LEAN_AND_MEAN
@@ -42,7 +42,7 @@ static void AssertPixel(const ImageBits& actual, int x, int y, ImageBits::Byte r
 	AssertPixel(actual, x, y, ImageBits::CreatePixel(r, g, b, a));
 }
 
-TEST_CLASS(ImageBitsTests) {
+TEST_CLASS(ImageBitsTest) {
 public:
 	TEST_METHOD(IsCopyConstructible_False) {
 		//Act

@@ -1,9 +1,9 @@
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
-#include "../Overlord/BitmapGdi.hpp"
-#include "../Overlord/CaptureWnd.hpp"
-#include "OverlordTests.hpp"
+#include "BitmapGdi.hpp"
+#include "CaptureWnd.hpp"
+#include "OverlordTest.hpp"
 
 static void ShowImage(const BitmapGdi& bitmap_gdi)
 {
@@ -14,7 +14,7 @@ static void ShowImage(const BitmapGdi& bitmap_gdi)
 		Sleep(1);
 }
 
-TEST_CLASS(CaptureWndTests) {
+TEST_CLASS(CaptureWndTest) {
 public:
 	TEST_METHOD(Capture_SaveToFile_OpenFolder) {
 		//Arrange

@@ -13,7 +13,7 @@ AreaView::AreaView(Size area, Size view)
 
 void AreaView::OffsetCameraPosition(int x, int y)
 {
-	camera.Offset({x, y});
+	camera.MoveBy({x, y});
 	ClampOffsetRectToSize(camera, area);
 }
 
@@ -25,7 +25,14 @@ void AreaView::OffsetCameraZoom(float zoom_offset)
 	if(abs(1 - zoom) < EPSILON)
 		zoom = 1.f;
 
-	camera.Resize(camera_nozoom).Zoom(1 / zoom);
+	camera.ResizeTo(camera_nozoom).ZoomTo(1 / zoom);
+	ClampOffsetRectToSize(camera, area);
+}
+
+void AreaView::ResetZoom()
+{
+	zoom = 1.f;
+	camera.ResizeTo(camera_nozoom);
 	ClampOffsetRectToSize(camera, area);
 }
 
@@ -33,15 +40,17 @@ void ClampOffsetRectToSize(Rect& rect, const Size& size)
 {
 	int x{}, y{};
 
-	if(rect.x < 0)
-		x = -rect.x;
-	else if(rect.x + rect.w > size.w)
-		x = size.w - (rect.x + rect.w);
+	if(rect.w < size.w)
+		if(rect.x < 0)
+			x = -rect.x;
+		else if(rect.x + rect.w > size.w)
+			x = size.w - (rect.x + rect.w);
 
-	if(rect.y < 0)
-		y = -rect.y;
-	else if(rect.y + rect.h + y > size.h)
-		y = size.h - (rect.y + rect.h);
+	if(rect.h < size.h)
+		if(rect.y < 0)
+			y = -rect.y;
+		else if(rect.y + rect.h + y > size.h)
+			y = size.h - (rect.y + rect.h);
 
-	rect.Offset({x, y});
+	rect.MoveBy({x, y});
 }

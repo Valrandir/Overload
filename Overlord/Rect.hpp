@@ -1,44 +1,47 @@
 #pragma once
 #include "Point.hpp"
 #include "Size.hpp"
+#include <cmath>
 
 struct Rect {
 	int x, y, w, h;
 
-	Rect& Move(Point p)
+	Rect& MoveTo(Point p)
 	{
 		this->x = p.x;
 		this->y = p.y;
 		return *this;
 	}
 
-	Rect& Offset(Point o)
+	Rect& MoveBy(Point o)
 	{
 		this->x += o.x;
 		this->y += o.y;
 		return *this;
 	}
 
-	Rect& Resize(Size size)
+	Rect& ResizeTo(Size new_size)
 	{
-		auto rw = (size.w - w) / 2;
-		auto rh = (size.h - h) / 2;
+		auto rw = (new_size.w - w) / 2;
+		auto rh = (new_size.h - h) / 2;
 		x -= rw;
 		y -= rh;
-		w = size.w;
-		h = size.h;
+		w = new_size.w;
+		h = new_size.h;
 		return *this;
 	}
 
-	Rect& Zoom(float factor)
+	Rect& ZoomTo(float factor)
 	{
 		--factor;
-		int fx = int(factor * w) / 2;
-		int fy = int(factor * h) / 2;
-		x -= fx;
-		y -= fy;
+		auto fx = (int)std::roundf(w * factor);
+		auto fy = (int)std::roundf(h * factor);
+
+		x -= fx / 2;
+		y -= fy / 2;
 		w += fx;
 		h += fy;
+
 		return *this;
 	}
 };

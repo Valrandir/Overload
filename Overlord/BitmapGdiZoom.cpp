@@ -8,25 +8,19 @@ BitmapGdiZoom::BitmapGdiZoom() :
 BitmapGdiZoom::BitmapGdiZoom(int width, int height) :
 	BitmapGdi(width, height)
 {
-	original = this->Clone();
+	original_bitmap = this->Clone();
 }
 
 BitmapGdiZoom::BitmapGdiZoom(int width, int height, HDC dc, HBITMAP bitmap) :
 	BitmapGdi(width, height, dc, bitmap)
 {
-	original = this->Clone();
-}
-
-void BitmapGdiZoom::Initialize(int width, int height)
-{
-	BitmapGdi::Initialize(width, height);
-	original = this->Clone();
+	original_bitmap = this->Clone();
 }
 
 BitmapGdiZoom::BitmapGdiZoom(BitmapGdi&& other) noexcept
 {
 	BitmapGdi::Move(other);
-	original = this->Clone();
+	original_bitmap = this->Clone();
 }
 
 BitmapGdiZoom& BitmapGdiZoom::operator=(BitmapGdi&& other) noexcept
@@ -36,7 +30,7 @@ BitmapGdiZoom& BitmapGdiZoom::operator=(BitmapGdi&& other) noexcept
 
 	Destroy();
 	BitmapGdi::Move(other);
-	original = this->Clone();
+	original_bitmap = this->Clone();
 
 	return *this;
 }
@@ -80,9 +74,9 @@ void BitmapGdiZoom::Zoom(float factor)
 {
 	zoom = factor;
 
-	int w = (int)(original.Width() * zoom);
-	int h = (int)(original.Height() * zoom);
+	int w = (int)(original_bitmap.Width() * zoom);
+	int h = (int)(original_bitmap.Height() * zoom);
 
 	Initialize(w, h);
-	StretchBlt(GetDC(), 0, 0, w, h, original.GetDC(), 0, 0, original.Width(), original.Height(), SRCCOPY);
+	StretchBlt(GetDC(), 0, 0, w, h, original_bitmap.GetDC(), 0, 0, original_bitmap.Width(), original_bitmap.Height(), SRCCOPY);
 }
