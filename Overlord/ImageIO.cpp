@@ -4,7 +4,6 @@
 #include <memory>
 
 static void SwapRedAndBlue(unsigned char* bits, int width, int height);
-static void SetMaxAlpha(unsigned char* bits, int width, int height);
 
 namespace ImageIO
 {

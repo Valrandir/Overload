@@ -10,8 +10,7 @@ bool SamplerDialog::ShowDialog()
 
 void SamplerDialog::Initialize()
 {
-	HICON icon = LoadIcon(GetModuleHandle(0), MAKEINTRESOURCEW(IDI_ICON1));
-	SendMessageW(dialog_wnd, WM_SETICON, ICON_BIG, LPARAM(icon));
+	SetIcon(IDI_ICON1);
 	InitializeHotKeys();
 }
 
@@ -39,12 +38,12 @@ INT_PTR SamplerDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM 
 			}
 	}
 
-	return DialogBase::DlgProc(dialog_wnd, msg, wparam, lparam);
+	return Dialog::DlgProc(dialog_wnd, msg, wparam, lparam);
 }
 
 void SamplerDialog::OnSize(LPARAM lparam)
 {
-	DialogBase::OnSize(lparam);
+	Dialog::OnSize(lparam);
 	if(root_element)
 		root_element->image_view.UpdateLayout();
 }

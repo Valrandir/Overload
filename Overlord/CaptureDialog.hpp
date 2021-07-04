@@ -1,10 +1,10 @@
 #pragma once
 #include "CaptureSample.hpp"
-#include "DialogBase.hpp"
+#include "Dialog.hpp"
 #include "BitmapGdi.hpp"
 #include "ImageView.hpp"
 
-class CaptureDialog : private DialogBase {
+class CaptureDialog : private Dialog {
 public:
 	static bool ShowDialog(const BitmapGdi* bitmap_gdi, const CaptureSource* capture_source = nullptr);
 	static bool ShowDialog(const CaptureSample* capture_sample);

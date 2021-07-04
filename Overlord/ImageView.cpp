@@ -1,7 +1,7 @@
 #include "ImageView.hpp"
 #include <cassert>
 #include <exception>
-#include "DialogBase.hpp"
+#include "Dialog.hpp"
 #include "RectUtility.hpp"
 
 void ImageView::Initialize(HWND parent_window, HWND placeholder, const BitmapGdi* bitmap_gdi)
@@ -10,7 +10,7 @@ void ImageView::Initialize(HWND parent_window, HWND placeholder, const BitmapGdi
 	HINSTANCE instance = GetModuleHandle(NULL);
 	WNDCLASSEX wc;
 
-	RECT placeholder_rect = DialogBase::GetDlgItemRect(placeholder);
+	RECT placeholder_rect = Dialog::GetDlgItemRect(placeholder);
 	auto pos = RectToPoint(placeholder_rect);
 	auto size = RectToSize(placeholder_rect);
 
@@ -62,7 +62,7 @@ void ImageView::Show()
 
 void ImageView::UpdateLayout()
 {
-	RECT rect = DialogBase::GetDlgItemRect(placeholder);
+	RECT rect = Dialog::GetDlgItemRect(placeholder);
 	POINT p = RectToPoint(rect);
 	SIZE s = RectToSize(rect);
 	BitmapGdi::Initialize(s.cx, s.cy);

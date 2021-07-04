@@ -82,8 +82,8 @@ struct AreaViewWindow : public WindowGdi {
 		const auto& view = av.View();
 		const auto& zoom = av.Zoom();
 
-		auto src_x = camera.x * zoom;
-		auto src_y = camera.y * zoom;
+		auto src_x = (int)std::roundf(camera.x * zoom);
+		auto src_y = (int)std::roundf(camera.y * zoom);
 		BitBlt(WindowGdi::dc, 0, 0, view.w, view.h, zoomable_bitmap.GetDC(), src_x, src_y, SRCCOPY);
 		AreaMinimap::DrawMinimap(GetDC(), av);
 

@@ -3,9 +3,6 @@
 #include <exception>
 #include <fstream>
 
-//#define WIN32_LEAN_AND_MEAN
-//#include <Windows.h>
-
 ImageBits::ImageBits(ImageBits&& other) noexcept
 {
 	Move(other);
@@ -121,11 +118,11 @@ ImageBits ImageBits::LoadBits(const char* filename)
 	FileHeader fh;
 	in.read((char*)&fh, sizeof(fh));
 	in.seekg(fh.header_bytesize);
-
-	if((size_t)fh.width * fh.height * sizeof(Pixel) != fh.data_bytesize)
+	auto pixel_count = (size_t)fh.width * fh.height;
+	if(pixel_count * sizeof(Pixel) != fh.data_bytesize)
 		throw new std::exception("width * height * Pixel does not match data_bytesize"); //TODO: Reconsider using exceptions
 
-	Pixel* data = new Pixel[fh.width * fh.height];
+	Pixel* data = new Pixel[pixel_count];
 	in.read((char*)data, fh.data_bytesize);
 	in.close();
 

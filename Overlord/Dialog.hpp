@@ -4,7 +4,7 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
-class DialogBase {
+class Dialog {
 public:
 	bool ShowModal(UINT dialog_resource_id);
 	static RECT GetDlgItemRect(HWND parent_window, int dlg_item);
@@ -20,12 +20,13 @@ protected:
 
 	static const int DIALOG_SUCCESS = 1;
 	static const int DIALOG_CANCEL = 2;
-	DialogBase() {}
+	Dialog() {}
 	virtual void Initialize() = 0;
 	virtual INT_PTR DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam);
 	virtual void OnSize(LPARAM lparam);
+	void SetIcon(UINT icon_resource_id);
 
 private:
-	DialogBase(const DialogBase&) = delete;
-	DialogBase& operator=(const DialogBase&) = delete;
+	Dialog(const Dialog&) = delete;
+	Dialog& operator=(const Dialog&) = delete;
 };

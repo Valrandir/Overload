@@ -58,7 +58,7 @@ INT_PTR CompareDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM 
 			}
 	}
 
-	return DialogBase::DlgProc(dialog_wnd, msg, wparam, lparam);
+	return Dialog::DlgProc(dialog_wnd, msg, wparam, lparam);
 }
 
 #include "CaptureDialog.hpp"

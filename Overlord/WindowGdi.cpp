@@ -135,8 +135,10 @@ bool WindowGdi::Update()
 {
 	MSG msg;
 
-	while(!destroyed && PeekMessage(&msg, window, 0, 0, PM_REMOVE))
+	while(!destroyed && PeekMessage(&msg, window, 0, 0, PM_REMOVE)) {
+		TranslateMessage(&msg);
 		DispatchMessage(&msg);
+	}
 
 	return !destroyed;
 }

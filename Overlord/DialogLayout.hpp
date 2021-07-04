@@ -1,7 +1,7 @@
 #pragma once
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
-#include <vector>
+#include <map>
 
 class DialogLayout {
 public:
@@ -11,7 +11,6 @@ public:
 
 		bool Horizontal() const { return x_ratio > 0; }
 		bool Vertical() const { return y_ratio > 0; }
-		//bool IsNone() const { return !IsHorizontal() && !IsVertical(); }
 	};
 
 	struct Layout {
@@ -29,7 +28,7 @@ private:
 	HWND dialog_wnd{};
 	SIZE dialog_size_initial{};
 	SIZE dialog_size_min{};
-	std::vector<Layout> layouts;
+	std::map<HWND, Layout> layouts;
 
 	static BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lparam);
 	void LayoutChild(HWND child_wnd, const Layout& layout, const SIZE& offset);

@@ -115,7 +115,9 @@
     <ClCompile Include="CaptureDialog.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="CompareDialog.cpp" />
-    <ClCompile Include="DialogBase.cpp" />
+    <ClCompile Include="DemoDialog.cpp" />
+    <ClCompile Include="DemoUserControl.cpp" />
+    <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="DialogLayout.cpp" />
     <ClCompile Include="GdiPen.cpp" />
     <ClCompile Include="HotkeyMonitor.cpp" />
@@ -129,9 +131,11 @@
     <ClCompile Include="MouseScroll.cpp" />
     <ClCompile Include="SamplerDialog.cpp" />
     <ClCompile Include="ScenarioAreaView.cpp" />
+    <ClCompile Include="ScenarioUserControl.cpp" />
     <ClCompile Include="ScrollHandler.cpp" />
     <ClCompile Include="ScenarioCaptureCompare.cpp" />
     <ClCompile Include="ScenarioSamplerDialog.cpp" />
+    <ClCompile Include="UserControl.cpp" />
     <ClCompile Include="WindowGdi.cpp" />
     <ClCompile Include="AreaView.cpp" />
   </ItemGroup>
@@ -143,7 +147,8 @@
     <ClInclude Include="CaptureSource.hpp" />
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="CompareDialog.hpp" />
-    <ClInclude Include="DialogBase.hpp" />
+    <ClInclude Include="DemoUserControl.hpp" />
+    <ClInclude Include="Dialog.hpp" />
     <ClInclude Include="DialogLayout.hpp" />
     <ClInclude Include="Event.hpp" />
     <ClInclude Include="GdiPen.hpp" />
@@ -166,6 +171,8 @@
     <ClInclude Include="SamplerDialog.hpp" />
     <ClInclude Include="ScrollHandler.hpp" />
     <ClInclude Include="Size.hpp" />
+    <ClInclude Include="DemoDialog.hpp" />
+    <ClInclude Include="UserControl.hpp" />
     <ClInclude Include="WindowGdi.hpp" />
   </ItemGroup>
   <ItemGroup>

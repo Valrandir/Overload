@@ -1,9 +1,9 @@
 #pragma once
-#include "DialogBase.hpp"
+#include "Dialog.hpp"
 #include "BitmapGdi.hpp"
 #include "ImageView.hpp"
 
-class CompareDialog : private DialogBase {
+class CompareDialog : private Dialog {
 public:
 	static bool ShowDialog(const BitmapGdi* bitmap_gdi_a, const BitmapGdi* bitmap_gdi_b);
 	void Initialize() override;

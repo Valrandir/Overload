@@ -23,7 +23,7 @@
     <ClCompile Include="WindowGdi.cpp">
       <Filter>Windows</Filter>
     </ClCompile>
-    <ClCompile Include="DialogBase.cpp">
+    <ClCompile Include="Dialog.cpp">
       <Filter>Windows\Dialogs\DialogBase</Filter>
     </ClCompile>
     <ClCompile Include="CaptureDialog.cpp">
@@ -31,9 +31,6 @@
     </ClCompile>
     <ClCompile Include="CompareDialog.cpp">
       <Filter>Windows\Dialogs</Filter>
-    </ClCompile>
-    <ClCompile Include="SamplerDialog.cpp">
-      <Filter>Windows\Dialogs\SamplerDialog</Filter>
     </ClCompile>
     <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageComparer.cpp">
@@ -68,6 +65,21 @@
     </ClCompile>
     <ClCompile Include="BitmapGdiZoom.cpp">
       <Filter>Image</Filter>
+    </ClCompile>
+    <ClCompile Include="UserControl.cpp">
+      <Filter>Windows\UserControls\UserControlBase</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerDialog.cpp">
+      <Filter>Windows\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="ScenarioUserControl.cpp">
+      <Filter>Scenarios\ScenarioUserControl</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoDialog.cpp">
+      <Filter>Scenarios\ScenarioUserControl</Filter>
+    </ClCompile>
+    <ClCompile Include="DemoUserControl.cpp">
+      <Filter>Scenarios\ScenarioUserControl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,7 +120,7 @@
     <ClInclude Include="CaptureWnd.hpp">
       <Filter>Windows</Filter>
     </ClInclude>
-    <ClInclude Include="DialogBase.hpp">
+    <ClInclude Include="Dialog.hpp">
       <Filter>Windows\Dialogs\DialogBase</Filter>
     </ClInclude>
     <ClInclude Include="CompareDialog.hpp">
@@ -119,9 +131,6 @@
     </ClInclude>
     <ClInclude Include="Overlord.rc.h">
       <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="SamplerDialog.hpp">
-      <Filter>Windows\Dialogs\SamplerDialog</Filter>
     </ClInclude>
     <ClInclude Include="HotkeyMonitor.hpp" />
     <ClInclude Include="ImageComparer.hpp">
@@ -160,6 +169,18 @@
     <ClInclude Include="BitmapGdiZoom.hpp">
       <Filter>Image</Filter>
     </ClInclude>
+    <ClInclude Include="UserControl.hpp">
+      <Filter>Windows\UserControls\UserControlBase</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerDialog.hpp">
+      <Filter>Windows\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoDialog.hpp">
+      <Filter>Scenarios\ScenarioUserControl</Filter>
+    </ClInclude>
+    <ClInclude Include="DemoUserControl.hpp">
+      <Filter>Scenarios\ScenarioUserControl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -183,9 +204,6 @@
     <Filter Include="Windows\Dialogs">
       <UniqueIdentifier>{6a96ef68-7838-4da5-a494-0c43b185fbac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Windows\Dialogs\SamplerDialog">
-      <UniqueIdentifier>{59e97872-1dd8-4830-964b-0a8518b92b1d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Windows\Dialogs\DialogBase">
       <UniqueIdentifier>{a8c44e32-7aab-4af7-9489-ffbca6bf5109}</UniqueIdentifier>
     </Filter>
@@ -197,6 +215,12 @@
     </Filter>
     <Filter Include="AreaView">
       <UniqueIdentifier>{76f7052a-2161-4c84-b83f-d89d95ec46e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\UserControls\UserControlBase">
+      <UniqueIdentifier>{3635df4a-460e-4e27-a912-e26df4aea9f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenarios\ScenarioUserControl">
+      <UniqueIdentifier>{fe64ac98-2851-4d5d-a438-6704ba573a82}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

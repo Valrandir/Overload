@@ -1,11 +1,11 @@
 #pragma once
-#include "DialogBase.hpp"
+#include "Dialog.hpp"
 #include "BitmapGdi.hpp"
 #include "HotkeyMonitor.hpp"
 #include "ImageView.hpp"
 #include <list>
 
-class SamplerDialog : private DialogBase {
+class SamplerDialog : private Dialog {
 	struct Element {
 		BitmapGdi bitmap_gdi;
 		ImageView image_view;

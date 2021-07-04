@@ -48,17 +48,13 @@ void DialogLayout::Initialize(UINT dialog_resource_id, HWND dialog_wnd)
 void DialogLayout::AddLayout(Layout layout, HWND child_wnd)
 {
 	INITIALIZE_ASSERT
-	layouts.push_back(layout);
-	size_t index = layouts.size() - 1;
-	SetWindowLongPtr(child_wnd, GWLP_USERDATA, (LONG_PTR)index);
+	layouts.emplace(child_wnd, layout);
 }
 
 void DialogLayout::OnSizing(RECT& new_rect, WPARAM wparam)
 {
 	EnforceMinimumSize(new_rect, dialog_size_min, wparam);
 }
-
-#include <sstream>
 
 void DialogLayout::OnSize(int width, int height)
 {
@@ -73,10 +69,10 @@ BOOL CALLBACK DialogLayout::EnumChildProc(HWND hwnd, LPARAM lparam)
 	auto userdata = (UserData*)lparam;
 	auto self = userdata->first;
 	auto offset = userdata->second;
-	auto index = (size_t)GetWindowLongPtr(hwnd, GWLP_USERDATA);
 
-	if(index < self->layouts.size())
-		self->LayoutChild(hwnd, self->layouts[index], *offset);
+	auto it = self->layouts.find(hwnd);
+	if(it != self->layouts.end())
+		self->LayoutChild(hwnd, it->second, *offset);
 
 	return TRUE;
 }
