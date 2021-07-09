@@ -3,6 +3,7 @@
 #include <Windows.h>
 
 class UserControl {
+	static LRESULT OnCtlColorStatic(WPARAM wparam);
 	static LRESULT CALLBACK WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam);
 
 protected:
@@ -19,6 +20,7 @@ public:
 	UserControl(const UserControl&) = delete;
 	UserControl& operator=(const UserControl&) = delete;
 
+	virtual void GetSize(int& width, int &height);
 	virtual bool Update();
 	virtual void Close();
 };

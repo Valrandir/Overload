@@ -1,5 +1,27 @@
 #include "UserControl.hpp"
 
+static COLORREF GetBrushColor(HBRUSH brush)
+{
+	LOGBRUSH lb;
+
+	if(GetObject(brush, sizeof(lb), &lb) != sizeof(lb))
+		return 0;
+
+	return lb.lbColor;
+}
+
+LRESULT UserControl::OnCtlColorStatic(WPARAM wparam)
+{
+	HDC hdc = (HDC)wparam;
+
+	HBRUSH brush = GetSysColorBrush(COLOR_3DFACE);
+	COLORREF bk_color = GetBrushColor(brush);
+	SetBkColor(hdc, bk_color);
+	//SetBkMode(hdc, TRANSPARENT);
+
+	return (LRESULT)GetSysColorBrush(COLOR_3DFACE);
+}
+
 LRESULT CALLBACK UserControl::WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	UserControl* uc;
@@ -13,6 +35,8 @@ LRESULT CALLBACK UserControl::WndProcStatic(HWND hWnd, UINT msg, WPARAM wparam, 
 LRESULT UserControl::WndProc(UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch(msg) {
+		case WM_CTLCOLORSTATIC:
+			return OnCtlColorStatic(wparam);
 		case WM_DESTROY:
 			Close();
 			return 0;
@@ -36,8 +60,7 @@ void UserControl::Initialize(HWND parent_window, int x, int y, int width, int he
 		wc.hInstance = hInstance;
 		wc.hIcon = 0;
 		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
-		//wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1);
-		wc.hbrBackground = CreateSolidBrush(RGB(128, 0, 0));
+		wc.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1);
 		wc.lpszMenuName = NULL;
 		wc.lpszClassName = CLASS_NAME;
 		wc.hIconSm = NULL;
@@ -48,13 +71,19 @@ void UserControl::Initialize(HWND parent_window, int x, int y, int width, int he
 	this->width = width;
 	this->height = height;
 
-	window = CreateWindowEx(0, CLASS_NAME, 0, WS_CHILDWINDOW | WS_VISIBLE, x, y, width, height, parent_window, NULL, hInstance, NULL);
+	window = CreateWindowEx(0, CLASS_NAME, 0, WS_CHILDWINDOW | WS_TABSTOP | WS_VISIBLE | WS_BORDER, x, y, width, height, parent_window, NULL, hInstance, NULL);
 
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 }
 
 UserControl::~UserControl()
 {
+}
+
+void UserControl::GetSize(int& width, int& height)
+{
+	width = this->width;
+	height = this->height;
 }
 
 bool UserControl::Update()

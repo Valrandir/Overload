@@ -115,10 +115,12 @@
     <ClCompile Include="CaptureDialog.cpp" />
     <ClCompile Include="CaptureWnd.cpp" />
     <ClCompile Include="CompareDialog.cpp" />
+    <ClCompile Include="ControlFactory.cpp" />
     <ClCompile Include="DemoDialog.cpp" />
     <ClCompile Include="DemoUserControl.cpp" />
     <ClCompile Include="Dialog.cpp" />
     <ClCompile Include="DialogLayout.cpp" />
+    <ClCompile Include="GdiBrush.cpp" />
     <ClCompile Include="GdiPen.cpp" />
     <ClCompile Include="HotkeyMonitor.cpp" />
     <ClCompile Include="ImageCapture.cpp" />
@@ -147,10 +149,12 @@
     <ClInclude Include="CaptureSource.hpp" />
     <ClInclude Include="CaptureWnd.hpp" />
     <ClInclude Include="CompareDialog.hpp" />
+    <ClInclude Include="ControlFactory.hpp" />
     <ClInclude Include="DemoUserControl.hpp" />
     <ClInclude Include="Dialog.hpp" />
     <ClInclude Include="DialogLayout.hpp" />
     <ClInclude Include="Event.hpp" />
+    <ClInclude Include="GdiBrush.hpp" />
     <ClInclude Include="GdiPen.hpp" />
     <ClInclude Include="BitmapGdiZoom.hpp" />
     <ClInclude Include="MouseScroll.hpp" />

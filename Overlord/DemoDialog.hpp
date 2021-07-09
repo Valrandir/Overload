@@ -3,7 +3,7 @@
 #include "DemoUserControl.hpp"
 
 class DemoDialog : private Dialog {
-	DemoUserControl demo_user_control;
+	DemoUserControl demo_user_control[3];
 
 public:
 	static bool ShowDialog();

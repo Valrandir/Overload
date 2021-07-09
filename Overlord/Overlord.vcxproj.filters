@@ -81,6 +81,12 @@
     <ClCompile Include="DemoUserControl.cpp">
       <Filter>Scenarios\ScenarioUserControl</Filter>
     </ClCompile>
+    <ClCompile Include="ControlFactory.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="GdiBrush.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CaptureSource.hpp">
@@ -180,6 +186,12 @@
     </ClInclude>
     <ClInclude Include="DemoUserControl.hpp">
       <Filter>Scenarios\ScenarioUserControl</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlFactory.hpp">
+      <Filter>Windows</Filter>
+    </ClInclude>
+    <ClInclude Include="GdiBrush.hpp">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

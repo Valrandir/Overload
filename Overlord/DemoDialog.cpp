@@ -6,14 +6,18 @@ bool DemoDialog::ShowDialog()
 	DemoDialog dialog;
 	return dialog.ShowModal(IDD_DIALOG_SAMPLER);
 }
-DemoUserControl d2;
 
 void DemoDialog::Initialize()
 {
 	SetIcon(IDI_ICON1);
 
-	demo_user_control.Initialize(dialog_wnd, 32, 32);
-	d2.Initialize(dialog_wnd, 400, 100);
+	int w{}, h{};
+	int y = 5;
+
+	for(auto& d : demo_user_control) {
+		d.Initialize(dialog_wnd, 15, y += h + 10);
+		d.GetSize(w, h);
+	}
 }
 
 INT_PTR DemoDialog::DlgProc(HWND dialog_wnd, UINT msg, WPARAM wparam, LPARAM lparam)
