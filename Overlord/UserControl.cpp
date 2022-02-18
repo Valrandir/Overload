@@ -17,7 +17,6 @@ LRESULT UserControl::OnCtlColorStatic(WPARAM wparam)
 	HBRUSH brush = GetSysColorBrush(COLOR_3DFACE);
 	COLORREF bk_color = GetBrushColor(brush);
 	SetBkColor(hdc, bk_color);
-	//SetBkMode(hdc, TRANSPARENT);
 
 	return (LRESULT)GetSysColorBrush(COLOR_3DFACE);
 }
@@ -80,22 +79,10 @@ UserControl::~UserControl()
 {
 }
 
-void UserControl::GetSize(int& width, int& height)
+void UserControl::GetSize(int& width, int& height) const
 {
 	width = this->width;
 	height = this->height;
-}
-
-bool UserControl::Update()
-{
-	MSG msg;
-
-	while(!destroyed && PeekMessage(&msg, window, 0, 0, PM_REMOVE)) {
-		TranslateMessage(&msg);
-		DispatchMessage(&msg);
-	}
-
-	return !destroyed;
 }
 
 void UserControl::Close()

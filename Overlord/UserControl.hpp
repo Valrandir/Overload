@@ -20,7 +20,6 @@ public:
 	UserControl(const UserControl&) = delete;
 	UserControl& operator=(const UserControl&) = delete;
 
-	virtual void GetSize(int& width, int &height);
-	virtual bool Update();
+	virtual void GetSize(int& width, int &height) const;
 	virtual void Close();
 };

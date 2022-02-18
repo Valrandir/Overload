@@ -27,6 +27,7 @@ public:
 	virtual void Show();
 	virtual void Hide();
 	virtual bool Update();
+	virtual bool UpdateLoop();
 	virtual void Close();
 	virtual bool OnKeyDown(WPARAM wparam);
 

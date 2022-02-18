@@ -89,7 +89,7 @@ WindowGdi::WindowGdi(LPCTSTR title, int width, int height, DWORD style, DWORD ex
 	this->height = height;
 
 	int x, y;
-	style = (style ? style : WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX) | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;
+	style = (style ? style : WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX) | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_EX_CONTROLPARENT;
 	AdjustAndCenter(x, y, width, height, style, ex_style);
 	window = CreateWindowEx(ex_style, CLASS_NAME, title, style, x, y, width, height, HWND_DESKTOP, NULL, hInstance, NULL);
 	SetWindowLongPtr(window, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
@@ -136,6 +136,24 @@ bool WindowGdi::Update()
 	MSG msg;
 
 	while(!destroyed && PeekMessage(&msg, window, 0, 0, PM_REMOVE)) {
+		if(IsDialogMessage(msg.hwnd, &msg))
+			continue;
+
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
+	}
+
+	return !destroyed;
+}
+
+bool WindowGdi::UpdateLoop()
+{
+	MSG msg;
+
+	while(!destroyed && GetMessage(&msg, 0, 0, 0)) {
+		if(IsDialogMessage(msg.hwnd, &msg))
+			continue;
+
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	}

@@ -29,7 +29,7 @@ BraceWrapping:
   BeforeElse: false
   IndentBraces: false
   SplitEmptyFunction: true
-  SplitEmptyRecord: true
+  SplitEmptyRecord: false
   SplitEmptyNamespace: true
 BreakAfterJavaFieldAnnotations: false
 BreakBeforeBinaryOperators: None
@@ -48,9 +48,7 @@ DerivePointerAlignment: false
 DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
 FixNamespaceComments: false
-#IncludeBlocks: Merge
 IndentCaseLabels: true
-#IndentPPDirectives: None
 IndentWidth: 4
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: false
@@ -63,10 +61,7 @@ SortUsingDeclarations: false
 SpaceAfterCStyleCast: false
 SpaceAfterTemplateKeyword: false
 SpaceBeforeAssignmentOperators: true
-#SpaceBeforeCtorInitializerColon: true
-#SpaceBeforeInheritanceColon: true
 SpaceBeforeParens: Never
-#SpaceBeforeRangeBasedForLoopColon: false
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: false
